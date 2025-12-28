@@ -119,22 +119,6 @@ export default function CTASection() {
             );
           })}
         </motion.div>
-
-        {/* Footer Note */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          className="text-sm text-[var(--text-muted)]"
-        >
-          <p className="mb-2">
-            🔒 完全にローカルで動作 | 🚀 オープンソース | 💚 コミュニティ主導
-          </p>
-          <p className="text-xs">
-            作成者: <a href="https://github.com/unrcom" target="_blank" rel="noopener noreferrer" className="text-[var(--primary)] hover:underline">@unrcom</a>
-          </p>
-        </motion.div>
       </div>
     </section>
   );

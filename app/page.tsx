@@ -3,6 +3,7 @@ import FeaturesSection from '@/components/sections/FeaturesSection';
 import InteractiveDemoSection from '@/components/sections/InteractiveDemoSection';
 import TechStackSection from '@/components/sections/TechStackSection';
 import CTASection from '@/components/sections/CTASection';
+import Footer from '@/components/Footer';
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
       <InteractiveDemoSection />
       <TechStackSection />
       <CTASection />
+      <Footer />
     </main>
   );
 }
