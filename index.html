@@ -1132,7 +1132,7 @@
     <li><a href="#apps">アプリ</a></li>
     <li><a href="#why">なぜ閉域LLM？</a></li>
     <li><a href="https://github.com/unrcom" target="_blank">GitHub</a></li>
-    <li><a href="https://unremoted.com/mission#consultation">お問い合わせ</a></li>
+    <li><a href="#consultation">お問い合わせ</a></li>
   </ul>
 </nav>
 
@@ -1161,7 +1161,7 @@
 
   <div class="hero-cta">
     <a href="#" onclick="event.preventDefault();openGallery()" class="btn-primary">アプリを見る →</a>
-    <a href="https://unremoted.com/mission#consultation" class="btn-outline">お問い合わせ</a>
+    <a href="#consultation" class="btn-outline">お問い合わせ</a>
   </div>
 
   <div class="scroll-hint">
@@ -1467,6 +1467,74 @@
     </div>
   </div>
 </section>
+
+
+<!-- CONSULTATION SECTION -->
+<section id="consultation" style="background:#0a1a22;padding:80px 24px;">
+  <div style="max-width:900px;margin:0 auto;">
+    <div style="text-align:center;margin-bottom:48px;">
+      <h2 style="font-family:'DM Sans',sans-serif;font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;color:#e8f4f0;margin-bottom:8px;">llamuneとLLMのご相談サービス</h2>
+      <p style="color:var(--cyan);font-weight:600;font-size:1rem;">ご相談はすべて無料です</p>
+    </div>
+
+    <p style="color:#b0ccc4;text-align:center;max-width:600px;margin:0 auto 48px;line-height:1.8;">
+      llamuneとLLMの導入・活用に関するご相談を承っています。「何から始めればいいかわからない」「自社の業務に使えるか試してみたい」といった段階からお気軽にどうぞ。
+    </p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:48px;">
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(0,212,170,0.15);border-radius:12px;padding:20px;">
+        <div style="font-size:1.5rem;margin-bottom:8px;">🏢</div>
+        <div style="font-weight:700;color:#e8f4f0;margin-bottom:6px;">LLM導入相談</div>
+        <p style="font-size:0.82rem;color:#7a9a90;line-height:1.6;">クラウドLLM・ローカルLLMの選択肢を整理し、自社環境に合った導入方針をご提案します。</p>
+      </div>
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(0,212,170,0.15);border-radius:12px;padding:20px;">
+        <div style="font-size:1.5rem;margin-bottom:8px;">🔒</div>
+        <div style="font-weight:700;color:#e8f4f0;margin-bottom:6px;">閉域LLM構築</div>
+        <p style="font-size:0.82rem;color:#7a9a90;line-height:1.6;">機密情報を外部に出さず、社内ネットワーク内で動作するLLM環境の構築を支援します。</p>
+      </div>
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(0,212,170,0.15);border-radius:12px;padding:20px;">
+        <div style="font-size:1.5rem;margin-bottom:8px;">🧪</div>
+        <div style="font-weight:700;color:#e8f4f0;margin-bottom:6px;">PoC設計・実施</div>
+        <p style="font-size:0.82rem;color:#7a9a90;line-height:1.6;">業務改善の仮説を立て、LLMの効果を検証するPoCの設計と実施をサポートします。</p>
+      </div>
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(0,212,170,0.15);border-radius:12px;padding:20px;">
+        <div style="font-size:1.5rem;margin-bottom:8px;">🎓</div>
+        <div style="font-weight:700;color:#e8f4f0;margin-bottom:6px;">ファインチューニング</div>
+        <p style="font-size:0.82rem;color:#7a9a90;line-height:1.6;">自社データを用いたモデルのカスタマイズ・ファインチューニングの計画立案から実施まで対応します。</p>
+      </div>
+    </div>
+
+    <div style="text-align:center;background:rgba(0,212,170,0.06);border:1px solid rgba(0,212,170,0.2);border-radius:16px;padding:40px 24px;">
+      <p style="color:#b0ccc4;margin-bottom:24px;">まずはお気軽にメールでご連絡ください。</p>
+      <div style="display:inline-flex;align-items:center;gap:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(0,212,170,0.2);border-radius:10px;padding:14px 24px;">
+        <span style="color:#e8f4f0;font-weight:600;font-size:0.95rem;">llm@unremoted.com</span>
+        <button onclick="copyEmail()" id="copy-btn" style="background:none;border:none;cursor:pointer;color:#7a9a90;display:flex;align-items:center;" aria-label="メールアドレスをコピー">
+          <svg id="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+          </svg>
+          <svg id="check-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00d4aa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </button>
+      </div>
+      <p style="font-size:0.75rem;color:#4a6a60;margin-top:12px;">llamune に関するご相談も、こちらのアドレスで承っています。</p>
+    </div>
+  </div>
+</section>
+
+<script>
+function copyEmail() {
+  navigator.clipboard.writeText('llm@unremoted.com').then(function() {
+    document.getElementById('copy-icon').style.display = 'none';
+    document.getElementById('check-icon').style.display = 'block';
+    setTimeout(function() {
+      document.getElementById('copy-icon').style.display = 'block';
+      document.getElementById('check-icon').style.display = 'none';
+    }, 2000);
+  });
+}
+</script>
 
 <!-- FOOTER -->
 <footer>
