@@ -1,0 +1,1675 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Llamune - 閉域LLMで業務を変える</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,800&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #070e12;
+      --bg2: #0a1520;
+      --cyan: #00d4aa;
+      --cyan2: #00b8ff;
+      --text: #e8f4f0;
+      --muted: #7a9a90;
+      --card-bg: rgba(255,255,255,0.03);
+      --card-border: rgba(0,212,170,0.15);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* ── Background ── */
+    .bg-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .bg-layer::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(0,184,100,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 80%, rgba(0,180,255,0.07) 0%, transparent 55%),
+        radial-gradient(ellipse 40% 40% at 60% 30%, rgba(0,212,170,0.05) 0%, transparent 50%);
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 48px;
+      background: rgba(7,14,18,0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0,212,170,0.08);
+    }
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--cyan), var(--cyan2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.02em;
+    }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 400;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--cyan); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,212,170,0.1);
+      border: 1px solid rgba(0,212,170,0.25);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 0.75rem;
+      color: var(--cyan);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+      animation: fadeUp 0.6s ease both;
+    }
+    .hero-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--cyan);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    .hero h1 {
+      font-family: 'DM Sans', sans-serif;
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #fff 10%, var(--cyan) 35%, var(--cyan2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 24px;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: var(--muted);
+      max-width: 580px;
+      line-height: 1.75;
+      margin-bottom: 20px;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+
+    .hero-value {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      margin-bottom: 48px;
+      animation: fadeUp 0.6s 0.3s ease both;
+      flex-wrap: wrap;
+    }
+    .value-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      color: var(--text);
+      opacity: 0.8;
+    }
+    .value-pill span {
+      color: var(--cyan);
+      font-size: 1rem;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      animation: fadeUp 0.6s 0.4s ease both;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--cyan), var(--cyan2));
+      color: #070e12;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 14px 28px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--cyan);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 500;
+      font-size: 0.9rem;
+      padding: 13px 28px;
+      border-radius: 8px;
+      border: 1px solid rgba(0,212,170,0.4);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-outline:hover { background: rgba(0,212,170,0.08); transform: translateY(-1px); }
+
+    /* scroll indicator */
+    .scroll-hint {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.75rem;
+      animation: fadeUp 0.6s 0.8s ease both;
+    }
+    .scroll-mouse {
+      width: 22px; height: 36px;
+      border: 1.5px solid rgba(0,212,170,0.4);
+      border-radius: 11px;
+      position: relative;
+    }
+    .scroll-mouse::after {
+      content: '';
+      position: absolute;
+      top: 6px; left: 50%;
+      transform: translateX(-50%);
+      width: 3px; height: 6px;
+      background: var(--cyan);
+      border-radius: 2px;
+      animation: scrollDot 1.8s ease-in-out infinite;
+    }
+    @keyframes scrollDot {
+      0% { top: 6px; opacity: 1; }
+      100% { top: 20px; opacity: 0; }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      position: relative;
+      z-index: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0,212,170,0.2), transparent);
+      margin: 0 48px;
+    }
+
+    /* ── APPS SECTION ── */
+    .apps {
+      position: relative;
+      z-index: 1;
+      padding: 100px 48px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      text-align: center;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 16px;
+    }
+    .section-title {
+      text-align: center;
+      font-family: 'DM Sans', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+    .section-desc {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      max-width: 520px;
+      margin: 0 auto 64px;
+    }
+
+    /* ── CARDS ── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 36px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
+      display: flex;
+      flex-direction: column;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .card:hover {
+      border-color: rgba(0,212,170,0.35);
+      transform: translateY(-4px);
+    }
+    .card:hover::before { opacity: 1; }
+
+    .card-number {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      color: rgba(0,212,170,0.35);
+      margin-bottom: 20px;
+    }
+    .card-icon {
+      font-size: 2rem;
+      margin-bottom: 16px;
+    }
+    .card-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(90deg, var(--cyan), var(--cyan2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 12px;
+    }
+    .card-desc {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    .card-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 32px;
+      flex: 1;
+    }
+    .card-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.85rem;
+      color: var(--text);
+      opacity: 0.85;
+      line-height: 1.5;
+    }
+    .card-features li::before {
+      content: '▸';
+      color: var(--cyan);
+      font-size: 0.7rem;
+      margin-top: 3px;
+      flex-shrink: 0;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .card-btn {
+      flex: 1;
+      min-width: 100px;
+      text-align: center;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 10px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+    .card-btn-primary {
+      background: linear-gradient(135deg, var(--cyan), var(--cyan2));
+      color: #070e12;
+      font-weight: 700;
+    }
+    .card-btn-primary:hover { opacity: 0.85; }
+    .card-btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .card-btn-ghost:hover { color: var(--text); border-color: rgba(0,212,170,0.25); }
+
+    /* ── WHY SECTION ── */
+    .why {
+      position: relative;
+      z-index: 1;
+      padding: 80px 48px 100px;
+    }
+    .why-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+    .why-text h2 {
+      font-family: 'DM Sans', sans-serif;
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.3;
+      margin-bottom: 20px;
+    }
+    .why-text p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+    .why-points {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .why-point {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 24px;
+      transition: border-color 0.3s;
+    }
+    .why-point:hover { border-color: rgba(0,212,170,0.3); }
+    .why-point-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .why-point-title span { font-size: 1.1rem; }
+    .why-point p {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid rgba(0,212,170,0.08);
+      padding: 40px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: gap;
+    }
+    .footer-logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--cyan), var(--cyan2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .footer-copy {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .footer-copy a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-copy a:hover { color: var(--cyan); }
+
+    /* ── DEMO SECTION ── */
+    .demo {
+      position: relative;
+      z-index: 1;
+      padding: 100px 48px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* Step tabs */
+    .demo-steps {
+      display: flex;
+      gap: 0;
+      margin-bottom: 40px;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .demo-step-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      border-right: 1px solid var(--card-border);
+      padding: 16px 12px;
+      cursor: pointer;
+      color: var(--muted);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 500;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .demo-step-btn:last-child { border-right: none; }
+    .demo-step-btn .step-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: rgba(0,212,170,0.4);
+    }
+    .demo-step-btn .step-name {
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+    .demo-step-btn.active {
+      background: rgba(0,212,170,0.08);
+      color: var(--cyan);
+    }
+    .demo-step-btn.active .step-num { color: var(--cyan); }
+    .step-sub { font-size: 0.72rem; color: var(--muted); display: block; transition: font-size 0.2s, color 0.2s; }
+    .demo-step-btn.active .step-sub { font-size: 1.08rem; color: var(--cyan); font-weight: 600; }
+    .demo-step-btn.done { color: var(--text); opacity: 0.6; }
+
+    /* Demo panels */
+    .demo-panel { display: none; }
+    .demo-panel.active { display: block; }
+
+    /* ── CHAT MOCK ── */
+    .chat-mock {
+      background: #0d1b24;
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      height: 480px;
+    }
+    .chat-sidebar {
+      width: 200px;
+      flex-shrink: 0;
+      border-right: 1px solid rgba(255,255,255,0.06);
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .chat-sidebar-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--cyan), var(--cyan2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+    .chat-new-btn {
+      background: linear-gradient(135deg, var(--cyan), var(--cyan2));
+      color: #070e12;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 6px;
+      padding: 8px;
+      cursor: pointer;
+      width: 100%;
+    }
+    .chat-sidebar-item {
+      font-size: 0.72rem;
+      color: var(--muted);
+      padding: 6px 8px;
+      border-radius: 6px;
+      line-height: 1.4;
+      cursor: pointer;
+    }
+    .chat-sidebar-item.active-chat {
+      background: rgba(0,212,170,0.1);
+      color: var(--text);
+      border: 1px solid rgba(0,212,170,0.2);
+    }
+
+    .chat-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .chat-messages {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .chat-bubble-user {
+      align-self: flex-end;
+      background: rgba(0,212,170,0.15);
+      border: 1px solid rgba(0,212,170,0.25);
+      border-radius: 12px 12px 2px 12px;
+      padding: 12px 16px;
+      max-width: 80%;
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+    .chat-you-label {
+      display: block;
+      font-size: 0.68rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+      text-align: right;
+      width: 100%;
+    }
+    .chat-bubble-label {
+      display: block;
+      font-size: 0.68rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .chat-response-area {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .chat-response-header {
+      font-size: 0.75rem;
+      color: var(--cyan);
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .chat-response-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 0.82rem;
+      line-height: 1.65;
+      color: var(--text);
+      opacity: 0.9;
+    }
+    .chat-response-card.selected {
+      border-color: rgba(0,212,170,0.4);
+      background: rgba(0,212,170,0.06);
+    }
+    .chat-model-tag {
+      font-size: 0.65rem;
+      color: var(--muted);
+      text-align: right;
+      margin-bottom: 6px;
+      font-family: monospace;
+    }
+    .chat-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .chat-action-btn {
+      font-size: 0.72rem;
+      padding: 5px 12px;
+      border-radius: 5px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font-family: 'Noto Sans JP', sans-serif;
+      transition: all 0.15s;
+    }
+    .chat-action-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+    .chat-action-btn.adopt {
+      background: rgba(0,212,170,0.12);
+      border-color: rgba(0,212,170,0.3);
+      color: var(--cyan);
+    }
+    .chat-input-area {
+      padding: 16px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      gap: 10px;
+    }
+    .chat-input {
+      flex: 1;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: var(--muted);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 0.82rem;
+      outline: none;
+    }
+    .chat-send-btn {
+      background: rgba(0,212,170,0.2);
+      border: 1px solid rgba(0,212,170,0.3);
+      color: var(--cyan);
+      font-size: 0.8rem;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'Noto Sans JP', sans-serif;
+    }
+
+    /* ── POC MOCK ── */
+    .poc-mock {
+      background: #f8f9fa;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      overflow: hidden;
+      height: 480px;
+      display: flex;
+      flex-direction: column;
+    }
+    .poc-nav {
+      background: #fff;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .poc-nav-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #1a1a2e;
+    }
+    .poc-nav-links {
+      display: flex;
+      gap: 20px;
+      font-size: 0.78rem;
+      color: #6b7280;
+    }
+    .poc-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .poc-breadcrumb {
+      font-size: 0.78rem;
+      color: #6b7280;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .poc-title-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .poc-title-row h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #111827;
+    }
+    .poc-badge {
+      font-size: 0.68rem;
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-weight: 600;
+    }
+    .poc-badge-good { background: #d1fae5; color: #065f46; }
+    .poc-badge-low { background: #f3f4f6; color: #6b7280; }
+    .poc-card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 18px;
+    }
+    .poc-card-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #6b7280;
+      margin-bottom: 10px;
+    }
+    .poc-card p { font-size: 0.85rem; color: #374151; line-height: 1.6; }
+    .poc-meta { display: flex; gap: 24px; }
+    .poc-meta-item { font-size: 0.82rem; color: #374151; }
+    .poc-meta-item span { color: #6b7280; margin-right: 8px; font-size: 0.75rem; }
+    .poc-eval-row {
+      display: flex;
+      gap: 16px;
+    }
+    .poc-select {
+      background: #fff;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 0.82rem;
+      color: #374151;
+      font-family: 'Noto Sans JP', sans-serif;
+    }
+
+    /* ── LEARN MOCK ── */
+    .learn-mock {
+      background: #0d1b24;
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      overflow: hidden;
+      height: 480px;
+      display: flex;
+      flex-direction: column;
+    }
+    .learn-header {
+      padding: 20px 28px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .learn-header-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--cyan), var(--cyan2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .learn-status {
+      font-size: 0.72rem;
+      padding: 4px 12px;
+      border-radius: 100px;
+      background: rgba(0,212,170,0.15);
+      color: var(--cyan);
+      border: 1px solid rgba(0,212,170,0.25);
+    }
+    .learn-body {
+      flex: 1;
+      padding: 24px 28px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .learn-section-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+    }
+    .learn-data-items {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .learn-data-item {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 0.78rem;
+      color: var(--text);
+      opacity: 0.8;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .learn-data-item-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--cyan);
+      flex-shrink: 0;
+    }
+    .learn-progress-wrap {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 18px;
+    }
+    .learn-progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+    .learn-progress-label span { color: var(--cyan); font-weight: 700; }
+    .learn-bar-bg {
+      height: 8px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .learn-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--cyan), var(--cyan2));
+      border-radius: 4px;
+      width: 0%;
+      transition: width 2s ease;
+    }
+    .learn-stats {
+      display: flex;
+      gap: 16px;
+    }
+    .learn-stat {
+      flex: 1;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+    }
+    .learn-stat-val {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--cyan);
+      display: block;
+    }
+    .learn-stat-label {
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .learn-log {
+      background: #070e12;
+      border-radius: 8px;
+      padding: 14px;
+      font-family: monospace;
+      font-size: 0.75rem;
+      color: #4ade80;
+      line-height: 1.8;
+      height: 100px;
+      overflow-y: auto;
+    }
+
+    /* Next button */
+    .demo-next-wrap {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+    .demo-next-btn {
+      background: linear-gradient(135deg, var(--cyan), var(--cyan2));
+      color: #070e12;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 12px 28px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .demo-next-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+    .demo-restart-btn {
+      background: transparent;
+      color: var(--cyan);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 500;
+      font-size: 0.88rem;
+      padding: 12px 28px;
+      border-radius: 8px;
+      border: 1px solid rgba(0,212,170,0.4);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .demo-restart-btn:hover { background: rgba(0,212,170,0.08); }
+
+    /* typing cursor */
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+    .cursor { display: inline-block; width: 2px; height: 1em; background: var(--cyan); margin-left: 2px; vertical-align: text-bottom; animation: blink 0.8s infinite; }
+
+
+    
+
+    /* ── GALLERY MODAL ── */
+    .gallery-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.92);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s;
+    }
+    .gallery-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .gallery-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 900px;
+      margin-bottom: 16px;
+    }
+    .gallery-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--cyan), var(--cyan2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .gallery-counter {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    .gallery-close {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 32px; height: 32px;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .gallery-close:hover { background: rgba(255,255,255,0.2); }
+    .gallery-main {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+    }
+    .gallery-img {
+      width: 100%;
+      border-radius: 12px;
+      display: block;
+      border: 1px solid rgba(0,212,170,0.2);
+    }
+    .gallery-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 50%;
+      width: 40px; height: 40px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .gallery-nav:hover { background: rgba(0,212,170,0.3); }
+    .gallery-prev { left: -52px; }
+    .gallery-next { right: -52px; }
+    .gallery-caption {
+      margin-top: 14px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-align: center;
+    }
+    .gallery-dots {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 16px;
+    }
+    .gallery-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      cursor: pointer;
+      transition: background 0.2s;
+      border: none;
+    }
+    .gallery-dot.active { background: var(--cyan); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      .apps { padding: 60px 24px; }
+      .why { padding: 60px 24px; }
+      .why-inner { grid-template-columns: 1fr; gap: 40px; }
+      footer { padding: 32px 24px; flex-direction: column; gap: 12px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-layer"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">llamune</div>
+  <ul class="nav-links">
+    <li><a href="#apps">アプリ</a></li>
+    <li><a href="#why">なぜ閉域LLM？</a></li>
+    <li><a href="https://github.com/unrcom" target="_blank">GitHub</a></li>
+    <li><a href="/cdn-cgi/l/email-protection#14777b7a6075776054617a6671797b6071703a777b79">お問い合わせ</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">Closed-Domain LLM Platform</div>
+
+  <h1>業務の知識を<br>AIの力に変える</h1>
+
+  <p class="hero-sub">
+    llamune は完全閉域で動作するLLMプラットフォームです。<br>
+    機密情報を守りながら、自社だけのAIを育てられます。
+  </p>
+
+  <div class="hero-value">
+    <div class="value-pill">
+      <span>🔒</span> データは外部に出ない
+    </div>
+    <div class="value-pill">
+      <span>⚡</span> 競合との差別化
+    </div>
+    <div class="value-pill">
+      <span>🧠</span> 自社知識でファインチューニング
+    </div>
+  </div>
+
+  <div class="hero-cta">
+    <a href="#" onclick="event.preventDefault();openGallery()" class="btn-primary">アプリを見る →</a>
+    <a href="/cdn-cgi/l/email-protection#6b0804051f0a081f2b1e05190e06041f0e0f45080406" class="btn-outline">お問い合わせ</a>
+  </div>
+
+  <div class="scroll-hint">
+    <div class="scroll-mouse"></div>
+    スクロールして詳細を見る
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- APPS -->
+<section class="apps" id="apps">
+  <p class="section-label">Application Suite</p>
+  <h2 class="section-title">3つのアプリで<br>LLM導入を完結させる</h2>
+  <p class="section-desc">
+    チャットから知識の洗い出し、ファインチューニングまで—<br>
+    llamune がフルサイクルをサポートします。
+  </p>
+
+  <div class="cards-grid">
+
+    <!-- llamune_chat -->
+    <div class="card">
+      <div class="card-number">01</div>
+      <div class="card-icon">💬</div>
+      <div class="card-name">llamune_chat</div>
+      <p class="card-desc">
+        閉域環境で複数のローカルLLMとチャットし、業務アウトプットを安全に取得できるチャットプラットフォーム。
+      </p>
+      <ul class="card-features">
+        <li>複数のローカルLLMを切り替えて利用</li>
+        <li>会話内容はAES-256-GCMで完全暗号化</li>
+        <li>システムプロンプトのテンプレート管理</li>
+        <li>思考過程（Thinking）のリアルタイム表示</li>
+        <li>データは一切外部サーバーに送信されない</li>
+      </ul>
+      <div class="card-actions">
+        <a href="https://github.com/unrcom/llamune_chat" target="_blank" class="card-btn card-btn-ghost">GitHub</a>
+        <a href="#demo" onclick="event.preventDefault();goStep(1);document.getElementById('demo').scrollIntoView({behavior:'smooth'})" class="card-btn card-btn-primary">デモを見る →</a>
+      </div>
+    </div>
+
+    <!-- llamune_poc -->
+    <div class="card">
+      <div class="card-number">02</div>
+      <div class="card-icon">🔍</div>
+      <div class="card-name">llamune_poc</div>
+      <p class="card-desc">
+        トレーニング前・トレーニング中のLLMと対話し、モデルに不足している業務知識を体系的に洗い出すPoC評価ツール。
+      </p>
+      <ul class="card-features">
+        <li>ドメイン特化の評価シナリオを設計・実行</li>
+        <li>LLMの回答品質をスコアリング</li>
+        <li>不足知識・誤答パターンを自動記録</li>
+        <li>llamune_learn への訓練データエクスポート</li>
+        <li>MLX / Ollama 両対応</li>
+      </ul>
+      <div class="card-actions">
+        <a href="https://github.com/unrcom/llamune_poc" target="_blank" class="card-btn card-btn-ghost">GitHub</a>
+        <a href="#demo" onclick="event.preventDefault();goStep(2);document.getElementById('demo').scrollIntoView({behavior:'smooth'})" class="card-btn card-btn-primary">デモを見る →</a>
+      </div>
+    </div>
+
+    <!-- llamune_learn -->
+    <div class="card">
+      <div class="card-number">03</div>
+      <div class="card-icon">🎓</div>
+      <div class="card-name">llamune_learn</div>
+      <p class="card-desc">
+        llamune_poc のアウトプットをもとに訓練データを生成し、ローカル環境でファインチューニングを実行するトレーニングツール。
+      </p>
+      <ul class="card-features">
+        <li>PoC結果から訓練データを自動生成</li>
+        <li>Apple MLX / QLoRA によるローカルファインチューニング</li>
+        <li>トレーニング進捗のリアルタイムモニタリング</li>
+        <li>モデル評価・バージョン管理</li>
+        <li>完全オフライン・クローズド環境で実行</li>
+      </ul>
+      <div class="card-actions">
+        <span class="card-btn card-btn-ghost" style="opacity:0.4;cursor:default;text-align:center;">🚧 準備中</span>
+        <a href="#demo" onclick="event.preventDefault();goStep(3);document.getElementById('demo').scrollIntoView({behavior:'smooth'})" class="card-btn card-btn-primary">デモを見る →</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- DEMO -->
+<section class="demo" id="demo">
+  <p class="section-label">Interactive Demo</p>
+  <h2 class="section-title">3ステップで体験する<br>llamune のワークフロー</h2>
+  <p class="section-desc">
+    広告代理店が新しいキャンペーン企画を提案する業務を例に、<br>
+    llamune がどう業務を変えるかを体験してみましょう。
+  </p>
+
+  <!-- Step tabs -->
+  <div class="demo-steps">
+    <button class="demo-step-btn active" id="tab-1" onclick="goStep(1)">
+      <span class="step-num">STEP 01</span>
+      <span class="step-name">💬 llamune_chat</span>
+      <span class="step-sub">複数モデルで提案を生成</span>
+    </button>
+    <button class="demo-step-btn" id="tab-2" onclick="goStep(2)">
+      <span class="step-num">STEP 02</span>
+      <span class="step-name">🔍 llamune_poc</span>
+      <span class="step-sub">LLMの知識ギャップを評価</span>
+    </button>
+    <button class="demo-step-btn" id="tab-3" onclick="goStep(3)">
+      <span class="step-num">STEP 03</span>
+      <span class="step-name">🎓 llamune_learn</span>
+      <span class="step-sub">ファインチューニング</span>
+    </button>
+  </div>
+
+  <!-- STEP 1: llamune_chat -->
+  <div class="demo-panel active" id="panel-1">
+    <div class="chat-mock">
+      <!-- sidebar -->
+      <div class="chat-sidebar">
+        <div class="chat-sidebar-title">llamune_chat</div>
+        <button class="chat-new-btn">＋ 新しいチャット</button>
+        <div style="font-size:0.65rem;color:var(--muted);margin-top:8px;padding:0 4px;">— A社様向け案件</div>
+        <div class="chat-sidebar-item active-chat">⭐ 携帯通信事業者からのキャンペーン依頼</div>
+        <div class="chat-sidebar-item">新サービスのターゲット分析</div>
+        <div style="font-size:0.65rem;color:var(--muted);margin-top:8px;padding:0 4px;">— フォルダなし</div>
+        <div class="chat-sidebar-item">競合他社リサーチ</div>
+      </div>
+      <!-- main -->
+      <div class="chat-main">
+        <div class="chat-messages" id="chat-messages">
+          <div style="display:flex;flex-direction:column;align-items:flex-end;width:100%;">
+            <div class="chat-you-label">👤 You</div>
+            <div class="chat-bubble-user">お客様（携帯通信事業者様）から新しいサービスのキャンペーンに関する提案依頼を受けました。いくつかプランを立てたいので協力してください。</div>
+          </div>
+          <div class="chat-response-area">
+            <div class="chat-response-header">💡 各回答のアクションを選択してください（2個の候補）</div>
+            <div>
+              <div class="chat-model-tag">qwen2.5-coder:32b</div>
+              <div class="chat-response-card" id="resp1">
+                <div id="resp1-text"></div>
+                <div class="chat-actions">
+                  <button class="chat-action-btn adopt" onclick="adoptResp()">✓ 採用</button>
+                  <button class="chat-action-btn">📋 履歴に残す</button>
+                  <button class="chat-action-btn">🗑 破棄</button>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="chat-model-tag">gemma2:27b</div>
+              <div class="chat-response-card" id="resp2">
+                <div id="resp2-text"></div>
+                <div class="chat-actions">
+                  <button class="chat-action-btn">✓ 採用</button>
+                  <button class="chat-action-btn">📋 履歴に残す</button>
+                  <button class="chat-action-btn">🗑 破棄</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="chat-input-area">
+          <input class="chat-input" placeholder="メッセージを入力... (Ctrl+Enter で送信)" readonly>
+          <button class="chat-send-btn">送信</button>
+        </div>
+      </div>
+    </div>
+    <div class="demo-next-wrap">
+      <button class="demo-next-btn" id="next1-btn" onclick="goStep(2)" style="display:none;">Step 2 へ進む →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: llamune_poc -->
+  <div class="demo-panel" id="panel-2">
+    <div class="poc-mock">
+      <div class="poc-nav">
+        <div class="poc-nav-title">llamune_poc</div>
+        <div class="poc-nav-links">
+          <span>ホーム</span><span>ログ一覧</span><span>設定</span>
+        </div>
+      </div>
+      <div class="poc-body">
+        <div class="poc-breadcrumb">← 一覧に戻る <strong style="color:#111827;">ログ詳細 #7</strong></div>
+        <div>
+          <div class="poc-title-row">
+            <h3>ログ詳細 #7</h3>
+            <span class="poc-badge poc-badge-good">要改善</span>
+            <span class="poc-badge poc-badge-low">優先度: 高</span>
+          </div>
+          <div style="font-size:0.75rem;color:#6b7280;margin-top:6px;">セッション #12 · 2026/2/21 13:30 · 広告代理店向けPoC</div>
+        </div>
+        <div class="poc-card">
+          <div class="poc-card-label">セッション情報</div>
+          <div class="poc-meta">
+            <div class="poc-meta-item"><span>PoC</span>広告代理店向けPoC</div>
+            <div class="poc-meta-item"><span>モデル</span>mlx-community/Qwen2.5-14B-Instruct-4bit</div>
+            <div class="poc-meta-item"><span>システムプロンプト</span>（未定義）</div>
+          </div>
+        </div>
+        <div class="poc-card">
+          <div class="poc-card-label">質問</div>
+          <p>携帯通信事業者の新サービス向けSNSキャンペーンで、Z世代に有効なアプローチを3つ提案してください。</p>
+        </div>
+        <div class="poc-card">
+          <div class="poc-card-label">LLM の回答</div>
+          <p id="poc-answer-text"></p>
+        </div>
+        <div class="poc-card">
+          <div class="poc-card-label">評価</div>
+          <div class="poc-eval-row">
+            <div>
+              <div style="font-size:0.75rem;color:#6b7280;margin-bottom:4px;">評価 *</div>
+              <select class="poc-select"><option>要改善</option><option>良い</option><option>不可</option></select>
+            </div>
+            <div>
+              <div style="font-size:0.75rem;color:#6b7280;margin-bottom:4px;">優先度</div>
+              <select class="poc-select"><option>高</option><option>中</option><option>低</option></select>
+            </div>
+          </div>
+          <div style="margin-top:12px;font-size:0.78rem;color:#6b7280;">
+            ⚠️ 知識ギャップ検出：Z世代のSNS行動特性・最新トレンドに関する具体的な事例が不足しています。llamune_learn へエクスポートしてファインチューニングを推奨します。
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="demo-next-wrap">
+      <button class="demo-next-btn" onclick="goStep(3)">Step 3 へ進む →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: llamune_learn -->
+  <div class="demo-panel" id="panel-3">
+    <div class="learn-mock">
+      <div class="learn-header">
+        <div class="learn-header-title">llamune_learn</div>
+        <div class="learn-status" id="learn-status">● 訓練データ生成中...</div>
+      </div>
+      <div class="learn-body">
+        <div>
+          <div class="learn-section-title">📥 llamune_poc からインポートされた知識ギャップ</div>
+          <div class="learn-data-items">
+            <div class="learn-data-item"><div class="learn-data-item-dot"></div>Z世代のSNS行動特性（TikTok / Instagram Reels 活用事例）</div>
+            <div class="learn-data-item"><div class="learn-data-item-dot"></div>携帯通信業界における競合キャンペーン成功事例 2024-2025</div>
+            <div class="learn-data-item"><div class="learn-data-item-dot"></div>インフルエンサーマーケティングの費用対効果データ</div>
+          </div>
+        </div>
+        <div>
+          <div class="learn-section-title">⚙️ ファインチューニング進捗</div>
+          <div class="learn-progress-wrap">
+            <div class="learn-progress-label">
+              <span>Qwen2.5-14B-Instruct ファインチューニング</span>
+              <span id="learn-pct">0%</span>
+            </div>
+            <div class="learn-bar-bg">
+              <div class="learn-bar-fill" id="learn-bar"></div>
+            </div>
+            <div class="learn-stats">
+              <div class="learn-stat"><span class="learn-stat-val" id="stat-epoch">0</span><div class="learn-stat-label">Epoch</div></div>
+              <div class="learn-stat"><span class="learn-stat-val" id="stat-loss">—</span><div class="learn-stat-label">Loss</div></div>
+              <div class="learn-stat"><span class="learn-stat-val" id="stat-samples">0</span><div class="learn-stat-label">Samples</div></div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="learn-section-title">📋 トレーニングログ</div>
+          <div class="learn-log" id="learn-log">$ llamune_learn start --model qwen2.5-14b --data gap_export_007.json<br></div>
+        </div>
+      </div>
+    </div>
+    <div class="demo-next-wrap" style="gap:12px;display:flex;justify-content:flex-end;">
+      <button class="demo-restart-btn" onclick="restart()">↩ 最初から</button>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- WHY -->
+<section class="why" id="why">
+  <div class="why-inner">
+    <div class="why-text">
+      <h2>なぜ、<br><span style="background:linear-gradient(90deg,var(--cyan),var(--cyan2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">閉域LLM</span>なのか</h2>
+      <p>
+        クラウドのAIサービスは便利ですが、業務の機密情報を外部に送信するリスクがあります。
+        llamune はすべてをローカルで完結させることで、セキュリティと競争優位性を両立します。
+      </p>
+    </div>
+    <div class="why-points">
+      <div class="why-point">
+        <div class="why-point-title"><span>🛡️</span> 機密情報の完全保全</div>
+        <p>顧客データ・社内ノウハウ・財務情報がクラウドに送信されることはありません。コンプライアンスリスクをゼロにします。</p>
+      </div>
+      <div class="why-point">
+        <div class="why-point-title"><span>🚀</span> 競合との差別化</div>
+        <p>自社固有の知識でファインチューニングされたモデルは、汎用AIでは再現できない業務精度を発揮します。</p>
+      </div>
+      <div class="why-point">
+        <div class="why-point-title"><span>💰</span> 従量課金コストなし</div>
+        <p>APIトークン費用が発生しません。一度構築すれば�、使用量に関わらず固定コストで運用できます。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">llamune</div>
+  <div class="footer-copy">
+    &copy; 2026 <a href="https://unremoted.com" target="_blank">unremoted.com</a>
+  </div>
+</footer>
+
+
+
+<!-- GALLERY MODAL -->
+<div class="gallery-overlay" id="gallery">
+  <div class="gallery-header">
+    <div class="gallery-title">llamune_chat — 実際の画面</div>
+    <div style="display:flex;align-items:center;gap:16px;">
+      <span class="gallery-counter" id="gallery-counter">1 / 4</span>
+      <button class="gallery-close" onclick="closeGallery()">✕</button>
+    </div>
+  </div>
+  <div class="gallery-main">
+    <button class="gallery-nav gallery-prev" onclick="galleryMove(-1)">‹</button>
+    <img class="gallery-img" id="gallery-img" src="" alt="">
+    <button class="gallery-nav gallery-next" onclick="galleryMove(1)">›</button>
+  </div>
+  <div class="gallery-caption" id="gallery-caption"></div>
+  <div class="gallery-dots" id="gallery-dots"></div>
+</div>
+
+</div>
+
+<script>
+
+const galleryImages = [
+  { src: 'chat_1.png', caption: '複数のLLMに同時に質問し、回答を比較して採用・破棄できます' },
+  { src: 'chat_2.png', caption: 'チャット中にモデル・Temperature・システムプロンプトをリアルタイムで変更できます' },
+  { src: 'chat_3.png', caption: 'パラメータセット管理：用途別にテンプレートを一覧管理できます' },
+  { src: 'chat_4.png', caption: 'テンプレート編集：モデル・システムプロンプト・LLMパラメータを細かく設定できます' },
+];
+let galleryIdx = 0;
+
+function openGallery(idx = 0) {
+  galleryIdx = idx;
+  renderGallery();
+  document.getElementById('gallery').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeGallery() {
+  document.getElementById('gallery').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function galleryMove(dir) {
+  galleryIdx = (galleryIdx + dir + galleryImages.length) % galleryImages.length;
+  renderGallery();
+}
+function renderGallery() {
+  const img = galleryImages[galleryIdx];
+  document.getElementById('gallery-img').src = img.src;
+  document.getElementById('gallery-img').alt = img.caption;
+  document.getElementById('gallery-caption').textContent = img.caption;
+  document.getElementById('gallery-counter').textContent = (galleryIdx + 1) + ' / ' + galleryImages.length;
+  const dotsEl = document.getElementById('gallery-dots');
+  dotsEl.innerHTML = '';
+  galleryImages.forEach((_, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'gallery-dot' + (i === galleryIdx ? ' active' : '');
+    btn.onclick = () => { galleryIdx = i; renderGallery(); };
+    dotsEl.appendChild(btn);
+  });
+}
+document.addEventListener('keydown', (e) => {
+  if (!document.getElementById('gallery').classList.contains('open')) return;
+  if (e.key === 'ArrowRight') galleryMove(1);
+  if (e.key === 'ArrowLeft') galleryMove(-1);
+  if (e.key === 'Escape') closeGallery();
+});
+
+function typeText(el, text, speed, callback) {
+  let i = 0;
+  el.innerHTML = '';
+  const cursor = document.createElement('span');
+  cursor.className = 'cursor';
+  el.appendChild(cursor);
+  const timer = setInterval(() => {
+    if (i < text.length) {
+      el.insertBefore(document.createTextNode(text[i]), cursor);
+      i++;
+    } else {
+      clearInterval(timer);
+      cursor.remove();
+      if (callback) callback();
+    }
+  }, speed);
+}
+
+let currentStep = 1;
+
+function goStep(n) {
+  document.querySelectorAll('.demo-step-btn').forEach((btn, i) => {
+    btn.classList.remove('active', 'done');
+    if (i + 1 < n) btn.classList.add('done');
+    if (i + 1 === n) btn.classList.add('active');
+  });
+  document.querySelectorAll('.demo-panel').forEach((p, i) => {
+    p.classList.remove('active');
+    if (i + 1 === n) p.classList.add('active');
+  });
+  currentStep = n;
+  if (n === 1) initStep1();
+  if (n === 2) initStep2();
+  if (n === 3) initStep3();
+  document.getElementById('demo').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function initStep1() {
+  const r1 = document.getElementById('resp1-text');
+  const r2 = document.getElementById('resp2-text');
+  const btn = document.getElementById('next1-btn');
+  r1.innerHTML = ''; r2.innerHTML = ''; btn.style.display = 'none';
+
+  const text1 = 'もちろんお手伝いします。キャンペーンのプランを立てるにあたり、以下の情報をお聞かせください。\n\n1. キャンペーンのターゲット（年齢層・地域）は？\n2. 訴求する新サービスの特長は何ですか？\n3. 予算規模と期間を教えてください。\n\n情報をいただければ、SNS・OOH・デジタル広告を組み合わせた具体的なプランを提案します。';
+  const text2 = '新サービスのキャンペーンですね！ご依頼ありがとうございます。\nまずターゲット層を明確にすることが重要です。サービス内容によって最適なキャンペーン手法が変わります。';
+
+  typeText(r1, text1, 18, () => {
+    typeText(r2, text2, 22, () => {
+      btn.style.display = 'inline-flex';
+    });
+  });
+}
+
+function adoptResp() {
+  document.getElementById('resp1').classList.add('selected');
+  setTimeout(() => goStep(2), 600);
+}
+
+function initStep2() {
+  const el = document.getElementById('poc-answer-text');
+  const text = 'Z世代向けSNSキャンペーンとして以下の3つを提案します。\n\n①ハッシュタグチャレンジ：オリジナルの参加型企画でUGCを促進\n②マイクロインフルエンサー起用：フォロワー1万〜10万人規模を複数活用\n③限定ARフィルター配布：キャンペーン期間限定のオリジナルフィルター\n\n※具体的な事例データや最新トレンドについては知識が不足しており、精度向上が必要です。';
+  typeText(el, text, 14, null);
+}
+
+function initStep3() {
+  const bar = document.getElementById('learn-bar');
+  const pct = document.getElementById('learn-pct');
+  const epochEl = document.getElementById('stat-epoch');
+  const lossEl = document.getElementById('stat-loss');
+  const samplesEl = document.getElementById('stat-samples');
+  const logEl = document.getElementById('learn-log');
+  const statusEl = document.getElementById('learn-status');
+
+  bar.style.width = '0%';
+  logEl.innerHTML = '$ llamune_learn start --model qwen2.5-14b --data gap_export_007.json\n';
+  epochEl.textContent = '0'; lossEl.textContent = '—'; samplesEl.textContent = '0';
+  statusEl.textContent = '● 訓練データ生成中...';
+  statusEl.style.background = ''; statusEl.style.color = ''; statusEl.style.borderColor = '';
+
+  const logs = [
+    '[00:01] 訓練データ読み込み中... 127件のQ&Aペアを検出',
+    '[00:03] データ前処理完了。トークナイズ開始',
+    '[00:06] Epoch 1/3 開始 — loss: 2.847',
+    '[00:12] Epoch 1/3 完了 — loss: 1.923 ✓',
+    '[00:18] Epoch 2/3 開始 — loss: 1.654',
+    '[00:24] Epoch 2/3 完了 — loss: 1.201 ✓',
+    '[00:30] Epoch 3/3 開始 — loss: 0.987',
+    '[00:38] Epoch 3/3 完了 — loss: 0.634 ✓',
+    '[00:40] モデル保存中... qwen2.5-14b-adagency-v1.gguf',
+    '[00:41] ✅ ファインチューニング完了！',
+  ];
+
+  let progress = 0, logIdx = 0, epoch = 0;
+
+  const timer = setInterval(() => {
+    progress += 2;
+    if (progress > 100) progress = 100;
+    bar.style.width = progress + '%';
+    pct.textContent = progress + '%';
+    samplesEl.textContent = Math.floor(progress * 1.27);
+
+    if (progress >= 30 && epoch < 1) { epoch = 1; epochEl.textContent = '1/3'; lossEl.textContent = '1.923'; }
+    if (progress >= 60 && epoch < 2) { epoch = 2; epochEl.textContent = '2/3'; lossEl.textContent = '1.201'; }
+    if (progress >= 90 && epoch < 3) { epoch = 3; epochEl.textContent = '3/3'; lossEl.textContent = '0.634'; }
+
+    if (logIdx < logs.length && progress >= (logIdx + 1) * 10) {
+      logEl.innerHTML += logs[logIdx] + '\n';
+      logEl.scrollTop = logEl.scrollHeight;
+      logIdx++;
+    }
+
+    if (progress >= 100) {
+      clearInterval(timer);
+      statusEl.textContent = '✅ 完了';
+      statusEl.style.background = 'rgba(74,222,128,0.15)';
+      statusEl.style.color = '#4ade80';
+      statusEl.style.borderColor = 'rgba(74,222,128,0.3)';
+    }
+  }, 80);
+}
+
+function restart() { goStep(1); }
+
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(initStep1, 800);
+});
+</script>
+</body>
+</html
