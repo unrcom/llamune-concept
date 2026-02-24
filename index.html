@@ -1690,6 +1690,13 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') closeGallery();
 });
 
+const activeTimers = [];
+
+function clearAllTimers() {
+  activeTimers.forEach(id => clearInterval(id));
+  activeTimers.length = 0;
+}
+
 function typeText(el, text, speed, callback) {
   let i = 0;
   el.innerHTML = '';
@@ -1697,6 +1704,7 @@ function typeText(el, text, speed, callback) {
   cursor.className = 'cursor';
   el.appendChild(cursor);
   const timer = setInterval(() => {
+    if (!cursor.parentNode) { clearInterval(timer); return; }
     if (i < text.length) {
       el.insertBefore(document.createTextNode(text[i]), cursor);
       i++;
@@ -1706,6 +1714,7 @@ function typeText(el, text, speed, callback) {
       if (callback) callback();
     }
   }, speed);
+  activeTimers.push(timer);
 }
 
 let currentStep = 1;
@@ -1719,6 +1728,7 @@ function goStep(n) {
     document.getElementById('mobile-modal').classList.add('open');
     return;
   }
+  clearAllTimers();
   document.querySelectorAll('.demo-step-btn').forEach((btn, i) => {
     btn.classList.remove('active', 'done');
     if (i + 1 < n) btn.classList.add('done');
@@ -1736,6 +1746,7 @@ function goStep(n) {
 }
 
 function initStep1() {
+  clearAllTimers();
   const r1 = document.getElementById('resp1-text');
   const r2 = document.getElementById('resp2-text');
   const btn = document.getElementById('next1-btn');
@@ -1817,6 +1828,7 @@ function initStep3() {
       statusEl.style.borderColor = 'rgba(74,222,128,0.3)';
     }
   }, 80);
+  activeTimers.push(timer);
 }
 
 function restart() { goStep(1); }
