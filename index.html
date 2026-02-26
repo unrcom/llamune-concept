@@ -474,6 +474,138 @@
       line-height: 1.6;
     }
 
+    /* ── DEPLOYMENT ── */
+    .deployment {
+      position: relative;
+      z-index: 1;
+      padding: 80px 48px;
+      background: var(--bg2);
+    }
+    .deployment-inner {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+    .deployment-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .deployment-header h2 {
+      font-family: 'DM Sans', sans-serif;
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+    .deployment-header p {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    .deployment-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .deployment-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 28px 32px;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      grid-template-rows: auto 1fr auto;
+      column-gap: 40px;
+      row-gap: 12px;
+      transition: border-color 0.3s;
+      align-items: start;
+    }
+    .deployment-card:hover { border-color: rgba(0,212,170,0.3); }
+    .deployment-card-title {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--text);
+      grid-column: 2;
+      grid-row: 1;
+    }
+    .deployment-diagram {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 20px 12px;
+      background: rgba(0,0,0,0.25);
+      border-radius: 12px;
+      grid-column: 1;
+      grid-row: 1 / 4;
+      align-self: stretch;
+      flex-wrap: wrap;
+    }
+    .deployment-diagram .d-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+    .deployment-diagram .d-node span { font-size: 2rem; }
+    .deployment-diagram .d-arrow {
+      color: var(--cyan);
+      font-size: 1.4rem;
+      opacity: 0.8;
+    }
+    .deployment-diagram .d-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .deployment-diagram .d-users {
+      display: flex;
+      gap: 4px;
+    }
+    .deployment-card-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.8;
+      grid-column: 2;
+      grid-row: 2;
+    }
+    .deployment-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 20px;
+      grid-column: 2;
+      grid-row: 3;
+      align-self: end;
+      justify-self: start;
+    }
+    .badge-max {
+      background: rgba(239,68,68,0.15);
+      color: #f87171;
+      border: 1px solid rgba(239,68,68,0.3);
+    }
+    .badge-high {
+      background: rgba(251,191,36,0.15);
+      color: #fbbf24;
+      border: 1px solid rgba(251,191,36,0.3);
+    }
+    @media (max-width: 768px) {
+      .deployment { padding: 60px 24px; }
+      .deployment-card {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto auto;
+      }
+      .deployment-card-title { grid-column: 1; grid-row: 1; }
+      .deployment-diagram { grid-column: 1; grid-row: 2; }
+      .deployment-card-desc { grid-column: 1; grid-row: 3; }
+      .deployment-badge { grid-column: 1; grid-row: 4; }
+    }
+
     /* ── FOOTER ── */
     footer {
       position: relative;
@@ -1210,8 +1342,9 @@
   <h1>業務の知識を<br>AIの力に変える</h1>
 
   <p class="hero-sub">
-    llamune は完全閉域で動作するLLMプラットフォームです。<br>
-    機密情報を守りながら、自社だけのAIを育てられます。
+    llamune は社内環境で動くAIプラットフォームです。<br>
+    情報が外部に一切出ないので、機密情報を扱う業務でも安心して使えます。<br>
+    自社の知識でAIを育て、競合に真似できない強みを作れます。
   </p>
 
   <div class="hero-value">
@@ -1260,7 +1393,7 @@
       </p>
       <ul class="card-features">
         <li>複数のローカルLLMを切り替えて利用</li>
-        <li>会話内容はAES-256-GCMで完全暗号化</li>
+        <li>会話内容は金融機関レベルの暗号化で保護</li>
         <li>システムプロンプトのテンプレート管理</li>
         <li>思考過程（Thinking）のリアルタイム表示</li>
         <li>データは一切外部サーバーに送信されない</li>
@@ -1512,7 +1645,7 @@
 <section class="why" id="why">
   <div class="why-inner">
     <div class="why-text">
-      <h2>なぜ、<br><span style="background:linear-gradient(90deg,var(--cyan),var(--cyan2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">閉域LLM</span>なのか</h2>
+      <h2>なぜ、<br><span style="background:linear-gradient(90deg,var(--cyan),var(--cyan2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">社内専用AI</span>なのか</h2>
       <p>
         クラウドのAIサービスは便利ですが、業務の機密情報を外部に送信するリスクがあります。
         llamune はすべてをローカルで完結させることで、セキュリティと競争優位性を両立します。
@@ -1521,16 +1654,77 @@
     <div class="why-points">
       <div class="why-point">
         <div class="why-point-title"><span>🛡️</span> 機密情報の完全保全</div>
-        <p>顧客データ・社内ノウハウ・財務情報がクラウドに送信されることはありません。コンプライアンスリスクをゼロにします。</p>
+        <p>顧客データも社内ノウハウも、すべて自社環境で完結します。インターネットに情報が出ないので、機密情報を扱う業務でも安心して使えます。</p>
       </div>
       <div class="why-point">
         <div class="why-point-title"><span>🚀</span> 競合との差別化</div>
-        <p>自社固有の知識でファインチューニングされたモデルは、汎用AIでは再現できない業務精度を発揮します。</p>
+        <p>汎用のクラウドAIは誰でも使えます。llamune で自社知識を学習させたAIは、競合には絶対に真似できません。それがそのまま、事業の差別化になります。</p>
       </div>
       <div class="why-point">
         <div class="why-point-title"><span>💰</span> 従量課金コストなし</div>
         <p>APIトークン費用が発生しません。一度構築すれば�、使用量に関わらず固定コストで運用できます。</p>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEPLOYMENT SECTION -->
+<section class="deployment" id="deployment">
+  <div class="deployment-inner">
+    <div class="deployment-header">
+      <h2>llamune <span style="background:linear-gradient(90deg,var(--cyan),var(--cyan2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">構築例</span></h2>
+      <p>用途とセキュリティ要件に合わせて、3つの構成から選べます。</p>
+    </div>
+    <div class="deployment-cards">
+
+      <!-- Card 1 -->
+      <div class="deployment-card">
+        <div class="deployment-card-title">① 個人・完全隔離</div>
+        <div class="deployment-diagram">
+          <div class="d-node"><span>👤</span>ユーザー</div>
+          <div class="d-arrow">→</div>
+          <div class="d-node"><span>💻</span>Mac (llamune)</div>
+        </div>
+        <p class="deployment-card-desc">1台のMacで完結。ネットワークに接続しないため、機密データが物理的に外部に出ません。個人の業務や社外秘データの取り扱いに最適です。</p>
+        <div class="deployment-badge badge-max">🔴 セキュリティ最高（物理的完全隔離）</div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="deployment-card">
+        <div class="deployment-card-title">② チーム・完全隔離</div>
+        <div class="deployment-diagram">
+          <div class="d-group">
+            <div class="d-node"><span>👤</span></div>
+            <div class="d-node"><span>👤</span></div>
+            <div class="d-node"><span>👤</span></div>
+            <div style="font-size:0.7rem;color:var(--muted);">ユーザー</div>
+          </div>
+          <div class="d-arrow">→</div>
+          <div class="d-node"><span>🔒</span>専用NW</div>
+          <div class="d-arrow">→</div>
+          <div class="d-node"><span>💻</span>Mac (llamune)</div>
+        </div>
+        <p class="deployment-card-desc">llamune専用のクローズドネットワークで複数人が利用。インターネットに接続しないため、チームで使いながら機密データを完全に守れます。</p>
+        <div class="deployment-badge badge-max">🔴 セキュリティ最高（ネットワーク完全隔離）</div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="deployment-card">
+        <div class="deployment-card-title">③ チーム・リモート対応</div>
+        <div class="deployment-diagram">
+          <div class="d-group">
+            <div class="d-node"><span>👤</span>オフィス</div>
+            <div class="d-node"><span>👤</span>リモート</div>
+          </div>
+          <div class="d-arrow">→</div>
+          <div class="d-node"><span>🌐</span>VPN</div>
+          <div class="d-arrow">→</div>
+          <div class="d-node"><span>💻</span>Mac (llamune)</div>
+        </div>
+        <p class="deployment-card-desc">社内ネットワーク上にllamuneを導入。VPN経由でリモートからも利用でき、ネットワーク管理者の設定により社内セキュリティポリシーに準拠した運用が可能です。</p>
+        <div class="deployment-badge badge-high">🟡 セキュリティ高（社内NW準拠＋通信暗号化）</div>
+      </div>
+
     </div>
   </div>
 </section>
