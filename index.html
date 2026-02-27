@@ -19,6 +19,225 @@
       --card-border: rgba(0,212,170,0.15);
     }
 
+    /* ── LIGHT MODE ── */
+    [data-theme="light"] {
+      --bg: #f0f7f5;
+      --bg2: #e4f0ec;
+      --cyan: #009e80;
+      --cyan2: #0090cc;
+      --text: #0d2a22;
+      --muted: #4a7068;
+      --card-bg: rgba(0,0,0,0.03);
+      --card-border: rgba(0,158,128,0.2);
+    }
+    [data-theme="light"] body {
+      background: var(--bg);
+      color: var(--text);
+    }
+    [data-theme="light"] nav {
+      background: rgba(240,247,245,0.88);
+    }
+    [data-theme="light"] .bg-layer::before {
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(0,184,100,0.10) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 80%, rgba(0,180,255,0.08) 0%, transparent 55%),
+        radial-gradient(ellipse 40% 40% at 60% 30%, rgba(0,212,170,0.07) 0%, transparent 50%);
+    }
+    [data-theme="light"] .chat-mock,
+    [data-theme="light"] .learn-mock {
+      background: #e8f4f0;
+    }
+    [data-theme="light"] .chat-sidebar {
+      border-right-color: rgba(0,0,0,0.08);
+    }
+    [data-theme="light"] .chat-sidebar-item { color: #4a7068; }
+    [data-theme="light"] .chat-bubble-user {
+      background: rgba(0,158,128,0.12);
+      border-color: rgba(0,158,128,0.25);
+    }
+    [data-theme="light"] .chat-response-card {
+      background: rgba(0,0,0,0.04);
+      border-color: rgba(0,0,0,0.08);
+      color: var(--text);
+    }
+    [data-theme="light"] .chat-input {
+      background: rgba(0,0,0,0.06);
+      border-color: rgba(0,0,0,0.12);
+      color: var(--muted);
+    }
+    [data-theme="light"] .chat-input-area,
+    [data-theme="light"] .chat-messages { background: transparent; }
+    [data-theme="light"] .learn-header { border-bottom-color: rgba(0,0,0,0.08); }
+    [data-theme="light"] .learn-data-item {
+      background: rgba(0,0,0,0.04);
+      border-color: rgba(0,0,0,0.07);
+      color: var(--text);
+    }
+    [data-theme="light"] .learn-progress-wrap {
+      background: rgba(0,0,0,0.04);
+      border-color: var(--card-border);
+    }
+    [data-theme="light"] .learn-stat {
+      background: rgba(0,0,0,0.03);
+      border-color: rgba(0,0,0,0.06);
+    }
+    [data-theme="light"] .learn-log {
+      background: #d8eae4;
+      color: #007a50;
+    }
+    [data-theme="light"] .deployment { background: var(--bg2); }
+    [data-theme="light"] .catalog { background: #e0ede8; }
+    [data-theme="light"] .deployment-diagram {
+      background: rgba(0,0,0,0.08);
+    }
+    [data-theme="light"] .catalog-note {
+      background: rgba(0,158,128,0.07);
+      border-color: rgba(0,158,128,0.25);
+    }
+    [data-theme="light"] .demo-steps {
+      border-color: var(--card-border);
+    }
+    [data-theme="light"] .demo-step-btn {
+      border-right-color: var(--card-border);
+    }
+    [data-theme="light"] .gallery-overlay {
+      background: rgba(240,247,245,0.96);
+    }
+    [data-theme="light"] .gallery-img {
+      border-color: rgba(0,158,128,0.25);
+    }
+    [data-theme="light"] .gallery-nav {
+      background: rgba(255,255,255,0.75);
+      color: var(--text);
+      border-color: rgba(0,0,0,0.15);
+    }
+    [data-theme="light"] .gallery-nav:hover { background: rgba(0,158,128,0.2); }
+    [data-theme="light"] .gallery-close {
+      background: rgba(0,0,0,0.1);
+      color: var(--text);
+    }
+    [data-theme="light"] .gallery-close:hover { background: rgba(0,0,0,0.2); }
+
+    /* ── CONSULTATION ── */
+    .consultation {
+      background: #0a1a22;
+      padding: 80px 24px;
+      position: relative;
+      z-index: 1;
+    }
+    .consultation-inner {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .consultation-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .consultation-title {
+      font-family: 'DM Sans', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .consultation-free {
+      color: var(--cyan);
+      font-weight: 600;
+      font-size: 1rem;
+    }
+    .consultation-lead {
+      color: var(--muted);
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto 48px;
+      line-height: 1.8;
+    }
+    .consultation-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+    .consultation-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: border-color 0.3s;
+    }
+    .consultation-card:hover { border-color: rgba(0,212,170,0.3); }
+    .consultation-card-icon { font-size: 1.5rem; margin-bottom: 8px; }
+    .consultation-card-name {
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .consultation-card-desc {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .consultation-contact {
+      text-align: center;
+      background: rgba(0,212,170,0.06);
+      border: 1px solid rgba(0,212,170,0.2);
+      border-radius: 16px;
+      padding: 40px 24px;
+    }
+    .consultation-contact-lead {
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+    .consultation-email-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--card-bg);
+      border: 1px solid rgba(0,212,170,0.2);
+      border-radius: 10px;
+      padding: 14px 24px;
+    }
+    .consultation-email {
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .consultation-copy-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+    }
+    .consultation-contact-note {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 12px;
+      opacity: 0.7;
+    }
+    [data-theme="light"] .consultation { background: #ddeee8; }
+    [data-theme="light"] .consultation-contact { background: rgba(0,158,128,0.07); }
+
+    /* ── THEME TOGGLE BUTTON ── */
+    .theme-toggle {
+      background: transparent;
+      border: 1px solid rgba(0,212,170,0.3);
+      border-radius: 50%;
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      font-size: 1rem;
+      color: var(--muted);
+      transition: border-color 0.2s, background 0.2s, color 0.2s;
+      flex-shrink: 0;
+    }
+    .theme-toggle:hover {
+      border-color: var(--cyan);
+      background: rgba(0,212,170,0.08);
+      color: var(--cyan);
+    }
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     html { scroll-behavior: smooth; }
@@ -1449,7 +1668,10 @@
 
 <!-- NAV -->
 <nav>
-  <div class="nav-logo">llamune</div>
+  <div style="display:flex;align-items:center;gap:14px;">
+    <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" aria-label="テーマ切り替え">🌙</button>
+    <div class="nav-logo">llamune</div>
+  </div>
   <ul class="nav-links">
     <li><a href="#apps">アプリ</a></li>
     <li><a href="#why">なぜ閉域LLM？</a></li>
@@ -1968,45 +2190,45 @@
 
 
 <!-- CONSULTATION SECTION -->
-<section id="consultation" style="background:#0a1a22;padding:80px 24px;">
-  <div style="max-width:900px;margin:0 auto;">
-    <div style="text-align:center;margin-bottom:48px;">
-      <h2 style="font-family:'DM Sans',sans-serif;font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;color:#e8f4f0;margin-bottom:8px;">llamuneとLLMのご相談サービス</h2>
-      <p style="color:var(--cyan);font-weight:600;font-size:1rem;">ご相談はすべて無料です</p>
+<section id="consultation" class="consultation">
+  <div class="consultation-inner">
+    <div class="consultation-header">
+      <h2 class="consultation-title">llamuneとLLMのご相談サービス</h2>
+      <p class="consultation-free">ご相談はすべて無料です</p>
     </div>
 
-    <p style="color:#b0ccc4;text-align:center;max-width:600px;margin:0 auto 48px;line-height:1.8;">
+    <p class="consultation-lead">
       llamuneとLLMの導入・活用に関するご相談を承っています。「何から始めればいいかわからない」「自社の業務に使えるか試してみたい」といった段階からお気軽にどうぞ。
     </p>
 
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:48px;">
-      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(0,212,170,0.15);border-radius:12px;padding:20px;">
-        <div style="font-size:1.5rem;margin-bottom:8px;">🏢</div>
-        <div style="font-weight:700;color:#e8f4f0;margin-bottom:6px;">LLM導入相談</div>
-        <p style="font-size:0.82rem;color:#7a9a90;line-height:1.6;">クラウドLLM・ローカルLLMの選択肢を整理し、自社環境に合った導入方針をご提案します。</p>
+    <div class="consultation-cards">
+      <div class="consultation-card">
+        <div class="consultation-card-icon">🏢</div>
+        <div class="consultation-card-name">LLM導入相談</div>
+        <p class="consultation-card-desc">クラウドLLM・ローカルLLMの選択肢を整理し、自社環境に合った導入方針をご提案します。</p>
       </div>
-      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(0,212,170,0.15);border-radius:12px;padding:20px;">
-        <div style="font-size:1.5rem;margin-bottom:8px;">🔒</div>
-        <div style="font-weight:700;color:#e8f4f0;margin-bottom:6px;">閉域LLM構築</div>
-        <p style="font-size:0.82rem;color:#7a9a90;line-height:1.6;">機密情報を外部に出さず、社内ネットワーク内で動作するLLM環境の構築を支援します。</p>
+      <div class="consultation-card">
+        <div class="consultation-card-icon">🔒</div>
+        <div class="consultation-card-name">閉域LLM構築</div>
+        <p class="consultation-card-desc">機密情報を外部に出さず、社内ネットワーク内で動作するLLM環境の構築を支援します。</p>
       </div>
-      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(0,212,170,0.15);border-radius:12px;padding:20px;">
-        <div style="font-size:1.5rem;margin-bottom:8px;">🧪</div>
-        <div style="font-weight:700;color:#e8f4f0;margin-bottom:6px;">PoC設計・実施</div>
-        <p style="font-size:0.82rem;color:#7a9a90;line-height:1.6;">業務改善の仮説を立て、LLMの効果を検証するPoCの設計と実施をサポートします。</p>
+      <div class="consultation-card">
+        <div class="consultation-card-icon">🧪</div>
+        <div class="consultation-card-name">PoC設計・実施</div>
+        <p class="consultation-card-desc">業務改善の仮説を立て、LLMの効果を検証するPoCの設計と実施をサポートします。</p>
       </div>
-      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(0,212,170,0.15);border-radius:12px;padding:20px;">
-        <div style="font-size:1.5rem;margin-bottom:8px;">🎓</div>
-        <div style="font-weight:700;color:#e8f4f0;margin-bottom:6px;">ファインチューニング</div>
-        <p style="font-size:0.82rem;color:#7a9a90;line-height:1.6;">自社データを用いたモデルのカスタマイズ・ファインチューニングの計画立案から実施まで対応します。</p>
+      <div class="consultation-card">
+        <div class="consultation-card-icon">🎓</div>
+        <div class="consultation-card-name">ファインチューニング</div>
+        <p class="consultation-card-desc">自社データを用いたモデルのカスタマイズ・ファインチューニングの計画立案から実施まで対応します。</p>
       </div>
     </div>
 
-    <div style="text-align:center;background:rgba(0,212,170,0.06);border:1px solid rgba(0,212,170,0.2);border-radius:16px;padding:40px 24px;">
-      <p style="color:#b0ccc4;margin-bottom:24px;">まずはお気軽にメールでご連絡ください。</p>
-      <div style="display:inline-flex;align-items:center;gap:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(0,212,170,0.2);border-radius:10px;padding:14px 24px;">
-        <span style="color:#e8f4f0;font-weight:600;font-size:0.95rem;">llm@unremoted.com</span>
-        <button onclick="copyEmail()" id="copy-btn" style="background:none;border:none;cursor:pointer;color:#7a9a90;display:flex;align-items:center;" aria-label="メールアドレスをコピー">
+    <div class="consultation-contact">
+      <p class="consultation-contact-lead">まずはお気軽にメールでご連絡ください。</p>
+      <div class="consultation-email-box">
+        <span class="consultation-email">llm@unremoted.com</span>
+        <button onclick="copyEmail()" id="copy-btn" class="consultation-copy-btn" aria-label="メールアドレスをコピー">
           <svg id="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
@@ -2016,10 +2238,47 @@
           </svg>
         </button>
       </div>
-      <p style="font-size:0.75rem;color:#4a6a60;margin-top:12px;">llamune に関するご相談も、こちらのアドレスで承っています。</p>
+      <p class="consultation-contact-note">llamune に関するご相談も、こちらのアドレスで承っています。</p>
     </div>
   </div>
 </section>
+
+<script>
+// ── THEME TOGGLE ──
+(function() {
+  const saved = localStorage.getItem('llamune-theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const theme = saved || (prefersDark ? 'dark' : 'light');
+  if (theme === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+  }
+  // Update icon after DOM ready
+  document.addEventListener('DOMContentLoaded', function() {
+    updateToggleIcon();
+  });
+})();
+
+function toggleTheme() {
+  const html = document.documentElement;
+  const isLight = html.getAttribute('data-theme') === 'light';
+  if (isLight) {
+    html.removeAttribute('data-theme');
+    localStorage.setItem('llamune-theme', 'dark');
+  } else {
+    html.setAttribute('data-theme', 'light');
+    localStorage.setItem('llamune-theme', 'light');
+  }
+  updateToggleIcon();
+}
+
+function updateToggleIcon() {
+  const btn = document.getElementById('theme-toggle');
+  if (!btn) return;
+  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  btn.textContent = isLight ? '☀️' : '🌙';
+  btn.setAttribute('aria-label', isLight ? 'ダークモードに切り替え' : 'ライトモードに切り替え');
+}
+</script>
 
 <script>
 function copyEmail() {
