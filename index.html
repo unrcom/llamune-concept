@@ -1482,6 +1482,21 @@
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
     .cursor { display: inline-block; width: 2px; height: 1em; background: var(--cyan); margin-left: 2px; vertical-align: text-bottom; animation: blink 0.8s infinite; }
 
+    /* ── CHAT IFRAME ── */
+    .chat-iframe-wrap {
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      overflow: hidden;
+      height: 600px;
+      background: #0d1b24;
+    }
+    .chat-iframe-wrap iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
 
     
 
@@ -1798,10 +1813,10 @@
 <!-- DEMO -->
 <section class="demo" id="demo">
   <p class="section-label">Interactive Demo</p>
-  <h2 class="section-title">3ステップで体験する<br>llamune のワークフロー</h2>
+  <h2 class="section-title">llamune_chat を<br>実際に触ってみる</h2>
   <p class="section-desc">
-    広告代理店が新しいキャンペーン企画を提案する業務を例に、<br>
-    llamune がどう業務を変えるかを体験してみましょう。
+    実際の llamune_chat インターフェースです。自由に操作してみてください。<br>
+    新しいチャットを開始して、別モデルで回答を比較する体験ができます。
   </p>
 
   <!-- Step tabs -->
@@ -1809,7 +1824,7 @@
     <button class="demo-step-btn active" id="tab-1" onclick="goStep(1)">
       <span class="step-num">STEP 01</span>
       <span class="step-name">💬 llamune_chat</span>
-      <span class="step-sub">複数モデルで提案を生成</span>
+      <span class="step-sub">自由に操作できます</span>
     </button>
     <button class="demo-step-btn" id="tab-2" onclick="goStep(2)">
       <span class="step-num">STEP 02</span>
@@ -1823,60 +1838,15 @@
     </button>
   </div>
 
-  <!-- STEP 1: llamune_chat -->
+  <!-- STEP 1: llamune_chat (iframe) -->
   <div class="demo-panel active" id="panel-1">
-    <div class="chat-mock">
-      <!-- sidebar -->
-      <div class="chat-sidebar">
-        <div class="chat-sidebar-title">llamune_chat</div>
-        <button class="chat-new-btn">＋ 新しいチャット</button>
-        <div style="font-size:0.65rem;color:var(--muted);margin-top:8px;padding:0 4px;">— A社様向け案件</div>
-        <div class="chat-sidebar-item active-chat">⭐ 携帯通信事業者からのキャンペーン依頼</div>
-        <div class="chat-sidebar-item">新サービスのターゲット分析</div>
-        <div style="font-size:0.65rem;color:var(--muted);margin-top:8px;padding:0 4px;">— フォルダなし</div>
-        <div class="chat-sidebar-item">競合他社リサーチ</div>
-      </div>
-      <!-- main -->
-      <div class="chat-main">
-        <div class="chat-messages" id="chat-messages">
-          <div style="display:flex;flex-direction:column;align-items:flex-end;width:100%;">
-            <div class="chat-you-label">👤 You</div>
-            <div class="chat-bubble-user">お客様（携帯通信事業者様）から新しいサービスのキャンペーンに関する提案依頼を受けました。いくつかプランを立てたいので協力してください。</div>
-          </div>
-          <div class="chat-response-area">
-            <div class="chat-response-header">💡 各回答のアクションを選択してください（2個の候補）</div>
-            <div>
-              <div class="chat-model-tag">qwen2.5-coder:32b</div>
-              <div class="chat-response-card" id="resp1">
-                <div id="resp1-text"></div>
-                <div class="chat-actions">
-                  <button class="chat-action-btn adopt" onclick="adoptResp()">✓ 採用</button>
-                  <button class="chat-action-btn">📋 履歴に残す</button>
-                  <button class="chat-action-btn">🗑 破棄</button>
-                </div>
-              </div>
-            </div>
-            <div>
-              <div class="chat-model-tag">gemma2:27b</div>
-              <div class="chat-response-card" id="resp2">
-                <div id="resp2-text"></div>
-                <div class="chat-actions">
-                  <button class="chat-action-btn">✓ 採用</button>
-                  <button class="chat-action-btn">📋 履歴に残す</button>
-                  <button class="chat-action-btn">🗑 破棄</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="chat-input-area">
-          <input class="chat-input" placeholder="メッセージを入力... (Ctrl+Enter で送信)" readonly>
-          <button class="chat-send-btn">送信</button>
-        </div>
-      </div>
-    </div>
-    <div class="demo-next-wrap">
-      <button class="demo-next-btn" id="next1-btn" onclick="goStep(2)" style="display:none;">Step 2 へ進む →</button>
+    <div class="chat-iframe-wrap">
+      <iframe
+        src="chat_app/index.html"
+        id="chat-iframe"
+        title="llamune_chat デモ"
+        allow="clipboard-write"
+      ></iframe>
     </div>
   </div>
 
