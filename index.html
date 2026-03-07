@@ -1487,7 +1487,7 @@
       border: 1px solid var(--card-border);
       border-radius: 16px;
       overflow: hidden;
-      height: 100vh;
+      height: 80vh;
       background: #0d1b24;
     }
     .chat-iframe-wrap iframe {
@@ -2406,25 +2406,7 @@ function goStep(n) {
 }
 
 function initStep1() {
-  clearAllTimers();
-  const r1 = document.getElementById('resp1-text');
-  const r2 = document.getElementById('resp2-text');
-  const btn = document.getElementById('next1-btn');
-  r1.innerHTML = ''; r2.innerHTML = ''; btn.style.display = 'none';
-
-  const text1 = 'もちろんお手伝いします。キャンペーンのプランを立てるにあたり、以下の情報をお聞かせください。\n\n1. キャンペーンのターゲット（年齢層・地域）は？\n2. 訴求する新サービスの特長は何ですか？\n3. 予算規模と期間を教えてください。\n\n情報をいただければ、SNS・OOH・デジタル広告を組み合わせた具体的なプランを提案します。';
-  const text2 = '新サービスのキャンペーンですね！ご依頼ありがとうございます。\nまずターゲット層を明確にすることが重要です。サービス内容によって最適なキャンペーン手法が変わります。';
-
-  typeText(r1, text1, 18, () => {
-    typeText(r2, text2, 22, () => {
-      btn.style.display = 'inline-flex';
-    });
-  });
-}
-
-function adoptResp() {
-  document.getElementById('resp1').classList.add('selected');
-  setTimeout(() => goStep(2), 600);
+  // STEP1はiframeのため何もしない
 }
 
 function initStep2() {
@@ -2493,9 +2475,7 @@ function initStep3() {
 
 function restart() { goStep(1); }
 
-window.addEventListener('DOMContentLoaded', () => {
-  setTimeout(initStep1, 800);
-});
+// STEP1はiframe表示のため初期化不要
 </script>
 </body>
 </html>
