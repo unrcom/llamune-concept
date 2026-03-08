@@ -1482,6 +1482,78 @@
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
     .cursor { display: inline-block; width: 2px; height: 1em; background: var(--cyan); margin-left: 2px; vertical-align: text-bottom; animation: blink 0.8s infinite; }
 
+    /* ── SD DETAIL (③展開) ── */
+    .sd-toggle-btn {
+      display: flex; align-items: center; justify-content: space-between;
+      width: 100%; margin-top: 14px; padding: 10px 14px;
+      background: rgba(0,212,170,0.08); border: 1px solid rgba(0,212,170,0.25);
+      border-radius: 8px; color: var(--cyan); font-size: 0.82rem;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .sd-toggle-btn:hover { background: rgba(0,212,170,0.15); }
+    #sd-toggle-arrow { transition: transform 0.3s; display: inline-block; }
+    #sd-toggle-arrow.open { transform: rotate(180deg); }
+
+    .sd-detail {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.5s ease, opacity 0.4s ease;
+      opacity: 0;
+    }
+    .sd-detail.open { max-height: 1000px; opacity: 1; }
+
+    .sd-detail-inner {
+      padding: 18px 4px 4px;
+      border-top: 1px solid rgba(0,212,170,0.15);
+      margin-top: 14px;
+    }
+    .sd-detail-title {
+      font-size: 0.85rem; font-weight: 600; color: var(--cyan); margin-bottom: 6px;
+    }
+    .sd-detail-desc {
+      font-size: 0.75rem; color: var(--muted); margin-bottom: 16px; line-height: 1.6;
+    }
+
+    .sd-diagram {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+    }
+    .sd-layer { width: 100%; }
+    .sd-layer-label {
+      font-size: 0.65rem; color: var(--muted); text-align: center; margin-bottom: 6px;
+    }
+    .sd-layer-nodes {
+      display: flex; justify-content: center; align-items: center;
+      gap: 8px; flex-wrap: wrap;
+    }
+    .sd-arrows-down {
+      font-size: 1rem; color: rgba(0,212,170,0.4); letter-spacing: 4px;
+      margin: 2px 0;
+    }
+    .sd-node {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 6px 10px; border-radius: 8px; font-size: 0.7rem;
+      min-width: 52px; text-align: center;
+    }
+    .sd-node span { font-size: 1.2rem; }
+    .sd-node-name { font-size: 0.62rem; margin-top: 2px; color: var(--muted); }
+    .sd-node-user { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); }
+    .sd-node-monkey { background: rgba(0,212,170,0.1); border: 1px solid rgba(0,212,170,0.3); color: var(--cyan); }
+    .sd-node-chat { background: rgba(100,160,255,0.1); border: 1px solid rgba(100,160,255,0.25); }
+    .sd-node-poc  { background: rgba(160,100,255,0.1); border: 1px solid rgba(160,100,255,0.25); }
+    .sd-node-model { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); }
+    .sd-node-training { background: rgba(255,180,0,0.08); border: 1px dashed rgba(255,180,0,0.35); color: #ffc542; }
+    .sd-sync-arrow {
+      font-size: 1.1rem; color: rgba(0,212,170,0.5); text-align: center;
+      font-size: 0.75rem;
+    }
+    .sd-note {
+      margin-top: 14px; padding: 10px 12px;
+      background: rgba(0,212,170,0.05); border-left: 2px solid rgba(0,212,170,0.3);
+      border-radius: 4px; font-size: 0.72rem; color: var(--muted); line-height: 1.6;
+    }
+    [data-theme="light"] .sd-toggle-btn { background: rgba(0,140,110,0.07); border-color: rgba(0,140,110,0.2); }
+    [data-theme="light"] .sd-node-user { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.1); }
+    [data-theme="light"] .sd-note { background: rgba(0,140,110,0.05); }
+
     /* ── CHAT IFRAME ── */
     .chat-iframe-wrap {
       border: 1px solid var(--card-border);
@@ -2023,7 +2095,7 @@
       </div>
 
       <!-- Card 3 -->
-      <div class="deployment-card">
+      <div class="deployment-card" id="card3">
         <div class="deployment-card-title">③ チーム・リモート対応</div>
         <div class="deployment-diagram">
           <div class="d-group">
@@ -2037,6 +2109,60 @@
         </div>
         <p class="deployment-card-desc">社内ネットワーク上にllamuneを導入。VPN経由でリモートからも利用でき、ネットワーク管理者の設定により社内セキュリティポリシーに準拠した運用が可能です。</p>
         <div class="deployment-badge badge-high">🟡 セキュリティ高（社内NW準拠＋通信暗号化）</div>
+
+        <button class="sd-toggle-btn" onclick="toggleSD()" id="sd-toggle-btn">
+          <span id="sd-toggle-label">🐒 llamune_monkey による複数インスタンス構成を見る</span>
+          <span id="sd-toggle-arrow">▼</span>
+        </button>
+
+        <div class="sd-detail" id="sd-detail">
+          <div class="sd-detail-inner">
+            <div class="sd-detail-title">llamune_monkey を介した複数インスタンス構成</div>
+            <div class="sd-detail-desc">llamune_monkey はサービスディスカバリ（SD）として動作し、各インスタンスのハートビートを管理・ルーティングします。SD同士も状態を伝播し合い、障害時も継続してサービスを提供します。</div>
+            <div class="sd-diagram">
+              <div class="sd-layer">
+                <div class="sd-layer-label">ユーザー</div>
+                <div class="sd-layer-nodes">
+                  <div class="sd-node sd-node-user"><span>👤</span></div>
+                  <div class="sd-node sd-node-user"><span>👤</span></div>
+                  <div class="sd-node sd-node-user"><span>👤</span></div>
+                  <div class="sd-node sd-node-user"><span>👤</span></div>
+                </div>
+              </div>
+              <div class="sd-arrows-down">↓</div>
+              <div class="sd-layer">
+                <div class="sd-layer-label">サービスディスカバリ（llamune_monkey）</div>
+                <div class="sd-layer-nodes">
+                  <div class="sd-node sd-node-monkey"><span>🐒</span><div class="sd-node-name">SD #1</div></div>
+                  <div class="sd-sync-arrow">⇄<div style="font-size:0.6rem;color:var(--muted);">状態伝播</div></div>
+                  <div class="sd-node sd-node-monkey"><span>🐒</span><div class="sd-node-name">SD #2</div></div>
+                </div>
+              </div>
+              <div class="sd-arrows-down">↓</div>
+              <div class="sd-layer">
+                <div class="sd-layer-label">llamune インスタンス（ハートビートで登録）</div>
+                <div class="sd-layer-nodes">
+                  <div class="sd-node sd-node-chat"><span>💬</span><div class="sd-node-name">Chat</div></div>
+                  <div class="sd-node sd-node-poc"><span>🔬</span><div class="sd-node-name">Poc</div></div>
+                  <div class="sd-node sd-node-chat"><span>💬</span><div class="sd-node-name">Chat</div></div>
+                  <div class="sd-node sd-node-poc"><span>🔬</span><div class="sd-node-name">Poc</div></div>
+                </div>
+              </div>
+              <div class="sd-arrows-down">↓</div>
+              <div class="sd-layer">
+                <div class="sd-layer-label">LLMモデル</div>
+                <div class="sd-layer-nodes">
+                  <div class="sd-node sd-node-model"><span>🤖</span><div class="sd-node-name">モデル A</div></div>
+                  <div class="sd-node sd-node-model"><span>🤖</span><div class="sd-node-name">モデル B</div></div>
+                  <div class="sd-node sd-node-model"><span>🤖</span><div class="sd-node-name">モデル C</div></div>
+                  <div class="sd-node sd-node-training"><span>⚙️</span><div class="sd-node-name">訓練中 Y</div></div>
+                  <div class="sd-node sd-node-training"><span>⚙️</span><div class="sd-node-name">訓練中 Z</div></div>
+                </div>
+              </div>
+            </div>
+            <div class="sd-note">各llamuneインスタンスはハートビートでSDに利用可能モデルを通知。SD間でも状態を伝播し、一方のSDが落ちても継続してルーティングします。</div>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -2475,6 +2601,18 @@ function initStep3() {
 function restart() { goStep(1); }
 
 // STEP1はiframe表示のため初期化不要
+
+function toggleSD() {
+  const detail = document.getElementById('sd-detail');
+  const arrow = document.getElementById('sd-toggle-arrow');
+  const label = document.getElementById('sd-toggle-label');
+  const isOpen = detail.classList.contains('open');
+  detail.classList.toggle('open');
+  arrow.classList.toggle('open');
+  label.textContent = isOpen
+    ? '🐒 llamune_monkey による複数インスタンス構成を見る'
+    : '🐒 llamune_monkey による複数インスタンス構成を閉じる';
+}
 </script>
 </body>
 </html>
