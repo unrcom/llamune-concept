@@ -1872,7 +1872,7 @@
         <li>完全オフライン・クローズド環境で実行</li>
       </ul>
       <div class="card-actions">
-        <span class="card-btn card-btn-ghost" style="opacity:0.4;cursor:default;text-align:center;">🚧 準備中</span>
+        <a href="https://github.com/unrcom/llamune_learn" target="_blank" class="card-btn card-btn-ghost">GitHub</a>
         <a href="#demo" onclick="event.preventDefault();goStep(3);document.getElementById('demo').scrollIntoView({behavior:'smooth'})" class="card-btn card-btn-primary">デモを見る →</a>
       </div>
     </div>
@@ -1901,7 +1901,7 @@
     <button class="demo-step-btn" id="tab-2" onclick="goStep(2)">
       <span class="step-num">STEP 02</span>
       <span class="step-name">🔍 llamune_poc</span>
-      <span class="step-sub">LLMの知識ギャップを評価</span>
+      <span class="step-sub">自由に操作できます</span>
     </button>
     <button class="demo-step-btn" id="tab-3" onclick="goStep(3)">
       <span class="step-num">STEP 03</span>
@@ -1922,61 +1922,15 @@
     </div>
   </div>
 
-  <!-- STEP 2: llamune_poc -->
+  <!-- STEP 2: llamune_poc (iframe) -->
   <div class="demo-panel" id="panel-2">
-    <div class="poc-mock">
-      <div class="poc-nav">
-        <div class="poc-nav-title">llamune_poc</div>
-        <div class="poc-nav-links">
-          <span>ホーム</span><span>ログ一覧</span><span>設定</span>
-        </div>
-      </div>
-      <div class="poc-body">
-        <div class="poc-breadcrumb">← 一覧に戻る <strong style="color:#111827;">ログ詳細 #7</strong></div>
-        <div>
-          <div class="poc-title-row">
-            <h3>ログ詳細 #7</h3>
-            <span class="poc-badge poc-badge-good">要改善</span>
-            <span class="poc-badge poc-badge-low">優先度: 高</span>
-          </div>
-          <div style="font-size:0.75rem;color:#6b7280;margin-top:6px;">セッション #12 · 2026/2/21 13:30 · 広告代理店向けPoC</div>
-        </div>
-        <div class="poc-card">
-          <div class="poc-card-label">セッション情報</div>
-          <div class="poc-meta">
-            <div class="poc-meta-item"><span>セッション</span>広告代理店向け評価セッション</div>
-            <div class="poc-meta-item"><span>モデル</span>mlx-community/Qwen2.5-14B-Instruct-4bit</div>
-            <div class="poc-meta-item"><span>システムプロンプト</span>（未定義）</div>
-          </div>
-        </div>
-        <div class="poc-card">
-          <div class="poc-card-label">質問</div>
-          <p>携帯通信事業者の新サービス向けSNSキャンペーンで、Z世代に有効なアプローチを3つ提案してください。</p>
-        </div>
-        <div class="poc-card">
-          <div class="poc-card-label">LLM の回答</div>
-          <p id="poc-answer-text"></p>
-        </div>
-        <div class="poc-card">
-          <div class="poc-card-label">評価</div>
-          <div class="poc-eval-row">
-            <div>
-              <div style="font-size:0.75rem;color:#6b7280;margin-bottom:4px;">評価 *</div>
-              <select class="poc-select"><option>要改善</option><option>良い</option><option>不可</option></select>
-            </div>
-            <div>
-              <div style="font-size:0.75rem;color:#6b7280;margin-bottom:4px;">優先度</div>
-              <select class="poc-select"><option>高</option><option>中</option><option>低</option></select>
-            </div>
-          </div>
-          <div style="margin-top:12px;font-size:0.78rem;color:#6b7280;">
-            ⚠️ 知識ギャップ検出：Z世代のSNS行動特性・最新トレンドに関する具体的な事例が不足しています。llamune_learn へエクスポートしてファインチューニングを推奨します。
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="demo-next-wrap">
-      <button class="demo-next-btn" onclick="goStep(3)">Step 3 へ進む →</button>
+    <div class="chat-iframe-wrap">
+      <iframe
+        src="poc_app/index.html"
+        id="poc-iframe"
+        title="llamune_poc デモ"
+        allow="clipboard-write"
+      ></iframe>
     </div>
   </div>
 
