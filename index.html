@@ -1,2572 +1,1909 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Llamune - 閉域LLMで業務を変える</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,800&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg: #070e12;
-      --bg2: #0a1520;
-      --cyan: #00d4aa;
-      --cyan2: #00b8ff;
-      --text: #e8f4f0;
-      --muted: #7a9a90;
-      --card-bg: rgba(255,255,255,0.03);
-      --card-border: rgba(0,212,170,0.15);
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>llamune — 業務知識を持つLLMを、社内で育てる</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Sans+JP:wght@300;400;500&family=Syne:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0c0c0e;
+  --bg-2: #111114;
+  --bg-3: #18181c;
+  --bg-4: #1e1e24;
+  --border: rgba(255,255,255,0.07);
+  --border-2: rgba(255,255,255,0.12);
+  --text: #f3f4f6;
+  --text-2: #d1d5db;
+  --text-3: #9ca3af;
+  --accent: #06b6d4;
+  --accent-dim: rgba(6,182,212,0.12);
+  --accent-border: rgba(6,182,212,0.3);
+  --danger: #f87171;
+  --danger-dim: rgba(248,113,113,0.1);
+  --mono: 'DM Mono', monospace;
+  --sans: 'Noto Sans JP', sans-serif;
+  --display: 'Syne', sans-serif;
+}
 
-    /* ── LIGHT MODE ── */
-    [data-theme="light"] {
-      --bg: #f0f7f5;
-      --bg2: #e4f0ec;
-      --cyan: #009e80;
-      --cyan2: #0090cc;
-      --text: #0d2a22;
-      --muted: #4a7068;
-      --card-bg: rgba(0,0,0,0.03);
-      --card-border: rgba(0,158,128,0.2);
-    }
-    [data-theme="light"] body {
-      background: var(--bg);
-      color: var(--text);
-    }
-    [data-theme="light"] nav {
-      background: rgba(240,247,245,0.88);
-    }
-    [data-theme="light"] .bg-layer::before {
-      background:
-        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(0,184,100,0.10) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 50% at 80% 80%, rgba(0,180,255,0.08) 0%, transparent 55%),
-        radial-gradient(ellipse 40% 40% at 60% 30%, rgba(0,212,170,0.07) 0%, transparent 50%);
-    }
-    [data-theme="light"] .chat-mock,
-    [data-theme="light"] .learn-mock {
-      background: #e8f4f0;
-    }
-    [data-theme="light"] .chat-sidebar {
-      border-right-color: rgba(0,0,0,0.08);
-    }
-    [data-theme="light"] .chat-sidebar-item { color: #4a7068; }
-    [data-theme="light"] .chat-bubble-user {
-      background: rgba(0,158,128,0.12);
-      border-color: rgba(0,158,128,0.25);
-    }
-    [data-theme="light"] .chat-response-card {
-      background: rgba(0,0,0,0.04);
-      border-color: rgba(0,0,0,0.08);
-      color: var(--text);
-    }
-    [data-theme="light"] .chat-input {
-      background: rgba(0,0,0,0.06);
-      border-color: rgba(0,0,0,0.12);
-      color: var(--muted);
-    }
-    [data-theme="light"] .chat-input-area,
-    [data-theme="light"] .chat-messages { background: transparent; }
-    [data-theme="light"] .learn-header { border-bottom-color: rgba(0,0,0,0.08); }
-    [data-theme="light"] .learn-data-item {
-      background: rgba(0,0,0,0.04);
-      border-color: rgba(0,0,0,0.07);
-      color: var(--text);
-    }
-    [data-theme="light"] .learn-progress-wrap {
-      background: rgba(0,0,0,0.04);
-      border-color: var(--card-border);
-    }
-    [data-theme="light"] .learn-stat {
-      background: rgba(0,0,0,0.03);
-      border-color: rgba(0,0,0,0.06);
-    }
-    [data-theme="light"] .learn-log {
-      background: #d8eae4;
-      color: #007a50;
-    }
-    [data-theme="light"] .deployment { background: var(--bg2); }
-    [data-theme="light"] .catalog { background: #e0ede8; }
-    [data-theme="light"] .deployment-diagram {
-      background: rgba(0,0,0,0.08);
-    }
-    [data-theme="light"] .catalog-note {
-      background: rgba(0,158,128,0.07);
-      border-color: rgba(0,158,128,0.25);
-    }
-    [data-theme="light"] .demo-steps {
-      border-color: var(--card-border);
-    }
-    [data-theme="light"] .demo-step-btn {
-      border-right-color: var(--card-border);
-    }
-    [data-theme="light"] .gallery-overlay {
-      background: rgba(240,247,245,0.96);
-    }
-    [data-theme="light"] .gallery-img {
-      border-color: rgba(0,158,128,0.25);
-    }
-    [data-theme="light"] .gallery-nav {
-      background: rgba(255,255,255,0.75);
-      color: var(--text);
-      border-color: rgba(0,0,0,0.15);
-    }
-    [data-theme="light"] .gallery-nav:hover { background: rgba(0,158,128,0.2); }
-    [data-theme="light"] .gallery-close {
-      background: rgba(0,0,0,0.1);
-      color: var(--text);
-    }
-    [data-theme="light"] .gallery-close:hover { background: rgba(0,0,0,0.2); }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* ── CONSULTATION ── */
-    .consultation {
-      background: #0a1a22;
-      padding: 80px 24px;
-      position: relative;
-      z-index: 1;
-    }
-    .consultation-inner {
-      max-width: 900px;
-      margin: 0 auto;
-    }
-    .consultation-header {
-      text-align: center;
-      margin-bottom: 48px;
-    }
-    .consultation-title {
-      font-family: 'DM Sans', sans-serif;
-      font-size: clamp(1.8rem, 4vw, 2.6rem);
-      font-weight: 800;
-      color: var(--text);
-      margin-bottom: 8px;
-    }
-    .consultation-free {
-      color: var(--cyan);
-      font-weight: 600;
-      font-size: 1rem;
-    }
-    .consultation-lead {
-      color: var(--muted);
-      text-align: center;
-      max-width: 600px;
-      margin: 0 auto 48px;
-      line-height: 1.8;
-    }
-    .consultation-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      margin-bottom: 48px;
-    }
-    .consultation-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 20px;
-      transition: border-color 0.3s;
-    }
-    .consultation-card:hover { border-color: rgba(0,212,170,0.3); }
-    .consultation-card-icon { font-size: 1.5rem; margin-bottom: 8px; }
-    .consultation-card-name {
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 6px;
-    }
-    .consultation-card-desc {
-      font-size: 0.82rem;
-      color: var(--muted);
-      line-height: 1.6;
-    }
-    .consultation-contact {
-      text-align: center;
-      background: rgba(0,212,170,0.06);
-      border: 1px solid rgba(0,212,170,0.2);
-      border-radius: 16px;
-      padding: 40px 24px;
-    }
-    .consultation-contact-lead {
-      color: var(--muted);
-      margin-bottom: 24px;
-    }
-    .consultation-email-box {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      background: var(--card-bg);
-      border: 1px solid rgba(0,212,170,0.2);
-      border-radius: 10px;
-      padding: 14px 24px;
-    }
-    .consultation-email {
-      color: var(--text);
-      font-weight: 600;
-      font-size: 0.95rem;
-    }
-    .consultation-copy-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: var(--muted);
-      display: flex;
-      align-items: center;
-    }
-    .consultation-contact-note {
-      font-size: 0.75rem;
-      color: var(--muted);
-      margin-top: 12px;
-      opacity: 0.7;
-    }
-    [data-theme="light"] .consultation { background: #ddeee8; }
-    [data-theme="light"] .consultation-contact { background: rgba(0,158,128,0.07); }
+html { scroll-behavior: smooth; }
 
-    /* ── THEME TOGGLE BUTTON ── */
-    .theme-toggle {
-      background: transparent;
-      border: 1px solid rgba(0,212,170,0.3);
-      border-radius: 50%;
-      width: 36px; height: 36px;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer;
-      font-size: 1rem;
-      color: var(--muted);
-      transition: border-color 0.2s, background 0.2s, color 0.2s;
-      flex-shrink: 0;
-    }
-    .theme-toggle:hover {
-      border-color: var(--cyan);
-      background: rgba(0,212,170,0.08);
-      color: var(--cyan);
-    }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-weight: 400;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+a { color: inherit; text-decoration: none; }
 
-    html { scroll-behavior: smooth; }
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  height: 56px;
+  background: rgba(12,12,14,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Noto Sans JP', sans-serif;
-      font-weight: 300;
-      overflow-x: hidden;
-    }
+.nav-logo {
+  font-family: var(--mono);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
 
-    /* ── Background ── */
-    .bg-layer {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-    }
-    .bg-layer::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(0,184,100,0.08) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 50% at 80% 80%, rgba(0,180,255,0.07) 0%, transparent 55%),
-        radial-gradient(ellipse 40% 40% at 60% 30%, rgba(0,212,170,0.05) 0%, transparent 50%);
-    }
+.nav-logo span { color: var(--accent); }
 
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 20px 48px;
-      background: rgba(7,14,18,0.8);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(0,212,170,0.08);
-    }
-    .nav-logo {
-      font-family: 'Syne', sans-serif;
-      font-size: 1.4rem;
-      font-weight: 800;
-      background: linear-gradient(90deg, var(--cyan), var(--cyan2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      letter-spacing: -0.02em;
-    }
-    .nav-links {
-      display: flex;
-      gap: 32px;
-      list-style: none;
-    }
-    .nav-links a {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: 400;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover { color: var(--cyan); }
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--text-2);
+}
 
-    /* ── HERO ── */
-    .hero {
-      position: relative;
-      z-index: 1;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 120px 24px 80px;
-    }
+.nav-links a:hover { color: var(--text); }
 
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(0,212,170,0.1);
-      border: 1px solid rgba(0,212,170,0.25);
-      border-radius: 100px;
-      padding: 6px 16px;
-      font-size: 0.75rem;
-      color: var(--cyan);
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      margin-bottom: 32px;
-      animation: fadeUp 0.6s ease both;
-    }
-    .hero-badge::before {
-      content: '';
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--cyan);
-      animation: pulse 2s ease-in-out infinite;
-    }
+.nav-cta {
+  font-size: 0.8rem;
+  font-weight: 400;
+  padding: 0.4rem 1rem;
+  border: 1px solid var(--accent-border);
+  border-radius: 4px;
+  color: var(--accent);
+  transition: background 0.2s;
+}
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.8); }
-    }
+.nav-cta:hover { background: var(--accent-dim); }
 
-    .hero h1 {
-      font-family: 'DM Sans', sans-serif;
-      font-size: clamp(3rem, 8vw, 6rem);
-      font-weight: 800;
-      line-height: 1.05;
-      letter-spacing: -0.03em;
-      background: linear-gradient(135deg, #fff 10%, var(--cyan) 35%, var(--cyan2) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 24px;
-      animation: fadeUp 0.6s 0.1s ease both;
-    }
+/* ── HERO ── */
+#hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 8rem 2rem 6rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
 
-    .hero-sub {
-      font-size: clamp(1rem, 2.5vw, 1.25rem);
-      color: var(--muted);
-      max-width: 580px;
-      line-height: 1.75;
-      margin-bottom: 20px;
-      animation: fadeUp 0.6s 0.2s ease both;
-    }
+.hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--accent);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
 
-    .hero-value {
-      display: flex;
-      gap: 24px;
-      justify-content: center;
-      margin-bottom: 48px;
-      animation: fadeUp 0.6s 0.3s ease both;
-      flex-wrap: wrap;
-    }
-    .value-pill {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.85rem;
-      color: var(--text);
-      opacity: 0.8;
-    }
-    .value-pill span {
-      color: var(--cyan);
-      font-size: 1rem;
-    }
+.hero-eyebrow::before {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 1px;
+  background: var(--accent);
+}
 
-    .hero-cta {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      animation: fadeUp 0.6s 0.4s ease both;
-      flex-wrap: wrap;
-    }
-    .btn-primary {
-      background: linear-gradient(135deg, var(--cyan), var(--cyan2));
-      color: #070e12;
-      font-family: 'Noto Sans JP', sans-serif;
-      font-weight: 700;
-      font-size: 0.9rem;
-      padding: 14px 28px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      transition: opacity 0.2s, transform 0.2s;
-    }
-    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+.hero-title {
+  font-family: var(--display);
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  margin-bottom: 1.5rem;
+}
 
-    .btn-outline {
-      background: transparent;
-      color: var(--cyan);
-      font-family: 'Noto Sans JP', sans-serif;
-      font-weight: 500;
-      font-size: 0.9rem;
-      padding: 13px 28px;
-      border-radius: 8px;
-      border: 1px solid rgba(0,212,170,0.4);
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      transition: background 0.2s, transform 0.2s;
-    }
-    .btn-outline:hover { background: rgba(0,212,170,0.08); transform: translateY(-1px); }
+.hero-title em {
+  font-style: normal;
+  color: var(--accent);
+}
 
-    /* scroll indicator */
-    .scroll-hint {
-      position: absolute;
-      bottom: 40px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      color: var(--muted);
-      font-size: 0.75rem;
-      animation: fadeUp 0.6s 0.8s ease both;
-    }
-    .scroll-mouse {
-      width: 22px; height: 36px;
-      border: 1.5px solid rgba(0,212,170,0.4);
-      border-radius: 11px;
-      position: relative;
-    }
-    .scroll-mouse::after {
-      content: '';
-      position: absolute;
-      top: 6px; left: 50%;
-      transform: translateX(-50%);
-      width: 3px; height: 6px;
-      background: var(--cyan);
-      border-radius: 2px;
-      animation: scrollDot 1.8s ease-in-out infinite;
-    }
-    @keyframes scrollDot {
-      0% { top: 6px; opacity: 1; }
-      100% { top: 20px; opacity: 0; }
-    }
+.hero-sub {
+  font-size: 1rem;
+  color: var(--text-2);
+  max-width: 560px;
+  line-height: 1.9;
+  margin-bottom: 3rem;
+}
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 3rem;
+}
 
-    /* ── DIVIDER ── */
-    .divider {
-      position: relative;
-      z-index: 1;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(0,212,170,0.2), transparent);
-      margin: 0 48px;
-    }
+.badge {
+  font-size: 0.75rem;
+  font-family: var(--mono);
+  padding: 0.35rem 0.85rem;
+  border: 1px solid var(--border-2);
+  border-radius: 2px;
+  color: var(--text-2);
+  background: var(--bg-3);
+}
 
-    /* ── APPS SECTION ── */
-    .apps {
-      position: relative;
-      z-index: 1;
-      padding: 100px 48px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
+.hero-cta {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
 
-    .section-label {
-      text-align: center;
-      font-size: 0.75rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--cyan);
-      margin-bottom: 16px;
-    }
-    .section-title {
-      text-align: center;
-      font-family: 'DM Sans', sans-serif;
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      color: var(--text);
-      margin-bottom: 12px;
-    }
-    .section-desc {
-      text-align: center;
-      color: var(--muted);
-      font-size: 0.95rem;
-      line-height: 1.7;
-      max-width: 520px;
-      margin: 0 auto 64px;
-    }
+.btn-primary {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  background: var(--accent);
+  color: #0c0c0e;
+  font-weight: 500;
+  font-size: 0.875rem;
+  border-radius: 4px;
+  transition: opacity 0.2s;
+}
 
-    /* ── CARDS ── */
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 24px;
-    }
+.btn-primary:hover { opacity: 0.85; }
 
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 36px;
-      position: relative;
-      overflow: hidden;
-      transition: border-color 0.3s, transform 0.3s;
-      display: flex;
-      flex-direction: column;
-    }
-    .card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    .card:hover {
-      border-color: rgba(0,212,170,0.35);
-      transform: translateY(-4px);
-    }
-    .card:hover::before { opacity: 1; }
+.btn-ghost {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  border: 1px solid var(--border-2);
+  color: var(--text-2);
+  font-size: 0.875rem;
+  border-radius: 4px;
+  transition: border-color 0.2s, color 0.2s;
+}
 
-    .card-number {
-      font-family: 'Syne', sans-serif;
-      font-size: 0.7rem;
-      font-weight: 800;
-      letter-spacing: 0.1em;
-      color: rgba(0,212,170,0.35);
-      margin-bottom: 20px;
-    }
-    .card-icon {
-      font-size: 2rem;
-      margin-bottom: 16px;
-    }
-    .card-name {
-      font-family: 'Syne', sans-serif;
-      font-size: 1.4rem;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      background: linear-gradient(90deg, var(--cyan), var(--cyan2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 12px;
-    }
-    .card-desc {
-      font-size: 0.9rem;
-      color: var(--muted);
-      line-height: 1.7;
-      margin-bottom: 24px;
-    }
+.btn-ghost:hover { border-color: var(--border-2); color: var(--text); }
 
-    .card-features {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 32px;
-      flex: 1;
-    }
-    .card-features li {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      font-size: 0.85rem;
-      color: var(--text);
-      opacity: 0.85;
-      line-height: 1.5;
-    }
-    .card-features li::before {
-      content: '▸';
-      color: var(--cyan);
-      font-size: 0.7rem;
-      margin-top: 3px;
-      flex-shrink: 0;
-    }
+/* ── SECTION COMMON ── */
+section {
+  padding: 6rem 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
 
-    .card-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .card-btn {
-      flex: 1;
-      min-width: 100px;
-      text-align: center;
-      font-family: 'Noto Sans JP', sans-serif;
-      font-size: 0.8rem;
-      font-weight: 500;
-      padding: 10px 16px;
-      border-radius: 8px;
-      text-decoration: none;
-      transition: all 0.2s;
-      cursor: pointer;
-      border: none;
-    }
-    .card-btn-primary {
-      background: linear-gradient(135deg, var(--cyan), var(--cyan2));
-      color: #070e12;
-      font-weight: 700;
-    }
-    .card-btn-primary:hover { opacity: 0.85; }
-    .card-btn-ghost {
-      background: transparent;
-      color: var(--muted);
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-    .card-btn-ghost:hover { color: var(--text); border-color: rgba(0,212,170,0.25); }
+.section-label {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--accent);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
 
-    /* ── WHY SECTION ── */
-    .why {
-      position: relative;
-      z-index: 1;
-      padding: 80px 48px 100px;
-    }
-    .why-inner {
-      max-width: 960px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 64px;
-      align-items: center;
-    }
-    .why-text h2 {
-      font-family: 'DM Sans', sans-serif;
-      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      line-height: 1.3;
-      margin-bottom: 20px;
-    }
-    .why-text p {
-      font-size: 0.9rem;
-      color: var(--muted);
-      line-height: 1.8;
-    }
-    .why-points {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-    .why-point {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 24px 16px;
-      box-sizing: border-box;
-      transition: border-color 0.3s;
-    }
-    .why-point:hover { border-color: rgba(0,212,170,0.3); }
-    .why-point-title {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 6px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .why-point-title span { font-size: 1.1rem; }
-    .why-point p {
-      font-size: 0.82rem;
-      color: var(--muted);
-      line-height: 1.6;
-    }
+.section-label::before {
+  content: '';
+  display: block;
+  width: 16px;
+  height: 1px;
+  background: var(--accent);
+}
 
-    /* ── DEPLOYMENT ── */
-    .deployment {
-      position: relative;
-      z-index: 1;
-      padding: 80px 48px;
-      background: var(--bg2);
-    }
-    .deployment-inner {
-      max-width: 860px;
-      margin: 0 auto;
-    }
-    .deployment-header {
-      text-align: center;
-      margin-bottom: 48px;
-    }
-    .deployment-header h2 {
-      font-family: 'DM Sans', sans-serif;
-      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      margin-bottom: 12px;
-    }
-    .deployment-header p {
-      font-size: 0.9rem;
-      color: var(--muted);
-    }
-    .deployment-cards {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-    .deployment-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 28px 32px;
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      grid-template-rows: auto 1fr auto;
-      column-gap: 40px;
-      row-gap: 12px;
-      transition: border-color 0.3s;
-      align-items: start;
-    }
-    .deployment-card:hover { border-color: rgba(0,212,170,0.3); }
-    .deployment-card-title {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 1rem;
-      font-weight: 800;
-      color: var(--text);
-      grid-column: 2;
-      grid-row: 1;
-    }
-    .deployment-diagram {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 20px 12px;
-      background: rgba(0,0,0,0.25);
-      border-radius: 12px;
-      grid-column: 1;
-      grid-row: 1 / 4;
-      align-self: stretch;
-      flex-wrap: wrap;
-    }
-    .deployment-diagram .d-node {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.72rem;
-      color: var(--muted);
-    }
-    .deployment-diagram .d-node span { font-size: 2rem; }
-    .deployment-diagram .d-arrow {
-      color: var(--cyan);
-      font-size: 1.4rem;
-      opacity: 0.8;
-    }
-    .deployment-diagram .d-group {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-    }
-    .deployment-diagram .d-users {
-      display: flex;
-      gap: 4px;
-    }
-    .deployment-card-desc {
-      font-size: 0.85rem;
-      color: var(--muted);
-      line-height: 1.8;
-      grid-column: 2;
-      grid-row: 2;
-    }
-    .deployment-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 6px 14px;
-      border-radius: 20px;
-      grid-column: 2;
-      grid-row: 3;
-      align-self: end;
-      justify-self: start;
-    }
-    .badge-max {
-      background: rgba(239,68,68,0.15);
-      color: #f87171;
-      border: 1px solid rgba(239,68,68,0.3);
-    }
-    .badge-high {
-      background: rgba(251,191,36,0.15);
-      color: #fbbf24;
-      border: 1px solid rgba(251,191,36,0.3);
-    }
-    @media (max-width: 768px) {
-      .deployment { padding: 60px 24px; }
-      .deployment-card {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto auto auto auto;
-      }
-      .deployment-card-title { grid-column: 1; grid-row: 1; }
-      .deployment-diagram { grid-column: 1; grid-row: 2; }
-      .deployment-card-desc { grid-column: 1; grid-row: 3; }
-      .deployment-badge { grid-column: 1; grid-row: 4; }
-    }
+.section-title {
+  font-family: var(--display);
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
 
-    /* ── MODEL CATALOG ── */
-    .catalog {
-      position: relative;
-      z-index: 1;
-      padding: 80px 48px;
-      background: #07131a;
-    }
-    .catalog-inner {
-      max-width: 860px;
-      margin: 0 auto;
-    }
-    .catalog-header {
-      text-align: center;
-      margin-bottom: 48px;
-    }
-    .catalog-header h2 {
-      font-family: 'DM Sans', sans-serif;
-      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      margin-bottom: 12px;
-    }
-    .catalog-header p {
-      font-size: 0.9rem;
-      color: var(--muted);
-    }
-    .catalog-note {
-      background: rgba(0,212,170,0.06);
-      border: 1px solid rgba(0,212,170,0.2);
-      border-radius: 10px;
-      padding: 14px 20px;
-      font-size: 0.82rem;
-      color: var(--muted);
-      margin-bottom: 40px;
-      line-height: 1.7;
-    }
-    .catalog-note strong { color: var(--cyan); }
-    .catalog-group {
-      margin-bottom: 40px;
-    }
-    .catalog-group-title {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 16px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--card-border);
-    }
-    .catalog-rows {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .catalog-row {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 16px 20px;
-      display: grid;
-      grid-template-columns: 1fr auto auto;
-      align-items: center;
-      gap: 16px;
-      transition: border-color 0.3s;
-    }
-    .catalog-row:hover { border-color: rgba(0,212,170,0.3); }
-    .catalog-row-left {}
-    .catalog-model-name {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.88rem;
-      color: var(--cyan);
-      margin-bottom: 4px;
-    }
-    .catalog-model-desc {
-      font-size: 0.78rem;
-      color: var(--muted);
-      line-height: 1.5;
-    }
-    .catalog-mem {
-      font-size: 0.78rem;
-      color: var(--muted);
-      text-align: right;
-      white-space: nowrap;
-    }
-    .catalog-mem span {
-      display: block;
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--text);
-    }
-    .catalog-thinking {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 0.72rem;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 20px;
-      white-space: nowrap;
-    }
-    .thinking-yes {
-      background: rgba(0,212,170,0.12);
-      color: var(--cyan);
-      border: 1px solid rgba(0,212,170,0.3);
-    }
-    .thinking-no {
-      background: rgba(255,255,255,0.05);
-      color: var(--muted);
-      border: 1px solid var(--card-border);
-    }
-    @media (max-width: 768px) {
-      .catalog { padding: 60px 24px; }
-      .catalog-row {
-        grid-template-columns: 1fr auto;
-        grid-template-rows: auto auto;
-      }
-      .catalog-row-left { grid-column: 1; grid-row: 1; }
-      .catalog-thinking { grid-column: 2; grid-row: 1; }
-      .catalog-mem { grid-column: 1 / 3; grid-row: 2; text-align: left; }
-    }
+.section-desc {
+  color: var(--text-2);
+  font-size: 0.95rem;
+  max-width: 600px;
+  line-height: 1.9;
+  margin-bottom: 3rem;
+}
 
-    /* ── FOOTER ── */
-    footer {
-      position: relative;
-      z-index: 1;
-      border-top: 1px solid rgba(0,212,170,0.08);
-      padding: 40px 48px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: gap;
-    }
-    .footer-logo {
-      font-family: 'Syne', sans-serif;
-      font-size: 1.1rem;
-      font-weight: 800;
-      background: linear-gradient(90deg, var(--cyan), var(--cyan2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .footer-copy {
-      font-size: 0.8rem;
-      color: var(--muted);
-    }
-    .footer-copy a {
-      color: var(--muted);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    .footer-copy a:hover { color: var(--cyan); }
+/* ── DIVIDER ── */
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  max-width: 900px;
+  margin: 0 auto;
+}
 
-    /* ── DEMO SECTION ── */
-    .demo {
-      position: relative;
-      z-index: 1;
-      padding: 100px 48px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
+/* ── SECTION 2: ベースモデルの限界 ── */
+.hallucination-demo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
 
-    /* Step tabs */
-    .demo-steps {
-      display: flex;
-      gap: 0;
-      margin-bottom: 40px;
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      overflow: hidden;
-    }
-    .demo-step-btn {
-      flex: 1;
-      background: transparent;
-      border: none;
-      border-right: 1px solid var(--card-border);
-      padding: 16px 12px;
-      cursor: pointer;
-      color: var(--muted);
-      font-family: 'Noto Sans JP', sans-serif;
-      font-size: 0.82rem;
-      font-weight: 500;
-      transition: all 0.2s;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-    }
-    .demo-step-btn:last-child { border-right: none; }
-    .demo-step-btn .step-num {
-      font-family: 'Syne', sans-serif;
-      font-size: 0.65rem;
-      letter-spacing: 0.1em;
-      color: rgba(0,212,170,0.4);
-    }
-    .demo-step-btn .step-name {
-      font-size: 0.88rem;
-      font-weight: 700;
-    }
-    .demo-step-btn.active {
-      background: rgba(0,212,170,0.08);
-      color: var(--cyan);
-    }
-    .demo-step-btn.active .step-num { color: var(--cyan); }
-    .step-sub { font-size: 0.72rem; color: var(--muted); display: block; transition: font-size 0.2s, color 0.2s; }
-    .demo-step-btn.active .step-sub { font-size: 1.08rem; color: var(--cyan); font-weight: 600; }
-    .demo-step-btn.done { color: var(--text); opacity: 0.6; }
+.demo-panel {
+  background: var(--bg-2);
+  padding: 1.75rem;
+}
 
-    /* Demo panels */
-    .demo-panel { display: none; }
-    .demo-panel.active { display: block; }
+.demo-panel-label {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
 
-    /* ── CHAT MOCK ── */
-    .chat-mock {
-      background: #0d1b24;
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      overflow: hidden;
-      display: flex;
-      height: 480px;
-    }
-    .chat-sidebar {
-      width: 200px;
-      flex-shrink: 0;
-      border-right: 1px solid rgba(255,255,255,0.06);
-      padding: 16px 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .chat-sidebar-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 0.85rem;
-      font-weight: 800;
-      background: linear-gradient(90deg, var(--cyan), var(--cyan2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 8px;
-    }
-    .chat-new-btn {
-      background: linear-gradient(135deg, var(--cyan), var(--cyan2));
-      color: #070e12;
-      font-family: 'Noto Sans JP', sans-serif;
-      font-size: 0.75rem;
-      font-weight: 700;
-      border: none;
-      border-radius: 6px;
-      padding: 8px;
-      cursor: pointer;
-      width: 100%;
-    }
-    .chat-sidebar-item {
-      font-size: 0.72rem;
-      color: var(--muted);
-      padding: 6px 8px;
-      border-radius: 6px;
-      line-height: 1.4;
-      cursor: pointer;
-    }
-    .chat-sidebar-item.active-chat {
-      background: rgba(0,212,170,0.1);
-      color: var(--text);
-      border: 1px solid rgba(0,212,170,0.2);
-    }
+.demo-panel.before .demo-panel-label { color: var(--danger); }
+.demo-panel.after .demo-panel-label { color: var(--accent); }
 
-    .chat-main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-    .chat-messages {
-      flex: 1;
-      padding: 24px 16px;
-      box-sizing: border-box;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-    .chat-bubble-user {
-      align-self: flex-end;
-      background: rgba(0,212,170,0.15);
-      border: 1px solid rgba(0,212,170,0.25);
-      border-radius: 12px 12px 2px 12px;
-      padding: 12px 16px;
-      max-width: 80%;
-      font-size: 0.85rem;
-      line-height: 1.6;
-    }
-    .chat-you-label {
-      display: block;
-      font-size: 0.68rem;
-      color: var(--muted);
-      margin-bottom: 4px;
-      text-align: right;
-      width: 100%;
-    }
-    .chat-bubble-label {
-      display: block;
-      font-size: 0.68rem;
-      color: var(--muted);
-      margin-bottom: 4px;
-    }
-    .chat-response-area {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .chat-response-header {
-      font-size: 0.75rem;
-      color: var(--cyan);
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-    .chat-response-card {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 10px;
-      padding: 14px 16px;
-      font-size: 0.82rem;
-      line-height: 1.65;
-      color: var(--text);
-      opacity: 0.9;
-    }
-    .chat-response-card.selected {
-      border-color: rgba(0,212,170,0.4);
-      background: rgba(0,212,170,0.06);
-    }
-    .chat-model-tag {
-      font-size: 0.65rem;
-      color: var(--muted);
-      text-align: right;
-      margin-bottom: 6px;
-      font-family: monospace;
-    }
-    .chat-actions {
-      display: flex;
-      gap: 6px;
-      margin-top: 10px;
-    }
-    .chat-action-btn {
-      font-size: 0.72rem;
-      padding: 5px 12px;
-      border-radius: 5px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: transparent;
-      color: var(--muted);
-      cursor: pointer;
-      font-family: 'Noto Sans JP', sans-serif;
-      transition: all 0.15s;
-    }
-    .chat-action-btn:hover { border-color: var(--cyan); color: var(--cyan); }
-    .chat-action-btn.adopt {
-      background: rgba(0,212,170,0.12);
-      border-color: rgba(0,212,170,0.3);
-      color: var(--cyan);
-    }
-    .chat-input-area {
-      padding: 16px;
-      border-top: 1px solid rgba(255,255,255,0.06);
-      display: flex;
-      gap: 10px;
-    }
-    .chat-input {
-      flex: 1;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 8px;
-      padding: 10px 14px;
-      color: var(--muted);
-      font-family: 'Noto Sans JP', sans-serif;
-      font-size: 0.82rem;
-      outline: none;
-    }
-    .chat-send-btn {
-      background: rgba(0,212,170,0.2);
-      border: 1px solid rgba(0,212,170,0.3);
-      color: var(--cyan);
-      font-size: 0.8rem;
-      padding: 10px 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-family: 'Noto Sans JP', sans-serif;
-    }
+.demo-q {
+  font-size: 0.8rem;
+  color: var(--text);
+  margin-bottom: 0.75rem;
+  font-family: var(--mono);
+  font-weight: 500;
+}
 
-    /* ── POC MOCK ── */
-    .poc-mock {
-      background: #f8f9fa;
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 16px;
-      overflow: hidden;
-      height: 480px;
-      display: flex;
-      flex-direction: column;
-    }
-    .poc-nav {
-      background: #fff;
-      border-bottom: 1px solid #e5e7eb;
-      padding: 14px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .poc-nav-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 0.95rem;
-      font-weight: 800;
-      color: #1a1a2e;
-    }
-    .poc-nav-links {
-      display: flex;
-      gap: 20px;
-      font-size: 0.78rem;
-      color: #6b7280;
-    }
-    .poc-body {
-      flex: 1;
-      overflow-y: auto;
-      padding: 24px 16px;
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-    .poc-breadcrumb {
-      font-size: 0.78rem;
-      color: #6b7280;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .poc-title-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .poc-title-row h3 {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: #111827;
-    }
-    .poc-badge {
-      font-size: 0.68rem;
-      padding: 3px 10px;
-      border-radius: 100px;
-      font-weight: 600;
-    }
-    .poc-badge-good { background: #d1fae5; color: #065f46; }
-    .poc-badge-low { background: #f3f4f6; color: #6b7280; }
-    .poc-card {
-      background: #fff;
-      border: 1px solid #e5e7eb;
-      border-radius: 10px;
-      padding: 18px;
-    }
-    .poc-card-label {
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: #6b7280;
-      margin-bottom: 10px;
-    }
-    .poc-card p { font-size: 0.85rem; color: #374151; line-height: 1.6; }
-    .poc-meta { display: flex; gap: 24px; }
-    .poc-meta-item { font-size: 0.82rem; color: #374151; }
-    .poc-meta-item span { color: #6b7280; margin-right: 8px; font-size: 0.75rem; }
-    .poc-eval-row {
-      display: flex;
-      gap: 16px;
-    }
-    .poc-select {
-      background: #fff;
-      border: 1px solid #d1d5db;
-      border-radius: 6px;
-      padding: 6px 12px;
-      font-size: 0.82rem;
-      color: #374151;
-      font-family: 'Noto Sans JP', sans-serif;
-    }
+.demo-a {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  font-weight: 400;
+}
 
-    /* ── LEARN MOCK ── */
-    .learn-mock {
-      background: #0d1b24;
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      overflow: hidden;
-      height: 480px;
-      display: flex;
-      flex-direction: column;
-    }
-    .learn-header {
-      padding: 20px 28px;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .learn-header-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 0.95rem;
-      font-weight: 800;
-      background: linear-gradient(90deg, var(--cyan), var(--cyan2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .learn-status {
-      font-size: 0.72rem;
-      padding: 4px 12px;
-      border-radius: 100px;
-      background: rgba(0,212,170,0.15);
-      color: var(--cyan);
-      border: 1px solid rgba(0,212,170,0.25);
-    }
-    .learn-body {
-      flex: 1;
-      padding: 24px 28px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-    .learn-section-title {
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 10px;
-    }
-    .learn-data-items {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .learn-data-item {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 8px;
-      padding: 10px 14px;
-      font-size: 0.78rem;
-      color: var(--text);
-      opacity: 0.8;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .learn-data-item-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--cyan);
-      flex-shrink: 0;
-    }
-    .learn-progress-wrap {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
-      padding: 18px;
-    }
-    .learn-progress-label {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.8rem;
-      color: var(--text);
-      margin-bottom: 12px;
-    }
-    .learn-progress-label span { color: var(--cyan); font-weight: 700; }
-    .learn-bar-bg {
-      height: 8px;
-      background: rgba(255,255,255,0.08);
-      border-radius: 4px;
-      overflow: hidden;
-      margin-bottom: 12px;
-    }
-    .learn-bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--cyan), var(--cyan2));
-      border-radius: 4px;
-      width: 0%;
-      transition: width 2s ease;
-    }
-    .learn-stats {
-      display: flex;
-      gap: 16px;
-    }
-    .learn-stat {
-      flex: 1;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 8px;
-      padding: 12px;
-      text-align: center;
-    }
-    .learn-stat-val {
-      font-family: 'Syne', sans-serif;
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: var(--cyan);
-      display: block;
-    }
-    .learn-stat-label {
-      font-size: 0.7rem;
-      color: var(--muted);
-      margin-top: 2px;
-    }
-    .learn-log {
-      background: #070e12;
-      border-radius: 8px;
-      padding: 14px;
-      font-family: monospace;
-      font-size: 0.75rem;
-      color: #4ade80;
-      line-height: 1.8;
-      height: 100px;
-      overflow-y: auto;
-    }
+.demo-panel.before .demo-a {
+  background: var(--danger-dim);
+  color: var(--danger);
+  border: 1px solid rgba(248,113,113,0.15);
+}
 
-    /* Next button */
-    .demo-next-wrap {
-      display: flex;
-      justify-content: flex-end;
-      margin-top: 20px;
-    }
-    .demo-next-btn {
-      background: linear-gradient(135deg, var(--cyan), var(--cyan2));
-      color: #070e12;
-      font-family: 'Noto Sans JP', sans-serif;
-      font-weight: 700;
-      font-size: 0.88rem;
-      padding: 12px 28px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      transition: opacity 0.2s, transform 0.2s;
-    }
-    .demo-next-btn:hover { opacity: 0.85; transform: translateY(-1px); }
-    .demo-restart-btn {
-      background: transparent;
-      color: var(--cyan);
-      font-family: 'Noto Sans JP', sans-serif;
-      font-weight: 500;
-      font-size: 0.88rem;
-      padding: 12px 28px;
-      border-radius: 8px;
-      border: 1px solid rgba(0,212,170,0.4);
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .demo-restart-btn:hover { background: rgba(0,212,170,0.08); }
+.demo-panel.after .demo-a {
+  background: var(--accent-dim);
+  color: var(--accent);
+  border: 1px solid var(--accent-border);
+}
 
-    /* typing cursor */
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-    .cursor { display: inline-block; width: 2px; height: 1em; background: var(--cyan); margin-left: 2px; vertical-align: text-bottom; animation: blink 0.8s infinite; }
+.hallucination-note {
+  font-size: 0.8rem;
+  color: var(--text-3);
+  font-family: var(--mono);
+  text-align: center;
+}
 
-    /* ── SD DETAIL (③展開) ── */
-    .sd-toggle-btn {
-      display: flex; align-items: center; justify-content: space-between;
-      width: 100%; margin-top: 14px; padding: 10px 14px;
-      background: rgba(0,212,170,0.08); border: 1px solid rgba(0,212,170,0.25);
-      border-radius: 8px; color: var(--cyan); font-size: 0.82rem;
-      cursor: pointer; transition: background 0.2s;
-    }
-    .sd-toggle-btn:hover { background: rgba(0,212,170,0.15); }
-    #sd-toggle-arrow { transition: transform 0.3s; display: inline-block; }
-    #sd-toggle-arrow.open { transform: rotate(180deg); }
+/* ── SECTION 3: トレーニングサイクル ── */
+.cycle-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 3rem;
+}
 
-    .sd-detail {
-      max-height: 0; overflow: hidden;
-      transition: max-height 0.5s ease, opacity 0.4s ease;
-      opacity: 0;
-    }
-    .sd-detail.open { max-height: 1000px; opacity: 1; }
+.cycle-step {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 0;
+}
 
-    .sd-detail-inner {
-      padding: 18px 4px 4px;
-      border-top: 1px solid rgba(0,212,170,0.15);
-      margin-top: 14px;
-    }
-    .sd-detail-title {
-      font-size: 0.85rem; font-weight: 600; color: var(--cyan); margin-bottom: 6px;
-    }
-    .sd-detail-desc {
-      font-size: 0.75rem; color: var(--muted); margin-bottom: 16px; line-height: 1.6;
-    }
+.step-connector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-    .sd-diagram {
-      display: flex; flex-direction: column; align-items: center; gap: 4px;
-    }
-    .sd-layer { width: 100%; }
-    .sd-layer-label {
-      font-size: 0.65rem; color: var(--muted); text-align: center; margin-bottom: 6px;
-    }
-    .sd-layer-nodes {
-      display: flex; justify-content: center; align-items: center;
-      gap: 8px; flex-wrap: wrap;
-    }
-    .sd-arrows-down {
-      font-size: 1rem; color: rgba(0,212,170,0.4); letter-spacing: 4px;
-      margin: 2px 0;
-    }
-    .sd-node {
-      display: flex; flex-direction: column; align-items: center;
-      padding: 6px 10px; border-radius: 8px; font-size: 0.7rem;
-      min-width: 52px; text-align: center;
-    }
-    .sd-node span { font-size: 1.2rem; }
-    .sd-node-name { font-size: 0.62rem; margin-top: 2px; color: var(--muted); }
-    .sd-node-user { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); }
-    .sd-node-monkey { background: rgba(0,212,170,0.1); border: 1px solid rgba(0,212,170,0.3); color: var(--cyan); }
-    .sd-node-chat { background: rgba(100,160,255,0.1); border: 1px solid rgba(100,160,255,0.25); }
-    .sd-node-poc  { background: rgba(160,100,255,0.1); border: 1px solid rgba(160,100,255,0.25); }
-    .sd-node-model { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); }
-    .sd-node-training { background: rgba(255,180,0,0.08); border: 1px dashed rgba(255,180,0,0.35); color: #ffc542; }
-    .sd-sync-arrow {
-      font-size: 1.1rem; color: rgba(0,212,170,0.5); text-align: center;
-      font-size: 0.75rem;
-    }
-    .sd-note {
-      margin-top: 14px; padding: 10px 12px;
-      background: rgba(0,212,170,0.05); border-left: 2px solid rgba(0,212,170,0.3);
-      border-radius: 4px; font-size: 0.72rem; color: var(--muted); line-height: 1.6;
-    }
-    [data-theme="light"] .sd-toggle-btn { background: rgba(0,140,110,0.07); border-color: rgba(0,140,110,0.2); }
-    [data-theme="light"] .sd-node-user { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.1); }
-    [data-theme="light"] .sd-note { background: rgba(0,140,110,0.05); }
+.step-num {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--accent-border);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--accent);
+  flex-shrink: 0;
+  background: var(--bg);
+  position: relative;
+  z-index: 1;
+}
 
-    /* ── CHAT IFRAME ── */
-    .chat-iframe-wrap {
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      overflow: hidden;
-      height: 80vh;
-      background: #0d1b24;
-    }
-    .chat-iframe-wrap iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-      display: block;
-    }
+.step-line {
+  width: 1px;
+  flex: 1;
+  background: var(--border-2);
+  min-height: 2rem;
+}
+
+.cycle-step:last-child .step-line { display: none; }
+
+.step-body {
+  padding: 0 0 2.5rem 1.25rem;
+}
+
+.step-tool {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--text-3);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.35rem;
+}
+
+.step-title {
+  font-family: var(--display);
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+
+.step-desc {
+  font-size: 0.85rem;
+  color: var(--text-2);
+  line-height: 1.8;
+  margin-bottom: 1.25rem;
+}
+
+/* スクリーンショット */
+.screenshot-frame {
+  border: 1px solid var(--border-2);
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--bg-3);
+}
+
+.screenshot-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: var(--bg-4);
+  border-bottom: 1px solid var(--border);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border-2);
+}
+
+.screenshot-url {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--text-3);
+  margin-left: 4px;
+}
+
+.screenshot-frame img {
+  width: 100%;
+  display: block;
+}
+
+/* Loss グラフ */
+.loss-chart {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1.25rem 1.5rem;
+  margin-top: 1.25rem;
+}
+
+.loss-chart-title {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--text-3);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.loss-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 80px;
+}
+
+.loss-bar {
+  flex: 1;
+  background: var(--accent);
+  border-radius: 2px 2px 0 0;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  min-width: 0;
+}
+
+.loss-bar:hover { opacity: 1; }
+
+.loss-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+}
+
+.loss-label {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  color: var(--text-3);
+}
+
+/* ── SECTION 4: 2つのツール ── */
+.tools-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.tool-card {
+  background: var(--bg-2);
+  padding: 2rem;
+}
+
+.tool-name {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+}
+
+.tool-role {
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 0.75rem;
+  line-height: 1.5;
+}
+
+.tool-desc {
+  font-size: 0.82rem;
+  color: var(--text-2);
+  line-height: 1.8;
+}
+
+.tool-features {
+  list-style: none;
+  margin-top: 1rem;
+}
+
+.tool-features li {
+  font-size: 0.8rem;
+  color: var(--text-2);
+  padding: 0.3rem 0;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.tool-features li::before {
+  content: '—';
+  color: var(--text-3);
+  flex-shrink: 0;
+  font-family: var(--mono);
+}
+
+/* ── SECTION 5: なぜ閉域か ── */
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.why-card {
+  background: var(--bg-2);
+  padding: 1.75rem;
+}
+
+.why-icon {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.why-title {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+
+.why-desc {
+  font-size: 0.8rem;
+  color: var(--text-2);
+  line-height: 1.8;
+}
+
+/* ── SECTION 6: 構築例 ── */
+.config-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.config-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  background: var(--bg-2);
+}
+
+.config-label {
+  padding: 1.25rem 1.5rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--text-3);
+  border-right: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  padding-top: 1.35rem;
+}
+
+.config-content {
+  padding: 1.25rem 1.5rem;
+}
+
+.config-title {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 0.35rem;
+}
+
+.config-desc {
+  font-size: 0.8rem;
+  color: var(--text-2);
+  line-height: 1.75;
+}
+
+.config-badge {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 2px;
+  margin-top: 0.5rem;
+  background: var(--accent-dim);
+  color: var(--accent);
+  border: 1px solid var(--accent-border);
+}
+
+/* monkey */
+.monkey-diagram {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 2rem;
+}
+
+.monkey-header {
+  padding: 1rem 1.5rem;
+  background: var(--bg-3);
+  border-bottom: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--text-2);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+}
+
+.monkey-header:hover { background: var(--bg-4); }
+
+.monkey-body {
+  padding: 1.5rem;
+  background: var(--bg-2);
+  display: none;
+}
+
+.monkey-body.open { display: block; }
+
+.monkey-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--text-2);
+}
+
+.monkey-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.monkey-node {
+  background: var(--bg-4);
+  border: 1px solid var(--border-2);
+  border-radius: 4px;
+  padding: 0.4rem 0.8rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--text-2);
+  white-space: nowrap;
+}
+
+.monkey-node.highlight {
+  border-color: var(--accent-border);
+  color: var(--accent);
+  background: var(--accent-dim);
+}
+
+.arrow { color: var(--text-3); font-family: var(--mono); }
+
+/* ── SECTION 7: LLMカタログ ── */
+.catalog-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.catalog-header {
+  display: grid;
+  grid-template-columns: 1fr 80px 80px 80px;
+  padding: 0.6rem 1.25rem;
+  background: var(--bg-3);
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--text-3);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.catalog-item {
+  display: grid;
+  grid-template-columns: 1fr 80px 80px 80px;
+  padding: 1rem 1.25rem;
+  background: var(--bg-2);
+  align-items: center;
+  gap: 0;
+}
+
+.catalog-item:hover { background: var(--bg-3); }
+
+.model-name {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  color: var(--text);
+  margin-bottom: 0.2rem;
+}
+
+.model-desc {
+  font-size: 0.75rem;
+  color: var(--text-3);
+}
+
+.catalog-val {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--text-2);
+}
+
+.thinking-badge {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: 2px;
+  background: rgba(168,85,247,0.12);
+  color: #c084fc;
+  border: 1px solid rgba(168,85,247,0.2);
+}
+
+.catalog-section-label {
+  padding: 0.5rem 1.25rem;
+  background: var(--bg-4);
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--text-3);
+  letter-spacing: 0.08em;
+}
+
+/* ── SECTION 8: お問い合わせ ── */
+#consultation {
+  text-align: center;
+  padding: 6rem 2rem;
+}
+
+.contact-box {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.contact-mail {
+  font-family: var(--mono);
+  font-size: 1.1rem;
+  color: var(--accent);
+  margin: 2rem 0;
+  padding: 1rem 1.5rem;
+  border: 1px solid var(--accent-border);
+  border-radius: 4px;
+  background: var(--accent-dim);
+  display: inline-block;
+}
+
+.services {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  text-align: left;
+  margin-top: 2rem;
+}
+
+.service-item {
+  padding: 1.25rem 1.5rem;
+  background: var(--bg-2);
+}
+
+.service-title {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 0.35rem;
+}
+
+.service-desc {
+  font-size: 0.78rem;
+  color: var(--text-2);
+  line-height: 1.75;
+}
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 2rem;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--text-3);
+}
+
+footer a { color: var(--text-2); }
+footer a:hover { color: var(--text); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  nav { padding: 0 1rem; }
+  .nav-links { display: none; }
+  section { padding: 4rem 1rem; }
+  #hero { padding: 6rem 1rem 4rem; }
+  .hallucination-demo { grid-template-columns: 1fr; }
+  .tools-grid { grid-template-columns: 1fr; }
+  .why-grid { grid-template-columns: 1fr; }
+  .config-row { grid-template-columns: 1fr; }
+  .config-label { border-right: none; border-bottom: 1px solid var(--border); }
+  .catalog-header { grid-template-columns: 1fr 70px 60px; }
+  .catalog-item { grid-template-columns: 1fr 70px 60px; }
+  .catalog-item > .catalog-val:last-child { display: none; }
+  .services { grid-template-columns: 1fr; }
+}
 
 
-    
 
-    /* ── GALLERY MODAL ── */
-    .gallery-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.92);
-      z-index: 1000;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 24px 16px;
-      box-sizing: border-box;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s;
-    }
-    .gallery-overlay.open {
-      opacity: 1;
-      pointer-events: all;
-    }
-    .gallery-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-      max-width: 900px;
-      margin-bottom: 16px;
-    }
-    .gallery-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 0.9rem;
-      font-weight: 800;
-      background: linear-gradient(90deg, var(--cyan), var(--cyan2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .gallery-counter {
-      font-size: 0.78rem;
-      color: var(--muted);
-    }
-    .gallery-close {
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-      border: none;
-      border-radius: 50%;
-      width: 32px; height: 32px;
-      font-size: 1rem;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: background 0.2s;
-    }
-    .gallery-close:hover { background: rgba(255,255,255,0.2); }
-    .gallery-main {
-      position: relative;
-      width: 100%;
-      max-width: 900px;
-    }
-    .gallery-img {
-      width: 100%;
-      border-radius: 12px;
-      display: block;
-      border: 1px solid rgba(0,212,170,0.2);
-    }
-    .gallery-nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(0,0,0,0.65);
-      backdrop-filter: blur(4px);
-      color: #fff;
-      border: 1px solid rgba(255,255,255,0.25);
-      border-radius: 50%;
-      width: 44px; height: 44px;
-      font-size: 1.4rem;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: background 0.2s;
-      z-index: 10;
-    }
-    .gallery-nav:hover { background: rgba(0,212,170,0.35); }
-    .gallery-prev { left: 10px; }
-    .gallery-next { right: 10px; }
-    @media (max-width: 600px) {
-      .gallery-prev { left: 6px; }
-      .gallery-next { right: 6px; }
-      .gallery-nav { width: 38px; height: 38px; font-size: 1.2rem; }
-    }
-    .gallery-caption {
-      margin-top: 14px;
-      font-size: 0.82rem;
-      color: var(--muted);
-      text-align: center;
-    }
-    .gallery-dots {
-      display: flex;
-      gap: 8px;
-      justify-content: center;
-      margin-top: 16px;
-    }
-    .gallery-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.2);
-      cursor: pointer;
-      transition: background 0.2s;
-      border: none;
-    }
-    .gallery-dot.active { background: var(--cyan); }
 
-    /* ── MOBILE INFO MODAL ── */
-    .mobile-modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.75);
-      z-index: 2000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.2s;
-    }
-    .mobile-modal-overlay.open {
-      opacity: 1;
-      pointer-events: all;
-    }
-    .mobile-modal {
-      background: #0e1f2b;
-      border: 1px solid rgba(0,212,170,0.25);
-      border-radius: 16px;
-      padding: 32px 24px;
-      max-width: 320px;
-      width: 100%;
-      text-align: center;
-    }
-    .mobile-modal-icon {
-      font-size: 2.4rem;
-      margin-bottom: 16px;
-    }
-    .mobile-modal-title {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: #e8f4f0;
-      margin-bottom: 12px;
-    }
-    .mobile-modal-body {
-      font-size: 0.88rem;
-      color: #7a9a90;
-      line-height: 1.7;
-      margin-bottom: 24px;
-    }
-    .mobile-modal-btn {
-      background: var(--cyan);
-      color: #000;
-      border: none;
-      border-radius: 8px;
-      padding: 10px 28px;
-      font-weight: 700;
-      font-size: 0.9rem;
-      cursor: pointer;
-    }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
-      nav { padding: 16px 24px; }
-      .nav-links { display: none; }
-      .apps { padding: 60px 24px; }
-      .why { padding: 60px 24px; }
-      .why-inner { grid-template-columns: 1fr; gap: 40px; }
-      footer { padding: 32px 24px; flex-direction: column; gap: 12px; text-align: center; }
-      section.demo { display: none; }
-    }
-  </style>
+/* ── JOB MOCK ── */
+.ui-job-item {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 6px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.ui-job-open { border-color: rgba(6,182,212,0.2); }
+.ui-job-header { display:flex;align-items:center;gap:6px;flex-wrap:wrap; }
+.ui-job-num { font-size:0.62rem;color:#9ca3af;font-family:'DM Mono',monospace; }
+.ui-job-name { font-size:0.68rem;font-weight:600;color:#f3f4f6; }
+.ui-job-badge { font-size:0.58rem;padding:2px 6px;border-radius:3px; }
+.ui-badge-ok { background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.3);color:#4ade80; }
+.ui-badge-fail { background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);color:#f87171; }
+.ui-job-mode { font-size:0.62rem;color:#9ca3af; }
+.ui-job-date { font-size:0.6rem;color:#6b7280; }
+.ui-job-detail { display:flex;flex-direction:column;gap:3px;margin-top:4px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.06); }
+.ui-job-params { display:flex;gap:12px;font-size:0.62rem;color:#9ca3af;font-family:'DM Mono',monospace; }
+.ui-job-meta { font-size:0.6rem;color:#6b7280; }
+/* ── LOG FRAME ── */
+.ui-log-frame {
+  background: #0a0f14;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  padding: 12px 14px;
+  font-family: 'DM Mono', monospace;
+}
+.ui-log-title { font-size:0.72rem;color:#d1d5db;font-weight:600;margin-bottom:8px; }
+.ui-log-body { font-size:0.6rem;color:#6b7280;line-height:1.8;white-space:pre; }
+.ui-log-highlight { color:#4ade80;font-weight:600; }
+
+/* ── QA ITEMS ── */
+.ui-qs-row-open { background:rgba(6,182,212,0.06);border-bottom:none !important; }
+.ui-qs-row-qa { padding:6px 8px;display:flex;flex-direction:column;gap:4px;background:rgba(6,182,212,0.03);border-bottom:1px solid rgba(255,255,255,0.04); }
+.ui-qa-item { background:#111114;border:1px solid rgba(255,255,255,0.07);border-radius:4px;padding:5px 8px; }
+.ui-qa-q { font-size:0.58rem;color:#d1d5db;margin-bottom:3px; }
+.ui-qa-a { font-size:0.57rem;color:#9ca3af;line-height:1.5; }
+
+/* ── TRAINING DATA MOCK ── */
+.ui-qs-table { display:flex;flex-direction:column;gap:0;border:1px solid rgba(255,255,255,0.08);border-radius:6px;overflow:hidden;margin-top:4px; }
+.ui-qs-meta { font-size:0.62rem;color:#9ca3af;padding:6px 10px;background:rgba(255,255,255,0.02);border-bottom:1px solid rgba(255,255,255,0.06); }
+.ui-qs-header { display:grid;grid-template-columns:1fr 60px 130px 40px;font-size:0.6rem;color:#6b7280;padding:5px 10px;background:rgba(255,255,255,0.02);border-bottom:1px solid rgba(255,255,255,0.06); }
+.ui-qs-row { display:grid;grid-template-columns:1fr 60px 130px 40px;font-size:0.65rem;color:#d1d5db;padding:5px 10px;border-bottom:1px solid rgba(255,255,255,0.04);align-items:center; }
+.ui-qs-row:last-child { border-bottom:none; }
+.ui-qs-row-accent { background:rgba(6,182,212,0.05); }
+.ui-edit-btn { background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:3px;padding:2px 6px;font-size:0.58rem;color:#9ca3af;text-align:center; }
+.ui-qa-section { display:flex;flex-direction:column;gap:6px;border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:10px;margin-top:4px; }
+.ui-qa-title { font-size:0.72rem;font-weight:600;color:#f3f4f6; }
+.ui-qa-hint { font-size:0.6rem;color:#6b7280; }
+
+/* ── TEXT MANAGEMENT MOCK ── */
+.ui-text-list { display: flex; flex-direction: column; gap: 6px; flex: 1; overflow: hidden; }
+.ui-text-count { font-size: 0.65rem; color: #9ca3af; }
+.ui-text-item {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 6px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow: hidden;
+}
+.ui-text-open { border-color: rgba(6,182,212,0.2); }
+.ui-text-header { display: flex; align-items: center; gap: 8px; }
+.ui-text-badge {
+  background: rgba(6,182,212,0.12);
+  border: 1px solid rgba(6,182,212,0.25);
+  color: #06b6d4;
+  font-size: 0.6rem;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-family: 'DM Mono', monospace;
+}
+.ui-text-name { font-size: 0.72rem; color: #d1d5db; font-weight: 600; }
+.ui-text-preview { font-size: 0.65rem; color: #6b7280; line-height: 1.5; }
+.ui-text-actions { display: flex; gap: 5px; flex-wrap: wrap; }
+.ui-text-btn {
+  background: #1e1e24;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-size: 0.6rem;
+  color: #9ca3af;
+}
+.ui-btn-accent {
+  background: rgba(6,182,212,0.1);
+  border-color: rgba(6,182,212,0.3);
+  color: #06b6d4;
+}
+.ui-chunk-label { font-size: 0.62rem; color: #9ca3af; }
+.ui-chunk {
+  background: #111114;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 4px;
+  padding: 8px;
+}
+.ui-chunk-header { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+.ui-chunk-num {
+  background: rgba(6,182,212,0.15);
+  color: #06b6d4;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+.ui-chunk-tokens { font-size: 0.6rem; color: #6b7280; font-family: 'DM Mono', monospace; }
+.ui-chunk-body { font-size: 0.62rem; color: #9ca3af; line-height: 1.5; }
+
+/* ── UI MOCK ── */
+.ui-mock {
+  display: flex;
+  height: 320px;
+  border: 1px solid rgba(255,255,255,0.06);
+  font-size: 0.78rem;
+  background: #0d1b24;
+}
+.ui-mock-sidebar {
+  width: 140px;
+  flex-shrink: 0;
+  background: #0a1520;
+  border-right: 1px solid rgba(255,255,255,0.06);
+  padding: 14px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.ui-mock-logo {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #06b6d4;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.ui-mock-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ui-nav-item {
+  padding: 5px 8px;
+  border-radius: 5px;
+  color: #9ca3af;
+  font-size: 0.72rem;
+  cursor: pointer;
+}
+.ui-nav-active {
+  background: rgba(6,182,212,0.12);
+  color: #06b6d4;
+  border: 1px solid rgba(6,182,212,0.2);
+}
+.ui-mock-body {
+  flex: 1;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+}
+.ui-mock-page-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #f3f4f6;
+}
+.ui-mock-selectors {
+  display: flex;
+  gap: 10px;
+}
+.ui-mock-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+}
+.ui-selector-label {
+  font-size: 0.65rem;
+  color: #9ca3af;
+}
+.ui-selector-val {
+  background: #1e1e24;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 5px;
+  padding: 5px 10px;
+  color: #f3f4f6;
+  font-size: 0.72rem;
+}
+.ui-mock-model-path {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  color: #6b7280;
+}
+.ui-mock-chat {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+.ui-bubble-user {
+  align-self: flex-end;
+  background: rgba(6,182,212,0.12);
+  border: 1px solid rgba(6,182,212,0.25);
+  border-radius: 10px 10px 2px 10px;
+  padding: 8px 12px;
+  color: #e5e7eb;
+  max-width: 75%;
+  font-size: 0.75rem;
+}
+.ui-bubble-ai {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 2px 10px 10px 10px;
+  padding: 10px 12px;
+  color: #d1d5db;
+  max-width: 90%;
+  font-size: 0.75rem;
+  line-height: 1.6;
+}
+.ui-ai-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  color: #6b7280;
+  margin-bottom: 5px;
+}
+.ui-highlight {
+  color: #f87171;
+  font-weight: 600;
+}
+</style>
 </head>
 <body>
 
-<div class="bg-layer"></div>
-
 <!-- NAV -->
 <nav>
-  <div style="display:flex;align-items:center;gap:14px;">
-    <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" aria-label="テーマ切り替え">🌙</button>
-    <div class="nav-logo">llamune</div>
-  </div>
+  <div class="nav-logo"><span style="color:var(--accent);">ll</span>a<span style="color:var(--accent);">m</span>une</div>
   <ul class="nav-links">
-    <li><a href="#apps">アプリ</a></li>
-    <li><a href="#why">なぜ閉域LLM？</a></li>
+    <li><a href="#why-train">育てるとは</a></li>
+    <li><a href="#tools">ツール</a></li>
+    <li><a href="#why-closed">閉域LLM</a></li>
+    <li><a href="#catalog">モデル</a></li>
     <li><a href="https://github.com/unrcom" target="_blank">GitHub</a></li>
-    <li><a href="#consultation">お問い合わせ</a></li>
   </ul>
+  <a href="#consultation" class="nav-cta">お問い合わせ</a>
 </nav>
 
 <!-- HERO -->
-<section class="hero">
-  <div class="hero-badge">Closed-Domain LLM Platform</div>
-
-  <h1>業務の知識を<br>AIの力に変える</h1>
-
+<section id="hero">
+  <div class="hero-eyebrow">Closed-Domain LLM Platform</div>
+  <h1 class="hero-title">
+    業務知識を持つLLMを、<br>
+    <em>社内で育てる。</em>
+  </h1>
   <p class="hero-sub">
-    llamune は社内環境で動くAIプラットフォームです。<br>
-    情報が外部に一切出ないので、機密情報を扱う業務でも安心して使えます。<br>
-    自社の知識でAIを育て、競合に真似できない強みを作れます。
+    汎用のLLMは、あなたの業務を知りません。<br>
+    llamune は、自社のナレッジでLLMをトレーニングし、<br>
+    情報が外に出ない閉じた環境で動かすプラットフォームです。
   </p>
-
-  <div class="hero-value">
-    <div class="value-pill">
-      <span>🔒</span> データは外部に出ない
-    </div>
-    <div class="value-pill">
-      <span>⚡</span> 競合との差別化
-    </div>
-    <div class="value-pill">
-      <span>🧠</span> 自社知識でファインチューニング
-    </div>
+  <div class="hero-badges">
+    <span class="badge">Apple Silicon / Mac mini</span>
+    <span class="badge">LoRA Fine-tuning</span>
+    <span class="badge">完全オフライン動作</span>
+    <span class="badge">従量課金なし</span>
   </div>
-
   <div class="hero-cta">
-    <a href="#" onclick="event.preventDefault();openGallery()" class="btn-primary">アプリを見る →</a>
-    <a href="#consultation" class="btn-outline">お問い合わせ</a>
-  </div>
-
-  <div class="scroll-hint">
-    <div class="scroll-mouse"></div>
-    スクロールして詳細を見る
+    <a href="#why-train" class="btn-primary">トレーニングの仕組みを見る</a>
+    <a href="#consultation" class="btn-ghost">無料相談する</a>
   </div>
 </section>
 
-<div class="divider"></div>
+<hr class="divider">
 
-<!-- APPS -->
-<section class="apps" id="apps">
-  <p class="section-label">Application Suite</p>
-  <h2 class="section-title">3つのアプリで<br>LLM導入を完結させる</h2>
+<!-- SECTION 2: ベースモデルの限界 -->
+<section id="problem">
+  <div class="section-label">問題</div>
+  <h2 class="section-title">LLMは、知らないことを<br>知ったふりをする。</h2>
   <p class="section-desc">
-    チャットから知識の洗い出し、ファインチューニングまで—<br>
-    llamune がフルサイクルをサポートします。
+    汎用LLMは学習していない領域の質問に対して、もっともらしい誤りを返すことがあります。
+    これを「幻覚（ハルシネーション）」と呼びます。<br>
+    業務で使うには、自社の知識でトレーニングする必要があります。
   </p>
 
-  <div class="cards-grid">
-
-    <!-- llamune_chat -->
-    <div class="card">
-      <div class="card-number">01</div>
-      <div class="card-icon">💬</div>
-      <div class="card-name">llamune_chat</div>
-      <p class="card-desc">
-        閉域環境で複数のローカルLLMとチャットし、業務アウトプットを安全に取得できるチャットプラットフォーム。
-      </p>
-      <ul class="card-features">
-        <li>複数のローカルLLMを切り替えて利用</li>
-        <li>会話内容は金融機関レベルの暗号化で保護</li>
-        <li>システムプロンプトのテンプレート管理</li>
-        <li>思考過程（Thinking）のリアルタイム表示</li>
-        <li>データは一切外部サーバーに送信されない</li>
-      </ul>
-      <div class="card-actions">
-        <a href="https://github.com/unrcom/llamune_chat" target="_blank" class="card-btn card-btn-ghost">GitHub</a>
-        <a href="#demo" onclick="event.preventDefault();goStep(1);document.getElementById('demo').scrollIntoView({behavior:'smooth'})" class="card-btn card-btn-primary">デモを見る →</a>
-      </div>
+  <div class="hallucination-demo">
+    <div class="demo-panel before">
+      <div class="demo-panel-label">ベースモデル — トレーニング前</div>
+      <div class="demo-q">Q. フリーレンはどのような種族ですか？</div>
+      <div class="demo-a">フリーレンはドワーフの幼い魔法使いで、魔王討伐の旅に10年間参加していました。</div>
     </div>
-
-    <!-- llamune_poc -->
-    <div class="card">
-      <div class="card-number">02</div>
-      <div class="card-icon">🔍</div>
-      <div class="card-name">llamune_poc</div>
-      <p class="card-desc">
-        トレーニング前・トレーニング中のLLMと対話し、モデルに不足している業務知識を体系的に洗い出すLLM評価ツール。
-      </p>
-      <ul class="card-features">
-        <li>ドメイン特化の評価シナリオを設計・実行</li>
-        <li>LLMの回答品質をスコアリング</li>
-        <li>不足知識・誤答パターンを自動記録</li>
-        <li>llamune_learn への訓練データエクスポート</li>
-      </ul>
-      <div class="card-actions">
-        <a href="https://github.com/unrcom/llamune_poc" target="_blank" class="card-btn card-btn-ghost">GitHub</a>
-        <a href="#demo" onclick="event.preventDefault();goStep(2);document.getElementById('demo').scrollIntoView({behavior:'smooth'})" class="card-btn card-btn-primary">デモを見る →</a>
-      </div>
+    <div class="demo-panel after">
+      <div class="demo-panel-label">llamune トレーニング後</div>
+      <div class="demo-q">Q. フリーレンはどのような種族ですか？</div>
+      <div class="demo-a">フリーレンはエルフで、勇者ヒンメルたちとともに10年間魔王討伐の旅をしました。</div>
     </div>
-
-    <!-- llamune_learn -->
-    <div class="card">
-      <div class="card-number">03</div>
-      <div class="card-icon">🎓</div>
-      <div class="card-name">llamune_learn</div>
-      <p class="card-desc">
-        llamune_poc のアウトプットをもとに訓練データを生成し、ローカル環境でファインチューニングを実行するトレーニングツール。
-      </p>
-      <ul class="card-features">
-        <li>llamune_poc の評価結果から訓練データフォーマットを自動生成</li>
-        <li>Apple MLX / QLoRA によるローカルファインチューニング</li>
-        <li>トレーニング進捗のリアルタイムモニタリング</li>
-        <li>モデル評価・バージョン管理</li>
-        <li>完全オフライン・クローズド環境で実行</li>
-      </ul>
-      <div class="card-actions">
-        <a href="https://github.com/unrcom/llamune_learn" target="_blank" class="card-btn card-btn-ghost">GitHub</a>
-        <a href="#demo" onclick="event.preventDefault();goStep(3);document.getElementById('demo').scrollIntoView({behavior:'smooth'})" class="card-btn card-btn-primary">デモを見る →</a>
-      </div>
-    </div>
-
   </div>
+  <p class="hallucination-note">* 実際の llamune トレーニング結果。ベースモデル: Qwen2.5 14B Instruct 4bit</p>
 </section>
 
-<div class="divider"></div>
+<hr class="divider">
 
-<!-- DEMO -->
-<section class="demo" id="demo">
-  <p class="section-label">Interactive Demo</p>
-  <h2 class="section-title">llamune_chat を<br>実際に触ってみる</h2>
+<!-- SECTION 3: トレーニングサイクル -->
+<section id="why-train">
+  <div class="section-label">トレーニングサイクル</div>
+  <h2 class="section-title">こうやって、<br><em>理想のLLMを育てる。</em></h2>
   <p class="section-desc">
-    実際の llamune_chat インターフェースです。自由に操作してみてください。<br>
-    新しいチャットを開始して、別モデルで回答を比較する体験ができます。
+    1回のトレーニングで完成するわけではありません。
+    評価・改善・再トレーニングのサイクルを繰り返すことで、精度が上がっていきます。
   </p>
 
-  <!-- Step tabs -->
-  <div class="demo-steps">
-    <button class="demo-step-btn active" id="tab-1" onclick="goStep(1)">
-      <span class="step-num">STEP 01</span>
-      <span class="step-name">💬 llamune_chat</span>
-      <span class="step-sub">自由に操作できます</span>
-    </button>
-    <button class="demo-step-btn" id="tab-2" onclick="goStep(2)">
-      <span class="step-num">STEP 02</span>
-      <span class="step-name">🔍 llamune_poc</span>
-      <span class="step-sub">自由に操作できます</span>
-    </button>
-    <button class="demo-step-btn" id="tab-3" onclick="goStep(3)">
-      <span class="step-num">STEP 03</span>
-      <span class="step-name">🎓 llamune_learn</span>
-      <span class="step-sub">ファインチューニング</span>
-    </button>
-  </div>
+  <div class="cycle-steps">
 
-  <!-- STEP 1: llamune_chat (iframe) -->
-  <div class="demo-panel active" id="panel-1">
-    <div class="chat-iframe-wrap">
-      <iframe
-        src="chat_app/index.html"
-        id="chat-iframe"
-        title="llamune_chat デモ"
-        allow="clipboard-write"
-      ></iframe>
-    </div>
-  </div>
-
-  <!-- STEP 2: llamune_poc (iframe) -->
-  <div class="demo-panel" id="panel-2">
-    <div class="chat-iframe-wrap">
-      <iframe
-        src="poc_app/index.html"
-        id="poc-iframe"
-        title="llamune_poc デモ"
-        allow="clipboard-write"
-      ></iframe>
-    </div>
-  </div>
-
-  <!-- STEP 3: llamune_learn -->
-  <div class="demo-panel" id="panel-3">
-    <div class="learn-mock">
-      <div class="learn-header">
-        <div class="learn-header-title">llamune_learn</div>
-        <div class="learn-status" id="learn-status">● 訓練データ生成中...</div>
+    <!-- Step 1 -->
+    <div class="cycle-step">
+      <div class="step-connector">
+        <div class="step-num">01</div>
+        <div class="step-line"></div>
       </div>
-      <div class="learn-body">
-        <div>
-          <div class="learn-section-title">📥 llamune_poc からインポートされた知識ギャップ</div>
-          <div class="learn-data-items">
-            <div class="learn-data-item"><div class="learn-data-item-dot"></div>Z世代のSNS行動特性（TikTok / Instagram Reels 活用事例）</div>
-            <div class="learn-data-item"><div class="learn-data-item-dot"></div>携帯通信業界における競合キャンペーン成功事例 2024-2025</div>
-            <div class="learn-data-item"><div class="learn-data-item-dot"></div>インフルエンサーマーケティングの費用対効果データ</div>
-          </div>
+      <div class="step-body">
+        <div class="step-title">ベースモデルの実力を測る</div>
+        <div class="step-desc">
+          トレーニング前のLLMに業務知識の質問を投げ、何を知らないかを確認します。
+          ほぼ回答不能、または幻覚が返ってくる状態が可視化されます。
         </div>
-        <div>
-          <div class="learn-section-title">⚙️ ファインチューニング進捗</div>
-          <div class="learn-progress-wrap">
-            <div class="learn-progress-label">
-              <span>Qwen2.5-14B-Instruct ファインチューニング</span>
-              <span id="learn-pct">0%</span>
+        <div class="screenshot-frame">
+          <div class="screenshot-bar">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <span class="screenshot-url">xxxxxx/chat</span>
+          </div>
+          <div class="ui-mock">
+            <div class="ui-mock-sidebar">
+              <div class="ui-mock-logo">llamune</div>
+              <div class="ui-mock-nav">
+                <div class="ui-nav-item">🏠 ホーム</div>
+                <div class="ui-nav-item ui-nav-active">💬 チャット</div>
+                <div class="ui-nav-item">📝 訓練データ生成</div>
+                <div class="ui-nav-item">⚙️ 訓練ジョブ</div>
+                <div class="ui-nav-item">📚 テキスト管理</div>
+                <div class="ui-nav-item">🔧 設定</div>
+              </div>
             </div>
-            <div class="learn-bar-bg">
-              <div class="learn-bar-fill" id="learn-bar"></div>
-            </div>
-            <div class="learn-stats">
-              <div class="learn-stat"><span class="learn-stat-val" id="stat-epoch">0</span><div class="learn-stat-label">Epoch</div></div>
-              <div class="learn-stat"><span class="learn-stat-val" id="stat-loss">—</span><div class="learn-stat-label">Loss</div></div>
-              <div class="learn-stat"><span class="learn-stat-val" id="stat-samples">0</span><div class="learn-stat-label">Samples</div></div>
+            <div class="ui-mock-body">
+              <div class="ui-mock-page-title">チャット</div>
+              <div class="ui-mock-selectors">
+                <div class="ui-mock-selector"><span class="ui-selector-label">プロジェクト</span><span class="ui-selector-val">フリーレンLLM ▾</span></div>
+                <div class="ui-mock-selector"><span class="ui-selector-label">モデル</span><span class="ui-selector-val">Qwen2.5-14B-Instruct-4bit ▾</span></div>
+              </div>
+              <div class="ui-mock-model-path">mlx-community/Qwen2.5-14B-Instruct-4bit</div>
+              <div class="ui-mock-chat">
+                <div class="ui-bubble-user">葬送のフリーレンのあらすじを教えて</div>
+                <div class="ui-bubble-ai">
+                  <div class="ui-ai-tag">Qwen2.5-14B-Instruct-4bit</div>
+                  申し訳ありませんが、"葬送のフリーレン"というタイトルの作品は私のデータベースには存在しません。<span class="ui-highlight">知識が不足しています。</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <div>
-          <div class="learn-section-title">📋 トレーニングログ</div>
-          <div class="learn-log" id="learn-log">$ llamune_learn start --model qwen2.5-14b --data gap_export_007.json<br></div>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="cycle-step">
+      <div class="step-connector">
+        <div class="step-num">02</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-body">
+        <div class="step-title">データセットを用意する</div>
+        <div class="step-desc">
+          業務ドメインに関する質問を体系的に作成し、質問セットとして登録します。
+          
+        </div>
+        <div class="screenshot-frame">
+          <div class="screenshot-bar">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <span class="screenshot-url">xxxxxx/learning-texts</span>
+          </div>
+          <div class="ui-mock" style="height:480px;">
+            <div class="ui-mock-sidebar">
+              <div class="ui-mock-logo">llamune</div>
+              <div class="ui-mock-nav">
+                <div class="ui-nav-item">🏠 ホーム</div>
+                <div class="ui-nav-item">💬 チャット</div>
+                <div class="ui-nav-item">📝 訓練データ生成</div>
+                <div class="ui-nav-item">⚙️ 訓練ジョブ</div>
+                <div class="ui-nav-item ui-nav-active">📚 テキスト管理</div>
+                <div class="ui-nav-item">🔧 設定</div>
+              </div>
+            </div>
+            <div class="ui-mock-body" style="gap:6px;">
+              <div class="ui-mock-page-title">テキスト管理</div>
+              <div class="ui-mock-selector" style="max-width:200px;flex:none;">
+                <span class="ui-selector-label">プロジェクト</span>
+                <span class="ui-selector-val">フリーレンLLM ▾</span>
+              </div>
+              <div class="ui-text-list">
+                <div class="ui-text-count">4 件</div>
+                <div class="ui-text-item ui-text-open">
+                  <div class="ui-text-header">
+                    <span class="ui-text-badge">訓練用テキスト #12</span>
+                    <span class="ui-text-name">f-3</span>
+                  </div>
+                  <div class="ui-text-preview">『葬送のフリーレン』（そうそうのフリーレン）は、原作：山田鐘人、作画：アベツカサによる日本の漫画。『週刊少年サンデー』（小学館）において、2020年22・23合併号から連載中...</div>
+                  <div class="ui-text-actions">
+                    <span class="ui-text-btn">デフォルトモデル ▾</span>
+                    <span class="ui-text-btn">既存の質問セットに追加... ▾</span>
+                    <span class="ui-text-btn ui-btn-accent">✦ BG生成</span>
+                    <span class="ui-text-btn">自動チャンク分割</span>
+                  </div>
+                  <div class="ui-chunk-label">チャンク（6件）</div>
+                  <div class="ui-chunk">
+                    <div class="ui-chunk-header"><span class="ui-chunk-num">#0</span><span class="ui-chunk-tokens">437 tokens</span></div>
+                    <div class="ui-chunk-body">『葬送のフリーレン』（そうそうのフリーレン）は、原作：山田鐘人、作画：アベツカサによる日本の漫画。『週刊少年サンデー』（小学館）において、2020年22・23合併号から連載中[1]。<br><br>概要 魔王を倒した勇者一行の後日譚を描くファンタジー。あらすじ 魔王討伐の偉業を成し遂げ王都に凱旋した勇者ヒンメル、僧侶ハイター、戦士アイゼン、魔法使いフリーレン...</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <div class="demo-next-wrap" style="gap:12px;display:flex;justify-content:flex-end;">
-      <button class="demo-restart-btn" onclick="restart()">↩ 最初から</button>
+
+    <!-- Step 3 -->
+    <div class="cycle-step">
+      <div class="step-connector">
+        <div class="step-num">03</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-body">
+        <div class="step-title">正解回答を付けて訓練データにする</div>
+        <div class="step-desc">
+          質問に正解回答を付けたQ&Aペアが訓練データになります。
+          llamune がこのデータを読み込み、ファインチューニングを実行します。
+        </div>
+        <div class="screenshot-frame">
+          <div class="screenshot-bar">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <span class="screenshot-url">localhost:5274/answers/1/sets/5</span>
+          </div>
+          <div class="ui-mock" style="height:420px;">
+            <div class="ui-mock-sidebar">
+              <div class="ui-mock-logo">llamune</div>
+              <div class="ui-mock-nav">
+                <div class="ui-nav-item">🏠 ホーム</div>
+                <div class="ui-nav-item">💬 チャット</div>
+                <div class="ui-nav-item ui-nav-active">📝 訓練データ生成</div>
+                <div class="ui-nav-item">⚙️ 訓練ジョブ</div>
+                <div class="ui-nav-item">📚 テキスト管理</div>
+                <div class="ui-nav-item">🔧 設定</div>
+              </div>
+            </div>
+            <div class="ui-mock-body" style="overflow-y:auto;font-size:0.72rem;">
+              <div class="ui-mock-page-title">訓練データ生成</div>
+              <div style="display:flex;flex-direction:column;gap:6px;">
+                <div class="ui-mock-selector">
+                  <span class="ui-selector-label">プロジェクト</span>
+                  <span class="ui-selector-val">フリーレンLLM ▾</span>
+                </div>
+                <div class="ui-mock-selector">
+                  <span class="ui-selector-label">テキスト（全チャンクが生成対象）</span>
+                  <span class="ui-selector-val">f-3 ▾</span>
+                </div>
+                <div style="display:flex;gap:6px;align-items:flex-end;">
+                  <div class="ui-mock-selector" style="flex:1;">
+                    <span class="ui-selector-label">質問セット（生成したQ&Aの保存先）</span>
+                    <span class="ui-selector-val">f-3-4LLM-L-v2（211件） ▾</span>
+                  </div>
+                  <span class="ui-text-btn" style="padding:5px 10px;font-size:0.65rem;white-space:nowrap;color:#d1d5db;">＋ 新規作成</span>
+                </div>
+              </div>
+              <div class="ui-qs-table">
+                <div class="ui-qs-meta">システムプロンプト: v1</div>
+                <div class="ui-qs-header">
+                  <span>モデル</span><span>件数</span><span>生成完了日時</span><span></span>
+                </div>
+                <div class="ui-qs-row"><span>人間追加</span><span>32 件</span><span>2026/4/24 11:01:15</span><span class="ui-edit-btn">編集</span></div>
+                <div class="ui-qs-row"><span>✓ Qwen2.5 14B Instruct 4bit</span><span>39 件</span><span>2026/4/24 9:16:56</span><span class="ui-edit-btn">編集</span></div>
+                <div class="ui-qs-row"><span>GPT-OSS 20B Q4</span><span>27 件</span><span>2026/4/24 2:07:52</span><span class="ui-edit-btn">編集</span></div>
+                <div class="ui-qs-row ui-qs-row-open"><span>∧ Gemma 3 12B Instruct 4bit</span><span>73 件</span><span>2026/4/24 7:31:15</span><span class="ui-edit-btn">編集</span></div>
+                <div class="ui-qs-row-qa">
+                  <div class="ui-qa-item">
+                    <div class="ui-qa-q">1. フランメの手記には、どこに関する記述がありましたか？</div>
+                    <div class="ui-qa-a">フランメの手記には、かつての魔王城があった大陸北端の地エンデにあるという、死者の魂と対話できる場所・オレオールの存在が記されていました。</div>
+                  </div>
+                  <div class="ui-qa-item">
+                    <div class="ui-qa-q">8. 『葬送のフリーレン』は、どのような内容の物語ですか？</div>
+                    <div class="ui-qa-a">『葬送のフリーレン』は、魔王を倒した勇者一行の後日譚を描くファンタジーです。</div>
+                  </div>
+                  <div class="ui-qa-item">
+                    <div class="ui-qa-q">3. 魔王討伐の偉業を成し遂げた勇者パーティーのメンバーは、誰ですか？</div>
+                    <div class="ui-qa-a">魔王討伐の偉業を成し遂げた勇者パーティーのメンバーは、勇者ヒンメル、僧侶ハイター、戦士アイゼン、魔法使いフリーレンの4人です。</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="cycle-step">
+      <div class="step-connector">
+        <div class="step-num">04</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-body">
+        <div class="step-title">ローカルでファインチューニングする</div>
+        <div class="step-desc">
+          Apple MLX / LoRA により、アップルコンピューター上でトレーニングを実行します。
+          Loss（損失）が下がるにつれてモデルの精度が上がっていきます。
+          データは一切外部に出ません。
+        </div>
+        <div class="screenshot-frame">
+          <div class="screenshot-bar">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <span class="screenshot-url">xxxxxx/jobs</span>
+          </div>
+          <!-- 画面1: 新規ジョブ作成 -->
+          <div class="screenshot-bar" style="background:#1a1a1f;border:1px solid rgba(255,255,255,0.08);border-bottom:none;border-radius:6px 6px 0 0;">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <span class="screenshot-url">xxxxxx/jobs</span>
+          </div>
+          <div class="ui-mock" style="height:360px;border-radius:0 0 6px 6px;border-top:none;margin-bottom:16px;">
+            <div class="ui-mock-sidebar">
+              <div class="ui-mock-logo">llamune</div>
+              <div class="ui-mock-nav">
+                <div class="ui-nav-item">🏠 ホーム</div>
+                <div class="ui-nav-item">💬 チャット</div>
+                <div class="ui-nav-item">📝 訓練データ生成</div>
+                <div class="ui-nav-item ui-nav-active">⚙️ 訓練ジョブ</div>
+                <div class="ui-nav-item">📚 テキスト管理</div>
+                <div class="ui-nav-item">🔧 設定</div>
+              </div>
+            </div>
+            <div class="ui-mock-body" style="gap:6px;overflow-y:auto;">
+              <div class="ui-mock-page-title">新規訓練ジョブ</div>
+              <div style="display:flex;gap:8px;">
+                <div class="ui-mock-selector" style="flex:none;width:45%;">
+                  <span class="ui-selector-label">プロジェクト</span>
+                  <span class="ui-selector-val">フリーレンLLM ▾</span>
+                </div>
+                <div class="ui-mock-selector" style="flex:1;">
+                  <span class="ui-selector-label">ベースモデル</span>
+                  <span class="ui-selector-val">Qwen2.5-3B-Instruct-bf16 ▾</span>
+                </div>
+              </div>
+              <div class="ui-mock-selector" style="flex:none;">
+                <span class="ui-selector-label">訓練モード</span>
+                <span class="ui-selector-val">フルファインチューニング ▾</span>
+              </div>
+              <div class="ui-mock-selector" style="flex:none;">
+                <span class="ui-selector-label">質問セット</span>
+                <span class="ui-selector-val">f-3-4LLM-L-v2（active） ▾</span>
+              </div>
+              <div style="display:flex;gap:8px;align-items:flex-end;">
+                <div class="ui-mock-selector" style="flex:none;width:80px;">
+                  <span class="ui-selector-label">イテレーション数</span>
+                  <span class="ui-selector-val">400</span>
+                </div>
+                <div class="ui-mock-selector" style="flex:none;width:80px;">
+                  <span class="ui-selector-label">バッチサイズ</span>
+                  <span class="ui-selector-val">1</span>
+                </div>
+                <div class="ui-mock-selector" style="flex:none;width:100px;">
+                  <span class="ui-selector-label">学習率</span>
+                  <span class="ui-selector-val">0.00001 ▾</span>
+                </div>
+                <div class="ui-mock-selector" style="flex:none;width:80px;">
+                  <span class="ui-selector-label">最大シーケンス長</span>
+                  <span class="ui-selector-val">4096</span>
+                </div>
+              </div>
+              <div class="ui-mock-selector" style="flex:none;">
+                <span class="ui-selector-label">出力モデル名（任意）</span>
+                <span class="ui-selector-val">f-3-4LLM-L-v2-400-1-10-4096-1</span>
+              </div>
+              <div style="display:flex;gap:8px;margin-top:4px;">
+                <span class="ui-text-btn" style="padding:5px 14px;font-size:0.68rem;color:#06b6d4;border-color:rgba(6,182,212,0.3);">訓練ジョブを作成</span>
+                <span class="ui-text-btn" style="padding:5px 14px;font-size:0.68rem;color:#9ca3af;">キャンセル</span>
+              </div>
+            </div>
+          </div>
+          <!-- 画面2: ジョブ一覧 -->
+          <div class="screenshot-bar" style="background:#1a1a1f;border:1px solid rgba(255,255,255,0.08);border-bottom:none;border-radius:6px 6px 0 0;">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <span class="screenshot-url">xxxxxx/jobs</span>
+          </div>
+          <div class="ui-mock" style="height:300px;border-radius:0 0 6px 6px;border-top:none;margin-bottom:16px;">
+            <div class="ui-mock-sidebar">
+              <div class="ui-mock-logo">llamune</div>
+              <div class="ui-mock-nav">
+                <div class="ui-nav-item">🏠 ホーム</div>
+                <div class="ui-nav-item">💬 チャット</div>
+                <div class="ui-nav-item">📝 訓練データ生成</div>
+                <div class="ui-nav-item ui-nav-active">⚙️ 訓練ジョブ</div>
+                <div class="ui-nav-item">📚 テキスト管理</div>
+                <div class="ui-nav-item">🔧 設定</div>
+              </div>
+            </div>
+            <div class="ui-mock-body" style="gap:6px;overflow-y:auto;">
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <div class="ui-mock-page-title">訓練ジョブ</div>
+                <div style="display:flex;gap:6px;">
+                  <span class="ui-text-btn" style="padding:4px 10px;font-size:0.65rem;color:#d1d5db;">🔄 更新</span>
+                  <span class="ui-text-btn" style="padding:4px 10px;font-size:0.65rem;color:#06b6d4;">＋ 新規ジョブ</span>
+                </div>
+              </div>
+              <div style="font-size:0.62rem;color:#9ca3af;">36 件</div>
+              <div class="ui-job-item ui-job-open">
+                <div class="ui-job-header">
+                  <span class="ui-job-num">訓練ジョブ #46</span>
+                  <span class="ui-job-name">curl-data-400-10-4096-1</span>
+                  <span class="ui-job-badge ui-badge-ok">completed</span>
+                  <span class="ui-job-mode">フルファインチューニング</span>
+                </div>
+                <div class="ui-job-date">2026/4/25 3:10:56</div>
+                <div class="ui-job-detail">
+                  <div class="ui-job-params">
+                    <span>iters: 400</span><span>batch: 4</span><span>lr: 0.00001</span><span>layers: 16</span>
+                  </div>
+                  <div class="ui-job-meta">出力モデル: curl-data-400-10-4096-1</div>
+                  <div class="ui-job-meta">開始: 2026/4/25 3:10:56　完了: 2026/4/25 3:13:18</div>
+                  <span class="ui-text-btn" style="display:inline-block;padding:3px 10px;font-size:0.62rem;color:#d1d5db;margin-top:4px;">ログを見る</span>
+                </div>
+              </div>
+              <div class="ui-job-item">
+                <div class="ui-job-header">
+                  <span class="ui-job-num">訓練ジョブ #45</span>
+                  <span class="ui-job-name">f-3-4LLM L-v2-100-1-10-4096-1</span>
+                  <span class="ui-job-badge ui-badge-ok">completed</span>
+                  <span class="ui-job-mode">フルファインチューニング</span>
+                </div>
+                <div class="ui-job-date">2026/4/25 2:33:58</div>
+              </div>
+              <div class="ui-job-item">
+                <div class="ui-job-header">
+                  <span class="ui-job-num">訓練ジョブ #34</span>
+                  <span class="ui-job-name">f-2-33-65-471-LoRA-150-05-16-lora-rank-16-2</span>
+                  <span class="ui-job-badge ui-badge-ok">completed</span>
+                  <span class="ui-job-mode">LoRAノーマル</span>
+                </div>
+                <div class="ui-job-date">2026/4/21 15:25:53</div>
+              </div>
+            </div>
+          </div>
+          <!-- 画面3: 訓練ログ -->
+          <div class="screenshot-bar" style="background:#1a1a1f;border:1px solid rgba(255,255,255,0.08);border-bottom:none;border-radius:6px 6px 0 0;">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <span class="screenshot-url">xxxxxx/jobs/46/log</span>
+          </div>
+          <div class="ui-log-frame">
+            <div class="ui-log-title">← 訓練ログ #46</div>
+            <div class="ui-log-body">
+Iter 10: Train loss 2.252, Learning Rate 1.000e-05, It/sec 3.106, Tokens/sec 236.031
+Iter 50: Train loss 1.384, Learning Rate 1.000e-05, It/sec 3.184, Tokens/sec 262.695
+Iter 100: Train loss 1.262, Learning Rate 1.000e-05, It/sec 2.883, Tokens/sec 268.692
+Iter 200: Train loss 0.530, Learning Rate 1.000e-05, It/sec 3.200, Tokens/sec 248.942
+Iter 300: Train loss 0.530, Learning Rate 1.000e-05, It/sec 3.335, Tokens/sec 248.135
+<span class="ui-log-highlight">Iter 400: Val loss 0.369, Val took 3.332s</span>
+Iter 400: Train loss 0.362, Learning Rate 1.000e-05, It/sec 3.397, Tokens/sec 241.210
+Iter 400: Saved adapter weights to /Users/mini/llmn_models/46/adapters.safetensors
+Saved final weights to /Users/mini/llmn_models/46/adapters.safetensors.
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="cycle-step">
+      <div class="step-connector">
+        <div class="step-num">05</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-body">
+        <div class="step-title">評価して、また育てる</div>
+        <div class="step-desc">
+          トレーニング後のモデルに同じ質問を投げ、改善度を確認します。
+          まだ誤りがあれば再トレーニング、過学習があればバリデーションを追加。
+          このサイクルを繰り返して理想のモデルに近づけていきます。
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- サイクル図 -->
+  <div style="border:1px solid var(--border); border-radius:8px; padding:1.5rem; background:var(--bg-2); text-align:center;">
+    <div style="font-family:var(--mono);font-size:0.65rem;color:var(--text-3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1.25rem;">繰り返しサイクル</div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:0.5rem;flex-wrap:wrap;font-size:0.78rem;">
+      <span style="background:var(--bg-3);border:1px solid var(--border-2);padding:0.4rem 0.9rem;border-radius:4px;font-family:var(--mono);color:var(--text-2);">実力測定</span>
+      <span style="color:var(--text-3);">→</span>
+      <span style="background:var(--bg-3);border:1px solid var(--border-2);padding:0.4rem 0.9rem;border-radius:4px;font-family:var(--mono);color:var(--text-2);">データ作成</span>
+      <span style="color:var(--text-3);">→</span>
+      <span style="background:var(--accent-dim);border:1px solid var(--accent-border);padding:0.4rem 0.9rem;border-radius:4px;font-family:var(--mono);color:var(--accent);">トレーニング</span>
+      <span style="color:var(--text-3);">→</span>
+      <span style="background:var(--bg-3);border:1px solid var(--border-2);padding:0.4rem 0.9rem;border-radius:4px;font-family:var(--mono);color:var(--text-2);">評価</span>
+      <span style="color:var(--text-3);">→</span>
+      <span style="background:var(--bg-3);border:1px solid var(--border-2);padding:0.4rem 0.9rem;border-radius:4px;font-family:var(--mono);color:var(--text-2);">再トレーニング</span>
+      <span style="color:var(--accent);font-family:var(--mono);">↩</span>
     </div>
   </div>
 </section>
 
-<div class="divider"></div>
 
-<!-- WHY -->
-<section class="why" id="why">
-  <div class="why-inner">
-    <div class="why-text">
-      <h2>なぜ、<br><span style="background:linear-gradient(90deg,var(--cyan),var(--cyan2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">社内専用AI</span>なのか</h2>
-      <p>
-        クラウドのAIサービスは便利ですが、業務の機密情報を外部に送信するリスクがあります。
-        llamune はすべてをローカルで完結させることで、セキュリティと競争優位性を両立します。
-      </p>
+<hr class="divider">
+
+<!-- SECTION 3.6: 現在地点 -->
+<section id="current-status">
+  <div class="section-label">現在地点</div>
+  <h2 class="section-title">実証実験、<br><em>進行中。</em></h2>
+  <p class="section-desc">
+    現在、llamune を用いた実証実験を継続しています。
+  </p>
+
+  <div style="display:flex;flex-direction:column;gap:1rem;margin-bottom:2rem;">
+    <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:1.5rem;">
+      <div style="font-family:var(--mono);font-size:0.65rem;color:var(--text-3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border);">ファインチューニング単体の検証結果</div>
+      <p style="font-size:0.88rem;color:var(--text-2);line-height:1.9;margin-bottom:0.75rem;">現段階では、あらゆる質問に安定して答えられる LLM はまだ完成していません。特定の質問やそれに近い表現には正しく回答できるものの、多くの質問では意図しない回答を返すケースが見られます。同じ訓練済みモデルでも、質問の表現によって回答の精度が大きく変わるのが現状です。</p>
+      <p style="font-size:0.88rem;color:var(--text-2);line-height:1.9;">完全に安定した LLM を目指すより、正しく答えられる質問の割合を着実に高めていくことが現実的な目標だと考えています。</p>
     </div>
-    <div class="why-points">
-      <div class="why-point">
-        <div class="why-point-title"><span>🛡️</span> 機密情報の完全保全</div>
-        <p>顧客データも社内ノウハウも、すべて自社環境で完結します。インターネットに情報が出ないので、機密情報を扱う業務でも安心して使えます。</p>
-      </div>
-      <div class="why-point">
-        <div class="why-point-title"><span>🚀</span> 競合との差別化</div>
-        <p>汎用のクラウドAIは誰でも使えます。llamune で自社知識を学習させたAIは、競合には絶対に真似できません。それがそのまま、事業の差別化になります。</p>
-      </div>
-      <div class="why-point">
-        <div class="why-point-title"><span>💰</span> 従量課金コストなし</div>
-        <p>APIトークン費用が発生しません。一度構築すれば�、使用量に関わらず固定コストで運用できます。</p>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- DEPLOYMENT SECTION -->
-<section class="deployment" id="deployment">
-  <div class="deployment-inner">
-    <div class="deployment-header">
-      <h2>llamune <span style="background:linear-gradient(90deg,var(--cyan),var(--cyan2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">構築例</span></h2>
-      <p>用途とセキュリティ要件に合わせて、3つの構成から選べます。</p>
-    </div>
-    <div class="deployment-cards">
-
-      <!-- Card 1 -->
-      <div class="deployment-card">
-        <div class="deployment-card-title">① 個人・完全隔離</div>
-        <div class="deployment-diagram">
-          <div class="d-node"><span>👤</span>ユーザー</div>
-          <div class="d-arrow">→</div>
-          <div class="d-node"><span>💻</span>Mac (llamune)</div>
-        </div>
-        <p class="deployment-card-desc">1台のMacで完結。ネットワークに接続しないため、機密データが物理的に外部に出ません。個人の業務や社外秘データの取り扱いに最適です。</p>
-        <div class="deployment-badge badge-max">🔴 セキュリティ最高（物理的完全隔離）</div>
+    <div style="background:var(--bg-2);border:1px solid var(--accent-border);border-radius:8px;padding:1.5rem;">
+      <div style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1rem;padding-bottom:0.75rem;border-bottom:1px solid var(--accent-border);">新しいアプローチ — RAG × ファインチューニング</div>
+      <p style="font-size:0.88rem;color:var(--text-2);line-height:1.9;margin-bottom:1rem;">RAG を導入された方であれば、プロンプトの調整に多くの手間がかかることをご存知かと思います。プロンプトは改善を重ねるごとに肥大化・複雑化し、それに伴って応答の安定性を保つことも難しくなっていきます。</p>
+      <p style="font-size:0.88rem;color:var(--text-2);line-height:1.9;margin-bottom:1.25rem;">弊社では、この課題に対し、<strong style="color:var(--text);">プロンプトそのものをファインチューニングで LLM に学習させる</strong>という新しいアプローチを検証しています。</p>
+      <ol style="list-style:none;display:flex;flex-direction:column;gap:0.6rem;margin-bottom:1.25rem;">
+        <li style="font-size:0.85rem;color:var(--text-2);display:flex;gap:0.75rem;align-items:flex-start;">
+          <span style="color:var(--accent);font-family:var(--mono);font-weight:700;flex-shrink:0;">01</span>RAG に与えるシステムプロンプトを定義する
+        </li>
+        <li style="font-size:0.85rem;color:var(--text-2);display:flex;gap:0.75rem;align-items:flex-start;">
+          <span style="color:var(--accent);font-family:var(--mono);font-weight:700;flex-shrink:0;">02</span>llamune を使い、このプロンプトをマルチターンの Q&A 形式に変換する
+        </li>
+        <li style="font-size:0.85rem;color:var(--text-2);display:flex;gap:0.75rem;align-items:flex-start;">
+          <span style="color:var(--accent);font-family:var(--mono);font-weight:700;flex-shrink:0;">03</span>生成した Q&A を使ってベースモデルをファインチューニングする
+        </li>
+        <li style="font-size:0.85rem;color:var(--text-2);display:flex;gap:0.75rem;align-items:flex-start;">
+          <span style="color:var(--accent);font-family:var(--mono);font-weight:700;flex-shrink:0;">04</span>ファインチューニング済みの LLM を、プロンプトなしで RAG に組み込む
+        </li>
+      </ol>
+      <!-- FTデータ生成モック -->
+      <div class="screenshot-bar" style="background:#1a1a1f;border:1px solid rgba(255,255,255,0.08);border-bottom:none;border-radius:6px 6px 0 0;margin-top:1rem;">
+        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        <span class="screenshot-url">xxxxxx/admin/ft-data-gen</span>
       </div>
-
-      <!-- Card 2 -->
-      <div class="deployment-card">
-        <div class="deployment-card-title">② チーム・完全隔離</div>
-        <div class="deployment-diagram">
-          <div class="d-group">
-            <div class="d-node"><span>👤</span></div>
-            <div class="d-node"><span>👤</span></div>
-            <div class="d-node"><span>👤</span></div>
-            <div style="font-size:0.7rem;color:var(--muted);">ユーザー</div>
+      <div class="ui-mock" style="height:420px;border-radius:0 0 6px 6px;border-top:none;">
+        <div class="ui-mock-sidebar">
+          <div class="ui-mock-logo">llamune</div>
+          <div class="ui-mock-nav">
+            <div class="ui-nav-item">💬 チャット</div>
+            <div class="ui-nav-item">📊 データセット</div>
+            <div class="ui-nav-item" style="color:#9ca3af;font-size:0.62rem;padding:4px 8px;margin-top:4px;">管理</div>
+            <div class="ui-nav-item">📁 プロジェクト</div>
+            <div class="ui-nav-item">🤖 モデル</div>
+            <div class="ui-nav-item ui-nav-active">⚙️ FTデータ生成</div>
+            <div class="ui-nav-item">🔧 訓練ジョブ</div>
           </div>
-          <div class="d-arrow">→</div>
-          <div class="d-node"><span>🔒</span>専用NW</div>
-          <div class="d-arrow">→</div>
-          <div class="d-node"><span>💻</span>Mac (llamune)</div>
         </div>
-        <p class="deployment-card-desc">llamune専用のクローズドネットワークで複数人が利用。インターネットに接続しないため、チームで使いながら機密データを完全に守れます。</p>
-        <div class="deployment-badge badge-max">🔴 セキュリティ最高（ネットワーク完全隔離）</div>
-      </div>
-
-      <!-- Card 3 -->
-      <div class="deployment-card" id="card3">
-        <div class="deployment-card-title">③ チーム・リモート対応</div>
-        <div class="deployment-diagram">
-          <div class="d-group">
-            <div class="d-node"><span>👤</span>オフィス</div>
-            <div class="d-node"><span>👤</span>リモート</div>
-          </div>
-          <div class="d-arrow">→</div>
-          <div class="d-node"><span>🌐</span>VPN</div>
-          <div class="d-arrow">→</div>
-          <div class="d-node"><span>💻</span>Mac (llamune)</div>
-        </div>
-        <p class="deployment-card-desc">社内ネットワーク上にllamuneを導入。VPN経由でリモートからも利用でき、ネットワーク管理者の設定により社内セキュリティポリシーに準拠した運用が可能です。</p>
-        <div class="deployment-badge badge-high">🟡 セキュリティ高（社内NW準拠＋通信暗号化）</div>
-
-        <button class="sd-toggle-btn" onclick="toggleSD()" id="sd-toggle-btn">
-          <span id="sd-toggle-label">🐒 llamune_monkey による複数インスタンス構成を見る</span>
-          <span id="sd-toggle-arrow">▼</span>
-        </button>
-
-        <div class="sd-detail" id="sd-detail">
-          <div class="sd-detail-inner">
-            <div class="sd-detail-title">llamune_monkey を介した複数インスタンス構成</div>
-            <div class="sd-detail-desc">llamune_monkey はサービスディスカバリ（SD）として動作し、各インスタンスのハートビートを管理・ルーティングします。SD同士も状態を伝播し合い、障害時も継続してサービスを提供します。</div>
-            <div class="sd-diagram">
-              <div class="sd-layer">
-                <div class="sd-layer-label">ユーザー</div>
-                <div class="sd-layer-nodes">
-                  <div class="sd-node sd-node-user"><span>👤</span></div>
-                  <div class="sd-node sd-node-user"><span>👤</span></div>
-                  <div class="sd-node sd-node-user"><span>👤</span></div>
-                  <div class="sd-node sd-node-user"><span>👤</span></div>
-                </div>
-              </div>
-              <div class="sd-arrows-down">↓</div>
-              <div class="sd-layer">
-                <div class="sd-layer-label">サービスディスカバリ（llamune_monkey）</div>
-                <div class="sd-layer-nodes">
-                  <div class="sd-node sd-node-monkey"><span>🐒</span><div class="sd-node-name">SD #1</div></div>
-                  <div class="sd-sync-arrow">⇄<div style="font-size:0.6rem;color:var(--muted);">状態伝播</div></div>
-                  <div class="sd-node sd-node-monkey"><span>🐒</span><div class="sd-node-name">SD #2</div></div>
-                </div>
-              </div>
-              <div class="sd-arrows-down">↓</div>
-              <div class="sd-layer">
-                <div class="sd-layer-label">llamune インスタンス（ハートビートで登録）</div>
-                <div class="sd-layer-nodes">
-                  <div class="sd-node sd-node-chat"><span>💬</span><div class="sd-node-name">Chat</div></div>
-                  <div class="sd-node sd-node-poc"><span>🔬</span><div class="sd-node-name">Poc</div></div>
-                  <div class="sd-node sd-node-chat"><span>💬</span><div class="sd-node-name">Chat</div></div>
-                  <div class="sd-node sd-node-poc"><span>🔬</span><div class="sd-node-name">Poc</div></div>
-                </div>
-              </div>
-              <div class="sd-arrows-down">↓</div>
-              <div class="sd-layer">
-                <div class="sd-layer-label">LLMモデル</div>
-                <div class="sd-layer-nodes">
-                  <div class="sd-node sd-node-model"><span>🤖</span><div class="sd-node-name">モデル A</div></div>
-                  <div class="sd-node sd-node-model"><span>🤖</span><div class="sd-node-name">モデル B</div></div>
-                  <div class="sd-node sd-node-model"><span>🤖</span><div class="sd-node-name">モデル C</div></div>
-                  <div class="sd-node sd-node-training"><span>⚙️</span><div class="sd-node-name">訓練中 Y</div></div>
-                  <div class="sd-node sd-node-training"><span>⚙️</span><div class="sd-node-name">訓練中 Z</div></div>
-                </div>
-              </div>
+        <div class="ui-mock-body" style="gap:8px;overflow-y:auto;">
+          <div class="ui-mock-page-title">FTデータ生成</div>
+          <div style="font-size:0.65rem;color:#9ca3af;">システムプロンプトからマルチターン会話データを生成します</div>
+          <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:10px;display:flex;flex-direction:column;gap:6px;">
+            <div style="font-size:0.72rem;font-weight:600;color:#f3f4f6;">設定</div>
+            <div class="ui-mock-selector" style="flex:none;">
+              <span class="ui-selector-label">プロジェクト</span>
+              <span class="ui-selector-val">お探し物LLM ▾</span>
             </div>
-            <div class="sd-note">各llamuneインスタンスはハートビートでSDに利用可能モデルを通知。SD間でも状態を伝播し、一方のSDが落ちても継続してルーティングします。</div>
+            <div class="ui-mock-selector" style="flex:none;">
+              <span class="ui-selector-label">使用モデル</span>
+              <span class="ui-selector-val">Qwen2.5-14B-Instruct-4bit（base） ▾</span>
+            </div>
+            <div class="ui-mock-selector" style="flex:none;">
+              <span class="ui-selector-label">システムプロンプト</span>
+              <div style="background:#111114;border:1px solid rgba(255,255,255,0.1);border-radius:5px;padding:6px 10px;font-size:0.65rem;color:#9ca3af;line-height:1.6;min-height:60px;">必ず日本語で回答してください。<br>あなたはユーザーの業務アシスタントです。<br>ユーザーは様々な情報を様々なデバイス、アプリ、サービスに登録していますが、そのほとんどを忘れているようです...</div>
+            </div>
+            <div style="display:flex;align-items:flex-end;gap:8px;">
+              <div class="ui-mock-selector" style="flex:none;width:100px;">
+                <span class="ui-selector-label">生成パターン数</span>
+                <span class="ui-selector-val">6</span>
+              </div>
+              <span class="ui-text-btn" style="padding:5px 14px;font-size:0.68rem;color:#d1d5db;">生成</span>
+            </div>
+          </div>
+          <div style="font-size:0.72rem;font-weight:600;color:#f3f4f6;">生成結果（6件）</div>
+          <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:10px;display:flex;flex-direction:column;gap:6px;">
+            <div style="font-size:0.68rem;font-weight:600;color:#d1d5db;">パターン 1</div>
+            <div style="display:flex;align-items:flex-start;gap:6px;">
+              <span style="background:#1e1e24;border:1px solid rgba(255,255,255,0.1);border-radius:3px;padding:2px 6px;font-size:0.58rem;color:#9ca3af;flex-shrink:0;">ユーザー</span>
+              <span style="font-size:0.65rem;color:#d1d5db;line-height:1.6;">私のFacebookのログイン情報を見つける方法を教えてください。</span>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:6px;">
+              <span style="background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);border-radius:3px;padding:2px 6px;font-size:0.58rem;color:#06b6d4;flex-shrink:0;">AI</span>
+              <span style="font-size:0.65rem;color:#9ca3af;line-height:1.6;">あなたのFacebookのログイン情報は以下の通りです。<br>- タイトル: Facebookログイン情報<br>- URL: Facebookのアカウントにログインするための情報...</span>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:6px;">
+              <span style="background:#1e1e24;border:1px solid rgba(255,255,255,0.1);border-radius:3px;padding:2px 6px;font-size:0.58rem;color:#9ca3af;flex-shrink:0;">ユーザー</span>
+              <span style="font-size:0.65rem;color:#d1d5db;line-height:1.6;">パスワードを教えてくれるの？それは安全じゃないよね。</span>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:6px;">
+              <span style="background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);border-radius:3px;padding:2px 6px;font-size:0.58rem;color:#06b6d4;flex-shrink:0;">AI</span>
+              <span style="font-size:0.65rem;color:#9ca3af;line-height:1.6;">安全な情報管理の観点から、私は具体的なパスワードを共有しません。パスワードの管理は、あなたの信頼性の高いデバイスやサービス（例: LastPass, 1Password）を使用することをお勧めします...</span>
+            </div>
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </section>
 
+<hr class="divider">
 
-<!-- MODEL CATALOG SECTION -->
-<section class="catalog" id="catalog">
-  <div class="catalog-inner">
-    <div class="catalog-header">
-      <h2>閉域LLM <span style="background:linear-gradient(90deg,var(--cyan),var(--cyan2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">カタログ</span></h2>
-      <p>llamune で動作確認済みのモデル一覧です。</p>
+<!-- SECTION 5: なぜ閉域か -->
+<section id="why-closed">
+  <div class="section-label">なぜ閉域LLMか</div>
+  <h2 class="section-title">育てた知識は、<br><em>外に出さない。</em></h2>
+  <p class="section-desc">
+    クラウドLLMは便利ですが、業務の機密情報を外部サーバーに送るリスクがあります。
+    llamune はすべてをローカルで完結させ、セキュリティと競争優位性を両立します。
+  </p>
+
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-icon">Security</div>
+      <div class="why-title">機密情報の完全保全</div>
+      <div class="why-desc">顧客データも社内ノウハウも、すべて自社環境で完結。インターネットに情報が出ません。</div>
     </div>
-    <div class="catalog-note">
-      <strong>メモリ表示について：</strong>ディスク上のファイルサイズではなく、<strong>実際にメモリに展開した際のサイズ</strong>を掲載しています。コンテキスト長や量子化方式によって展開後のサイズは大きく変わるため、ご使用の環境に合わせてご確認ください。OS・その他のアプリケーション用に最低4GBの余裕を確保することを推奨します。
+    <div class="why-card">
+      <div class="why-icon">Advantage</div>
+      <div class="why-title">競合に真似できない強み</div>
+      <div class="why-desc">自社知識で育てたLLMは、競合が同じクラウドサービスを使っても再現できません。</div>
     </div>
-    <div class="catalog-note" style="margin-bottom:40px;">
-      <strong>💭 thinking とは：</strong>回答を生成する前に、モデルが内部で推論・思考する過程を指します。生成AI の回答に関する説明責任が求められる場合、推論・思考過程がその根拠になる場合があります。llamune ではこの思考過程を折りたたみ表示で確認できます。thinking 対応モデルは複雑な問題に強い一方、<strong>応答速度は遅くなります。</strong>シンプルな質問には thinking なしモデルの方が快適です。
+    <div class="why-card">
+      <div class="why-icon">Cost</div>
+      <div class="why-title">従量課金コストなし</div>
+      <div class="why-desc">APIトークン費用が発生しません。一度構築すれば使用量に関わらず固定コストで運用できます。</div>
     </div>
-
-    <!-- 32GB GROUP -->
-    <div class="catalog-group">
-      <div class="catalog-group-title">32GB 環境で動作 ── 2026年2月時点のおすすめ順</div>
-      <div class="catalog-rows">
-
-        <div class="catalog-row">
-          <div class="catalog-row-left">
-            <div class="catalog-model-name">qwen2.5:14b</div>
-            <div class="catalog-model-desc">Alibaba製。日本語に強く、ファインチューニングの事例も豊富。比較的軽量でファインチューニングのベースモデルとして最適。</div>
-          </div>
-          <div class="catalog-mem">展開後<span>17 GB</span></div>
-          <div class="catalog-thinking thinking-no">thinking なし</div>
-        </div>
-
-        <div class="catalog-row">
-          <div class="catalog-row-left">
-            <div class="catalog-model-name">gpt-oss:20B</div>
-            <div class="catalog-model-desc">OpenAIが公開したローカル動作モデル。推論・エージェントタスクに強く、思考過程を確認できる。</div>
-          </div>
-          <div class="catalog-mem">展開後<span>17 GB</span></div>
-          <div class="catalog-thinking thinking-yes">💭 thinking</div>
-        </div>
-
-        <div class="catalog-row">
-          <div class="catalog-row-left">
-            <div class="catalog-model-name">gemma3:12b</div>
-            <div class="catalog-model-desc">Google製。128Kコンテキスト・140言語対応。画像入力（マルチモーダル）にも対応。</div>
-          </div>
-          <div class="catalog-mem">展開後<span>18 GB</span></div>
-          <div class="catalog-thinking thinking-no">thinking なし</div>
-        </div>
-
-        <div class="catalog-row">
-          <div class="catalog-row-left">
-            <div class="catalog-model-name">phi4:14b</div>
-            <div class="catalog-model-desc">Microsoft製。14Bながら高い推論性能。コンテキストが短めで軽量動作。</div>
-          </div>
-          <div class="catalog-mem">展開後<span>14 GB</span></div>
-          <div class="catalog-thinking thinking-no">thinking なし</div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- 64GB GROUP -->
-    <div class="catalog-group">
-      <div class="catalog-group-title">64GB 環境で動作</div>
-      <div class="catalog-rows">
-
-        <div class="catalog-row">
-          <div class="catalog-row-left">
-            <div class="catalog-model-name">deepseek-r1:14b</div>
-            <div class="catalog-model-desc">DeepSeek製・推論特化モデル。数学・論理・コーディングに強く、思考過程を表示。</div>
-          </div>
-          <div class="catalog-mem">展開後<span>45 GB</span></div>
-          <div class="catalog-thinking thinking-yes">💭 thinking</div>
-        </div>
-
-        <div class="catalog-row">
-          <div class="catalog-row-left">
-            <div class="catalog-model-name">qwen2.5-coder:32b</div>
-            <div class="catalog-model-desc">Alibaba製・コーディング特化。コード生成・レビュー・デバッグに強い。</div>
-          </div>
-          <div class="catalog-mem">展開後<span>30 GB</span></div>
-          <div class="catalog-thinking thinking-no">thinking なし</div>
-        </div>
-
-        <div class="catalog-row">
-          <div class="catalog-row-left">
-            <div class="catalog-model-name">gemma3:27b</div>
-            <div class="catalog-model-desc">Google製・上位モデル。128Kコンテキスト・140言語・マルチモーダル対応。高品質な回答。</div>
-          </div>
-          <div class="catalog-mem">展開後<span>30 GB</span></div>
-          <div class="catalog-thinking thinking-no">thinking なし</div>
-        </div>
-
-        <div class="catalog-row">
-          <div class="catalog-row-left">
-            <div class="catalog-model-name">llama3.1:8b</div>
-            <div class="catalog-model-desc">Meta製スタンダードモデル。128Kコンテキストで幅広い用途に対応。</div>
-          </div>
-          <div class="catalog-mem">展開後<span>30 GB</span></div>
-          <div class="catalog-thinking thinking-no">thinking なし</div>
-        </div>
-
-        <div class="catalog-row">
-          <div class="catalog-row-left">
-            <div class="catalog-model-name">glm-4.7-flash:latest</div>
-            <div class="catalog-model-desc">清華大学発。長いコンテキスト（202K）に対応。思考過程を確認できる。</div>
-          </div>
-          <div class="catalog-mem">展開後<span>40 GB</span></div>
-          <div class="catalog-thinking thinking-yes">💭 thinking</div>
-        </div>
-
-      </div>
-    </div>
-
   </div>
 </section>
 
+<hr class="divider">
 
-<!-- CONSULTATION SECTION -->
-<section id="consultation" class="consultation">
-  <div class="consultation-inner">
-    <div class="consultation-header">
-      <h2 class="consultation-title">llamuneとLLMのご相談サービス</h2>
-      <p class="consultation-free">ご相談はすべて無料です</p>
+<!-- SECTION 6: 構築例 -->
+<section id="architecture">
+  <div class="section-label">構築例</div>
+  <h2 class="section-title">用途に合わせた<br>3つの構成</h2>
+  <p class="section-desc">セキュリティ要件と利用規模に合わせて選べます。</p>
+
+  <div class="config-grid">
+    <div class="config-row">
+      <div class="config-label">① 個人</div>
+      <div class="config-content">
+        <div class="config-title">完全隔離 — 1台のMacで完結</div>
+        <div class="config-desc">ネットワークに接続しないため、機密データが物理的に外部に出ません。個人の業務や社外秘データの取り扱いに最適。</div>
+        <div class="config-badge">セキュリティ最高（物理的完全隔離）</div>
+      </div>
+    </div>
+    <div class="config-row">
+      <div class="config-label">② チーム</div>
+      <div class="config-content">
+        <div class="config-title">閉域NW — チームで完全隔離</div>
+        <div class="config-desc">llamune専用のクローズドネットワークで複数人が利用。インターネット非接続でチーム全員が安全に使えます。</div>
+        <div class="config-badge">セキュリティ最高（ネットワーク完全隔離）</div>
+      </div>
+    </div>
+    <div class="config-row">
+      <div class="config-label">③ リモート</div>
+      <div class="config-content">
+        <div class="config-title">VPN — リモートワーク対応</div>
+        <div class="config-desc">社内ネットワーク上にllamuneを導入。VPN経由でリモートからも利用でき、社内セキュリティポリシーに準拠した運用が可能。</div>
+        <div class="config-badge">セキュリティ高（社内NW準拠＋通信暗号化）</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="monkey-diagram">
+    <div class="monkey-header" onclick="this.nextElementSibling.classList.toggle('open')">
+      <span>なぜ Apple Silicon Mac なのか</span>
+      <span>▼</span>
+    </div>
+    <div class="monkey-body">
+      <div style="font-size:0.82rem;color:var(--text-2);line-height:1.9;margin-bottom:1.25rem;">
+        llamune の実行環境に Apple Silicon Mac を選んでいる理由は、そのハードウェアアーキテクチャにあります。
+        Apple Silicon は CPU・GPU・メモリが同一チップ上に統合された <strong style="color:var(--text);font-weight:500;">Unified Memory Architecture</strong> を採用しており、
+        CPU と GPU がメモリをコピーなしで共有できます。
+        これにより大きなモデルを効率よく展開でき、LLMの実行環境として非常に相性が良い構成になっています。
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:6px;overflow:hidden;">
+        <div style="background:var(--bg-3);padding:1.25rem;">
+          <div style="font-family:var(--mono);font-size:0.65rem;color:var(--text-3);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.75rem;">NVIDIA GPU + VM（主流構成）</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:0.5rem;">
+            <li style="font-size:0.78rem;color:var(--text-2);display:flex;gap:0.5rem;"><span style="color:var(--text-3);font-family:var(--mono);">—</span>GPUメモリとシステムメモリが分離、転送コストが発生</li>
+            <li style="font-size:0.78rem;color:var(--text-2);display:flex;gap:0.5rem;"><span style="color:var(--text-3);font-family:var(--mono);">—</span>クラウドGPU VMはランニングコストが高い</li>
+            <li style="font-size:0.78rem;color:var(--text-2);display:flex;gap:0.5rem;"><span style="color:var(--text-3);font-family:var(--mono);">—</span>CUDA環境のセットアップが複雑</li>
+          </ul>
+        </div>
+        <div style="background:var(--bg-3);padding:1.25rem;">
+          <div style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.75rem;">Apple Silicon Mac（llamune）</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:0.5rem;">
+            <li style="font-size:0.78rem;color:var(--text-2);display:flex;gap:0.5rem;"><span style="color:var(--accent);font-family:var(--mono);">+</span>Unified Memoryで大きなモデルを効率よく展開</li>
+            <li style="font-size:0.78rem;color:var(--text-2);display:flex;gap:0.5rem;"><span style="color:var(--accent);font-family:var(--mono);">+</span>購入すれば固定コスト、消費電力も低い</li>
+            <li style="font-size:0.78rem;color:var(--text-2);display:flex;gap:0.5rem;"><span style="color:var(--accent);font-family:var(--mono);">+</span>Apple MLXによりセットアップがシンプル</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="monkey-diagram" style="margin-top:1px;">
+    <div class="monkey-header" onclick="this.nextElementSibling.classList.toggle('open')">
+      <span>llamune_monkey による複数インスタンス構成を見る</span>
+      <span>▼</span>
+    </div>
+    <div class="monkey-body">
+      <div class="monkey-flow">
+        <div class="monkey-row">
+          <div class="monkey-node">👤 ユーザー × N</div>
+          <span class="arrow">→</span>
+          <div class="monkey-node highlight">🐒 llamune_monkey（SD）</div>
+          <span class="arrow">⇄</span>
+          <div class="monkey-node highlight">🐒 llamune_monkey（SD）</div>
+        </div>
+        <div class="monkey-row" style="padding-left:2rem;">
+          <span class="arrow">↓ ルーティング</span>
+        </div>
+        <div class="monkey-row">
+          <div class="monkey-node">🔍 poc #1</div>
+          <div class="monkey-node">🔍 poc #2</div>
+          <div class="monkey-node">🎓 learn #1</div>
+          <div class="monkey-node">🎓 learn #2</div>
+        </div>
+        <div style="font-size:0.78rem;color:var(--text-3);margin-top:0.5rem;">
+          SD同士が状態を伝播し、一方が落ちても継続してサービスを提供します。
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- SECTION 7: ベースモデル -->
+<section id="catalog">
+  <div class="section-label">訓練方式とベースモデル</div>
+  <h2 class="section-title">目的に合わせた<br><em>2つの訓練方式。</em></h2>
+  <p class="section-desc">
+    llamune では、目的に応じてフルファインチューニングと LoRA の2つの訓練方式を選択できます。
+    それぞれ使えるベースモデルが異なります。
+  </p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;">
+    <!-- フルファインチューニング -->
+    <div style="border:1px solid var(--accent-border);border-radius:8px;overflow:hidden;">
+      <div style="background:var(--accent-dim);padding:0.6rem 1.25rem;border-bottom:1px solid var(--accent-border);">
+        <span style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;">フルファインチューニング</span>
+      </div>
+      <div style="background:var(--bg-2);padding:1.25rem;">
+        <p style="font-size:0.82rem;color:var(--text-2);line-height:1.8;margin-bottom:1rem;">モデルの全パラメータを更新します。ベースモデルが持っていない新しい知識を持たせるのに適しています。非量子化モデル（bf16）のみ使用可能です。</p>
+        <div style="background:var(--bg-3);border:1px solid var(--border);border-radius:6px;padding:1rem 1.25rem;margin-bottom:0.75rem;">
+          <div style="font-family:var(--mono);font-size:0.62rem;color:var(--text-3);margin-bottom:0.35rem;">推奨ベースモデル</div>
+          <div style="font-family:var(--mono);font-size:0.9rem;color:var(--text);">Qwen2.5-3B-Instruct-bf16</div>
+          <div style="font-family:var(--mono);font-size:0.65rem;color:var(--text-3);margin-top:0.2rem;">Alibaba Cloud</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;">
+          <div style="background:var(--bg-3);border:1px solid var(--border);border-radius:6px;padding:0.75rem 1rem;">
+            <div style="font-family:var(--mono);font-size:0.6rem;color:var(--text-3);margin-bottom:0.25rem;">訓練時メモリ</div>
+            <div style="font-family:var(--mono);font-size:0.95rem;color:var(--text);">約 16 GB</div>
+          </div>
+          <div style="background:var(--bg-3);border:1px solid var(--border);border-radius:6px;padding:0.75rem 1rem;">
+            <div style="font-family:var(--mono);font-size:0.6rem;color:var(--text-3);margin-bottom:0.25rem;">推奨環境</div>
+            <div style="font-family:var(--mono);font-size:0.95rem;color:var(--text);">Mac mini 32GB+</div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <p class="consultation-lead">
-      llamuneとLLMの導入・活用に関するご相談を承っています。「何から始めればいいかわからない」「自社の業務に使えるか試してみたい」といった段階からお気軽にどうぞ。
+    <!-- LoRA -->
+    <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+      <div style="background:var(--bg-3);padding:0.6rem 1.25rem;border-bottom:1px solid var(--border);">
+        <span style="font-family:var(--mono);font-size:0.65rem;color:var(--text-3);letter-spacing:0.1em;text-transform:uppercase;">LoRA</span>
+      </div>
+      <div style="background:var(--bg-2);padding:1.25rem;">
+        <p style="font-size:0.82rem;color:var(--text-2);line-height:1.8;margin-bottom:1rem;">差分アダプターのみを更新します。ベースモデルが持つ既存の知識を調整・拡張するのに適しています。量子化モデル（4bit など）でも使用可能です。</p>
+        <div style="background:var(--bg-3);border:1px solid var(--border);border-radius:6px;padding:1rem 1.25rem;margin-bottom:0.75rem;">
+          <div style="font-family:var(--mono);font-size:0.62rem;color:var(--text-3);margin-bottom:0.35rem;">推奨ベースモデル</div>
+          <div style="font-family:var(--mono);font-size:0.9rem;color:var(--text);">Qwen2.5-14B-Instruct-4bit</div>
+          <div style="font-family:var(--mono);font-size:0.65rem;color:var(--text-3);margin-top:0.2rem;">Alibaba Cloud</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;">
+          <div style="background:var(--bg-3);border:1px solid var(--border);border-radius:6px;padding:0.75rem 1rem;">
+            <div style="font-family:var(--mono);font-size:0.6rem;color:var(--text-3);margin-bottom:0.25rem;">訓練時メモリ</div>
+            <div style="font-family:var(--mono);font-size:0.95rem;color:var(--text);">約 17 GB</div>
+          </div>
+          <div style="background:var(--bg-3);border:1px solid var(--border);border-radius:6px;padding:0.75rem 1rem;">
+            <div style="font-family:var(--mono);font-size:0.6rem;color:var(--text-3);margin-bottom:0.25rem;">推奨環境</div>
+            <div style="font-family:var(--mono);font-size:0.95rem;color:var(--text);">Mac mini 32GB+</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- SECTION 8: お問い合わせ -->
+<section id="consultation">
+  <div class="contact-box">
+    <div class="section-label" style="justify-content:center;">相談・お問い合わせ</div>
+    <h2 class="section-title">まずは<br>気軽にご相談を</h2>
+    <p class="section-desc" style="margin:0 auto 1.5rem;">
+      「何から始めればいいかわからない」という段階からお気軽にどうぞ。
     </p>
+    <a href="mailto:llm@unremoted.com" class="contact-mail">llm@unremoted.com</a>
 
-    <div class="consultation-cards">
-      <div class="consultation-card">
-        <div class="consultation-card-icon">🏢</div>
-        <div class="consultation-card-name">LLM導入相談</div>
-        <p class="consultation-card-desc">クラウドLLM・ローカルLLMの選択肢を整理し、自社環境に合った導入方針をご提案します。</p>
+    <div class="services">
+      <div class="service-item">
+        <div class="service-title">LLM導入相談</div>
+        <div class="service-desc">クラウド・ローカルの選択肢を整理し、自社環境に合った導入方針をご提案します。</div>
       </div>
-      <div class="consultation-card">
-        <div class="consultation-card-icon">🔒</div>
-        <div class="consultation-card-name">閉域LLM構築</div>
-        <p class="consultation-card-desc">機密情報を外部に出さず、社内ネットワーク内で動作するLLM環境の構築を支援します。</p>
+      <div class="service-item">
+        <div class="service-title">閉域LLM構築</div>
+        <div class="service-desc">機密情報を外部に出さず、社内ネットワーク内で動作するLLM環境の構築を支援します。</div>
       </div>
-      <div class="consultation-card">
-        <div class="consultation-card-icon">🧪</div>
-        <div class="consultation-card-name">PoC設計・実施</div>
-        <p class="consultation-card-desc">業務改善の仮説を立て、LLMの効果を検証するPoCの設計と実施をサポートします。</p>
+      <div class="service-item">
+        <div class="service-title">PoC設計・実施</div>
+        <div class="service-desc">業務改善の仮説を立て、LLMの効果を検証するPoCの設計と実施をサポートします。</div>
       </div>
-      <div class="consultation-card">
-        <div class="consultation-card-icon">🎓</div>
-        <div class="consultation-card-name">ファインチューニング</div>
-        <p class="consultation-card-desc">自社データを用いたモデルのカスタマイズ・ファインチューニングの計画立案から実施まで対応します。</p>
+      <div class="service-item">
+        <div class="service-title">ファインチューニング</div>
+        <div class="service-desc">自社データを用いたモデルのカスタマイズ・ファインチューニングの計画から実施まで対応します。</div>
       </div>
-    </div>
-
-    <div class="consultation-contact">
-      <p class="consultation-contact-lead">まずはお気軽にメールでご連絡ください。</p>
-      <div class="consultation-email-box">
-        <span class="consultation-email">llm@unremoted.com</span>
-        <button onclick="copyEmail()" id="copy-btn" class="consultation-copy-btn" aria-label="メールアドレスをコピー">
-          <svg id="copy-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-          </svg>
-          <svg id="check-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00d4aa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
-            <polyline points="20 6 9 17 4 12"/>
-          </svg>
-        </button>
-      </div>
-      <p class="consultation-contact-note">llamune に関するご相談も、こちらのアドレスで承っています。</p>
     </div>
   </div>
 </section>
 
-<script>
-// ── THEME TOGGLE ──
-(function() {
-  const saved = localStorage.getItem('llamune-theme');
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const theme = saved || (prefersDark ? 'dark' : 'light');
-  if (theme === 'light') {
-    document.documentElement.setAttribute('data-theme', 'light');
-  }
-  // Update icon after DOM ready
-  document.addEventListener('DOMContentLoaded', function() {
-    updateToggleIcon();
-  });
-})();
-
-function toggleTheme() {
-  const html = document.documentElement;
-  const isLight = html.getAttribute('data-theme') === 'light';
-  if (isLight) {
-    html.removeAttribute('data-theme');
-    localStorage.setItem('llamune-theme', 'dark');
-  } else {
-    html.setAttribute('data-theme', 'light');
-    localStorage.setItem('llamune-theme', 'light');
-  }
-  updateToggleIcon();
-}
-
-function updateToggleIcon() {
-  const btn = document.getElementById('theme-toggle');
-  if (!btn) return;
-  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-  btn.textContent = isLight ? '☀️' : '🌙';
-  btn.setAttribute('aria-label', isLight ? 'ダークモードに切り替え' : 'ライトモードに切り替え');
-}
-</script>
-
-<script>
-function copyEmail() {
-  navigator.clipboard.writeText('llm@unremoted.com').then(function() {
-    document.getElementById('copy-icon').style.display = 'none';
-    document.getElementById('check-icon').style.display = 'block';
-    setTimeout(function() {
-      document.getElementById('copy-icon').style.display = 'block';
-      document.getElementById('check-icon').style.display = 'none';
-    }, 2000);
-  });
-}
-</script>
-
-<!-- FOOTER -->
 <footer>
-  <div class="footer-logo">llamune</div>
-  <div class="footer-copy">
-    &copy; 2026 <a href="https://unremoted.com" target="_blank">unremoted.com</a>
-  </div>
+  <p>llamune &nbsp;—&nbsp; <a href="https://unremoted.com" target="_blank">unremoted.com</a> &nbsp;©&nbsp;2026</p>
 </footer>
 
-
-
-<!-- GALLERY MODAL -->
-<div class="gallery-overlay" id="gallery">
-  <div class="gallery-header">
-    <div class="gallery-title">llamune_chat — 実際の画面</div>
-    <div style="display:flex;align-items:center;gap:16px;">
-      <span class="gallery-counter" id="gallery-counter">1 / 4</span>
-      <button class="gallery-close" onclick="closeGallery()">✕</button>
-    </div>
-  </div>
-  <div class="gallery-main">
-    <button class="gallery-nav gallery-prev" onclick="galleryMove(-1)">‹</button>
-    <img class="gallery-img" id="gallery-img" src="" alt="">
-    <button class="gallery-nav gallery-next" onclick="galleryMove(1)">›</button>
-  </div>
-  <div class="gallery-caption" id="gallery-caption"></div>
-  <div class="gallery-dots" id="gallery-dots"></div>
-</div>
-
-<!-- MOBILE DEMO INFO MODAL -->
-<div class="mobile-modal-overlay" id="mobile-modal">
-  <div class="mobile-modal">
-    <div class="mobile-modal-icon">🖥️</div>
-    <div class="mobile-modal-title">デモはPC画面でご覧ください</div>
-    <div class="mobile-modal-body">
-      インタラクティブなデモは、PC・タブレットの横向き画面に最適化されています。<br>
-      スマートフォンからご覧の場合は、PCからアクセスしていただくとデモをお試しいただけます。
-    </div>
-    <button class="mobile-modal-btn" onclick="closeMobileModal()">閉じる</button>
-  </div>
-</div>
-
 <script>
-
-const galleryImages = [
-  { src: 'chat_1.png', caption: '複数のLLMに同時に質問し、回答を比較して採用・破棄できます' },
-  { src: 'chat_2.png', caption: 'チャット中にモデル・Temperature・システムプロンプトをリアルタイムで変更できます' },
-  { src: 'chat_3.png', caption: 'パラメータセット管理：用途別にテンプレートを一覧管理できます' },
-  { src: 'chat_4.png', caption: 'テンプレート編集：モデル・システムプロンプト・LLMパラメータを細かく設定できます' },
-];
-let galleryIdx = 0;
-
-function openGallery(idx = 0) {
-  galleryIdx = idx;
-  renderGallery();
-  document.getElementById('gallery').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeGallery() {
-  document.getElementById('gallery').classList.remove('open');
-  document.body.style.overflow = '';
-}
-function galleryMove(dir) {
-  galleryIdx = (galleryIdx + dir + galleryImages.length) % galleryImages.length;
-  renderGallery();
-}
-function renderGallery() {
-  const img = galleryImages[galleryIdx];
-  document.getElementById('gallery-img').src = img.src;
-  document.getElementById('gallery-img').alt = img.caption;
-  document.getElementById('gallery-caption').textContent = img.caption;
-  document.getElementById('gallery-counter').textContent = (galleryIdx + 1) + ' / ' + galleryImages.length;
-  const dotsEl = document.getElementById('gallery-dots');
-  dotsEl.innerHTML = '';
-  galleryImages.forEach((_, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'gallery-dot' + (i === galleryIdx ? ' active' : '');
-    btn.onclick = () => { galleryIdx = i; renderGallery(); };
-    dotsEl.appendChild(btn);
-  });
-}
-document.addEventListener('keydown', (e) => {
-  if (!document.getElementById('gallery').classList.contains('open')) return;
-  if (e.key === 'ArrowRight') galleryMove(1);
-  if (e.key === 'ArrowLeft') galleryMove(-1);
-  if (e.key === 'Escape') closeGallery();
+// Loss chart bars
+const lossData = [3.140,1.901,1.589,1.463,1.336,1.188,0.988,1.022,0.750,0.719,0.484,0.313,0.319,0.184,0.185,0.129,0.096,0.095,0.082,0.078];
+const max = Math.max(...lossData);
+const container = document.getElementById('lossBars');
+lossData.forEach((v, i) => {
+  const bar = document.createElement('div');
+  bar.className = 'loss-bar';
+  bar.style.height = (v / max * 100) + '%';
+  bar.title = `Iter ${(i+1)*10}: ${v}`;
+  container.appendChild(bar);
 });
-
-const activeTimers = [];
-
-function clearAllTimers() {
-  activeTimers.forEach(id => clearInterval(id));
-  activeTimers.length = 0;
-}
-
-function typeText(el, text, speed, callback) {
-  let i = 0;
-  el.innerHTML = '';
-  const cursor = document.createElement('span');
-  cursor.className = 'cursor';
-  el.appendChild(cursor);
-  const timer = setInterval(() => {
-    if (!cursor.parentNode) { clearInterval(timer); return; }
-    if (i < text.length) {
-      el.insertBefore(document.createTextNode(text[i]), cursor);
-      i++;
-    } else {
-      clearInterval(timer);
-      cursor.remove();
-      if (callback) callback();
-    }
-  }, speed);
-  activeTimers.push(timer);
-}
-
-let currentStep = 1;
-
-function closeMobileModal() {
-  document.getElementById('mobile-modal').classList.remove('open');
-}
-
-function goStep(n) {
-  if (window.innerWidth <= 768) {
-    document.getElementById('mobile-modal').classList.add('open');
-    return;
-  }
-  clearAllTimers();
-  document.querySelectorAll('.demo-step-btn').forEach((btn, i) => {
-    btn.classList.remove('active', 'done');
-    if (i + 1 < n) btn.classList.add('done');
-    if (i + 1 === n) btn.classList.add('active');
-  });
-  document.querySelectorAll('.demo-panel').forEach((p, i) => {
-    p.classList.remove('active');
-    if (i + 1 === n) p.classList.add('active');
-  });
-  currentStep = n;
-  if (n === 1) initStep1();
-  if (n === 2) initStep2();
-  if (n === 3) initStep3();
-}
-
-function initStep1() {
-  // STEP1はiframeのため何もしない
-}
-
-function initStep2() {
-  const el = document.getElementById('poc-answer-text');
-  const text = 'Z世代向けSNSキャンペーンとして以下の3つを提案します。\n\n①ハッシュタグチャレンジ：オリジナルの参加型企画でUGCを促進\n②マイクロインフルエンサー起用：フォロワー1万〜10万人規模を複数活用\n③限定ARフィルター配布：キャンペーン期間限定のオリジナルフィルター\n\n※具体的な事例データや最新トレンドについては知識が不足しており、精度向上が必要です。';
-  typeText(el, text, 14, null);
-}
-
-function initStep3() {
-  const bar = document.getElementById('learn-bar');
-  const pct = document.getElementById('learn-pct');
-  const epochEl = document.getElementById('stat-epoch');
-  const lossEl = document.getElementById('stat-loss');
-  const samplesEl = document.getElementById('stat-samples');
-  const logEl = document.getElementById('learn-log');
-  const statusEl = document.getElementById('learn-status');
-
-  bar.style.width = '0%';
-  logEl.innerHTML = '$ llamune_learn start --model qwen2.5-14b --data gap_export_007.json\n';
-  epochEl.textContent = '0'; lossEl.textContent = '—'; samplesEl.textContent = '0';
-  statusEl.textContent = '● 訓練データ生成中...';
-  statusEl.style.background = ''; statusEl.style.color = ''; statusEl.style.borderColor = '';
-
-  const logs = [
-    '[00:01] 訓練データ読み込み中... 127件のQ&Aペアを検出',
-    '[00:03] データ前処理完了。トークナイズ開始',
-    '[00:06] Epoch 1/3 開始 — loss: 2.847',
-    '[00:12] Epoch 1/3 完了 — loss: 1.923 ✓',
-    '[00:18] Epoch 2/3 開始 — loss: 1.654',
-    '[00:24] Epoch 2/3 完了 — loss: 1.201 ✓',
-    '[00:30] Epoch 3/3 開始 — loss: 0.987',
-    '[00:38] Epoch 3/3 完了 — loss: 0.634 ✓',
-    '[00:40] モデル保存中... qwen2.5-14b-adagency-v1.gguf',
-    '[00:41] ✅ ファインチューニング完了！',
-  ];
-
-  let progress = 0, logIdx = 0, epoch = 0;
-
-  const timer = setInterval(() => {
-    progress += 2;
-    if (progress > 100) progress = 100;
-    bar.style.width = progress + '%';
-    pct.textContent = progress + '%';
-    samplesEl.textContent = Math.floor(progress * 1.27);
-
-    if (progress >= 30 && epoch < 1) { epoch = 1; epochEl.textContent = '1/3'; lossEl.textContent = '1.923'; }
-    if (progress >= 60 && epoch < 2) { epoch = 2; epochEl.textContent = '2/3'; lossEl.textContent = '1.201'; }
-    if (progress >= 90 && epoch < 3) { epoch = 3; epochEl.textContent = '3/3'; lossEl.textContent = '0.634'; }
-
-    if (logIdx < logs.length && progress >= (logIdx + 1) * 10) {
-      logEl.innerHTML += logs[logIdx] + '\n';
-      logEl.scrollTop = logEl.scrollHeight;
-      logIdx++;
-    }
-
-    if (progress >= 100) {
-      clearInterval(timer);
-      statusEl.textContent = '✅ 完了';
-      statusEl.style.background = 'rgba(74,222,128,0.15)';
-      statusEl.style.color = '#4ade80';
-      statusEl.style.borderColor = 'rgba(74,222,128,0.3)';
-    }
-  }, 80);
-  activeTimers.push(timer);
-}
-
-function restart() { goStep(1); }
-
-// STEP1はiframe表示のため初期化不要
-
-function toggleSD() {
-  const detail = document.getElementById('sd-detail');
-  const arrow = document.getElementById('sd-toggle-arrow');
-  const label = document.getElementById('sd-toggle-label');
-  const isOpen = detail.classList.contains('open');
-  detail.classList.toggle('open');
-  arrow.classList.toggle('open');
-  label.textContent = isOpen
-    ? '🐒 llamune_monkey による複数インスタンス構成を見る'
-    : '🐒 llamune_monkey による複数インスタンス構成を閉じる';
-}
 </script>
+
 </body>
 </html>
