@@ -1078,6 +1078,27 @@ footer a:hover { color: var(--text); }
   color: #f87171;
   font-weight: 600;
 }
+
+
+/* ── TRAINING GRID RESPONSIVE ── */
+@media (max-width: 768px) {
+  .training-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+  .ui-mock {
+    display: none !important;
+  }
+  .screenshot-bar {
+    display: none !important;
+  }
+  .ui-log-frame {
+    display: none !important;
+  }
+}
 </style>
 </head>
 <body>
@@ -1541,17 +1562,27 @@ Saved final weights to /Users/mini/llmn_models/46/adapters.safetensors.
   <!-- サイクル図 -->
   <div style="border:1px solid var(--border); border-radius:8px; padding:1.5rem; background:var(--bg-2); text-align:center;">
     <div style="font-family:var(--mono);font-size:0.65rem;color:var(--text-3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1.25rem;">繰り返しサイクル</div>
-    <div style="display:flex;align-items:center;justify-content:center;gap:0.5rem;flex-wrap:wrap;font-size:0.78rem;">
-      <span style="background:var(--bg-3);border:1px solid var(--border-2);padding:0.4rem 0.9rem;border-radius:4px;font-family:var(--mono);color:var(--text-2);">実力測定</span>
-      <span style="color:var(--text-3);">→</span>
-      <span style="background:var(--bg-3);border:1px solid var(--border-2);padding:0.4rem 0.9rem;border-radius:4px;font-family:var(--mono);color:var(--text-2);">データ作成</span>
-      <span style="color:var(--text-3);">→</span>
-      <span style="background:var(--accent-dim);border:1px solid var(--accent-border);padding:0.4rem 0.9rem;border-radius:4px;font-family:var(--mono);color:var(--accent);">トレーニング</span>
-      <span style="color:var(--text-3);">→</span>
-      <span style="background:var(--bg-3);border:1px solid var(--border-2);padding:0.4rem 0.9rem;border-radius:4px;font-family:var(--mono);color:var(--text-2);">評価</span>
-      <span style="color:var(--text-3);">→</span>
-      <span style="background:var(--bg-3);border:1px solid var(--border-2);padding:0.4rem 0.9rem;border-radius:4px;font-family:var(--mono);color:var(--text-2);">再トレーニング</span>
-      <span style="color:var(--accent);font-family:var(--mono);">↩</span>
+    <div style="display:flex;align-items:center;justify-content:center;gap:0.5rem;flex-wrap:wrap;font-size:0.78rem;row-gap:0.75rem;">
+      <span style="display:inline-flex;align-items:center;gap:0.5rem;">
+        <span style="background:var(--bg-3);border:1px solid var(--border-2);padding:0.4rem 0.9rem;border-radius:4px;font-family:var(--mono);color:var(--text-2);">実力測定</span>
+        <span style="color:var(--text-3);">→</span>
+      </span>
+      <span style="display:inline-flex;align-items:center;gap:0.5rem;">
+        <span style="background:var(--bg-3);border:1px solid var(--border-2);padding:0.4rem 0.9rem;border-radius:4px;font-family:var(--mono);color:var(--text-2);">データ作成</span>
+        <span style="color:var(--text-3);">→</span>
+      </span>
+      <span style="display:inline-flex;align-items:center;gap:0.5rem;">
+        <span style="background:var(--accent-dim);border:1px solid var(--accent-border);padding:0.4rem 0.9rem;border-radius:4px;font-family:var(--mono);color:var(--accent);">トレーニング</span>
+        <span style="color:var(--text-3);">→</span>
+      </span>
+      <span style="display:inline-flex;align-items:center;gap:0.5rem;">
+        <span style="background:var(--bg-3);border:1px solid var(--border-2);padding:0.4rem 0.9rem;border-radius:4px;font-family:var(--mono);color:var(--text-2);">評価</span>
+        <span style="color:var(--text-3);">→</span>
+      </span>
+      <span style="display:inline-flex;align-items:center;gap:0.5rem;">
+        <span style="background:var(--bg-3);border:1px solid var(--border-2);padding:0.4rem 0.9rem;border-radius:4px;font-family:var(--mono);color:var(--text-2);">再トレーニング</span>
+        <span style="color:var(--accent);font-family:var(--mono);">↩</span>
+      </span>
     </div>
   </div>
 </section>
@@ -1801,7 +1832,7 @@ Saved final weights to /Users/mini/llmn_models/46/adapters.safetensors.
     それぞれ使えるベースモデルが異なります。
   </p>
 
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;" class="training-grid">
     <!-- フルファインチューニング -->
     <div style="border:1px solid var(--accent-border);border-radius:8px;overflow:hidden;">
       <div style="background:var(--accent-dim);padding:0.6rem 1.25rem;border-bottom:1px solid var(--accent-border);">
