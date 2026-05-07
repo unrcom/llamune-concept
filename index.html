@@ -1129,7 +1129,7 @@ footer a:hover { color: var(--text); }
     情報が外に出ない閉じた環境で動かすプラットフォームです。
   </p>
   <div class="hero-badges">
-    <span class="badge">Apple Silicon / Mac mini</span>
+    <span class="badge">Apple Silicon</span>
     <span class="badge">LoRA Fine-tuning</span>
     <span class="badge">完全オフライン動作</span>
     <span class="badge">従量課金なし</span>
@@ -1593,97 +1593,166 @@ Saved final weights to /Users/mini/llmn_models/46/adapters.safetensors.
 <!-- SECTION 3.6: 現在地点 -->
 <section id="current-status">
   <div class="section-label">現在地点</div>
-  <h2 class="section-title">実証実験、<br><em>進行中。</em></h2>
+  <h2 class="section-title">RAG × FT、<br><em>稼働中。</em></h2>
   <p class="section-desc">
-    現在、llamune を用いた実証実験を継続しています。
+    ファインチューニングツールは <strong style="color:var(--text);font-weight:500;">llamune_ft</strong> として整理し、
+    新たに RAG × FT を組み合わせた <strong style="color:var(--accent);font-weight:500;">llamune</strong> が完成しました。
   </p>
 
-  <div style="display:flex;flex-direction:column;gap:1rem;margin-bottom:2rem;">
-    <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:1.5rem;">
-      <div style="font-family:var(--mono);font-size:0.65rem;color:var(--text-3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border);">ファインチューニング単体の検証結果</div>
-      <p style="font-size:0.88rem;color:var(--text-2);line-height:1.9;margin-bottom:0.75rem;">現段階では、あらゆる質問に安定して答えられる LLM はまだ完成していません。特定の質問やそれに近い表現には正しく回答できるものの、多くの質問では意図しない回答を返すケースが見られます。同じ訓練済みモデルでも、質問の表現によって回答の精度が大きく変わるのが現状です。</p>
-      <p style="font-size:0.88rem;color:var(--text-2);line-height:1.9;">完全に安定した LLM を目指すより、正しく答えられる質問の割合を着実に高めていくことが現実的な目標だと考えています。</p>
+  <!-- 2つのプロダクトの位置づけ -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:2rem;" class="training-grid">
+    <div style="background:var(--bg-2);padding:1.75rem;">
+      <div style="font-family:var(--mono);font-size:0.65rem;color:var(--text-3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem;">llamune_ft</div>
+      <div style="font-size:0.95rem;font-weight:500;color:var(--text);margin-bottom:0.5rem;">ファインチューニングツール</div>
+      <div style="font-size:0.82rem;color:var(--text-2);line-height:1.8;margin-bottom:0.75rem;">user ↔ assistant の Q&A ペアを用いてベースモデルをトレーニングします。このページで紹介しているトレーニングサイクルを担うツールです。</div>
+      <a href="https://github.com/unrcom/llamune_ft" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;font-family:var(--mono);font-size:0.7rem;color:var(--text-3);text-decoration:none;border:1px solid var(--border);border-radius:4px;padding:0.3rem 0.65rem;transition:color 0.2s,border-color 0.2s;" onmouseover="this.style.color='var(--text)';this.style.borderColor='var(--text-2)'" onmouseout="this.style.color='var(--text-3)';this.style.borderColor='var(--border)'">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        unrcom/llamune_ft
+      </a>
+    </div>
+    <div style="background:var(--bg-2);padding:1.75rem;border-left:2px solid var(--accent);">
+      <div style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem;">llamune <span style="background:var(--accent-dim);padding:0.1rem 0.4rem;border-radius:2px;border:1px solid var(--accent-border);">NEW</span></div>
+      <div style="font-size:0.95rem;font-weight:500;color:var(--text);margin-bottom:0.5rem;">RAG × FT アプリ</div>
+      <div style="font-size:0.82rem;color:var(--text-2);line-height:1.8;margin-bottom:0.75rem;">データセットを投入し、ユーザーの問い合わせに対して検索・回答します。システムプロンプトを FT で学習させる独自機能を備えます。</div>
+      <a href="https://github.com/unrcom/llamune" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;font-family:var(--mono);font-size:0.7rem;color:var(--accent);text-decoration:none;border:1px solid var(--accent-border);border-radius:4px;padding:0.3rem 0.65rem;transition:color 0.2s,border-color 0.2s;" onmouseover="this.style.opacity='0.75'" onmouseout="this.style.opacity='1'">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        unrcom/llamune
+      </a>
+    </div>
+  </div>
+
+  <!-- 独自機能：マルチターン FT -->
+  <div style="background:var(--bg-2);border:1px solid var(--accent-border);border-radius:8px;padding:1.75rem;margin-bottom:2rem;">
+    <div style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1rem;padding-bottom:0.75rem;border-bottom:1px solid var(--accent-border);">llamune 独自機能 — マルチターン FT データ定義</div>
+
+    <p style="font-size:0.88rem;color:var(--text-2);line-height:1.9;margin-bottom:1rem;">
+      RAG のシステムプロンプトには、検索命令の発行・結果の受け取り・最終回答の生成という複数のステップが含まれます。
+      これを LLM に学習させるには、従来の user ↔ assistant の 1 対 1 では不十分で、
+      <strong style="color:var(--text);">user / assistant / tool のマルチターン構造</strong>で FT データを定義する必要があります。
+    </p>
+
+    <div style="display:flex;flex-direction:column;gap:0.6rem;margin-bottom:1.5rem;">
+      <div style="font-size:0.78rem;color:var(--text-3);font-family:var(--mono);margin-bottom:0.25rem;">会話ターンの構造</div>
+      <div style="display:flex;gap:0.5rem;align-items:stretch;flex-wrap:wrap;">
+        <div style="background:var(--bg-3);border:1px solid var(--border-2);border-radius:4px;padding:0.5rem 0.85rem;font-family:var(--mono);font-size:0.72rem;color:var(--text-2);">system</div>
+        <div style="color:var(--text-3);font-family:var(--mono);align-self:center;">→</div>
+        <div style="background:var(--bg-3);border:1px solid var(--border-2);border-radius:4px;padding:0.5rem 0.85rem;font-family:var(--mono);font-size:0.72rem;color:var(--text-2);">user</div>
+        <div style="color:var(--text-3);font-family:var(--mono);align-self:center;">→</div>
+        <div style="background:var(--accent-dim);border:1px solid var(--accent-border);border-radius:4px;padding:0.5rem 0.85rem;font-family:var(--mono);font-size:0.72rem;color:var(--accent);">assistant<br><span style="font-size:0.6rem;opacity:0.8;">[SEARCH]クエリ[/SEARCH]</span></div>
+        <div style="color:var(--text-3);font-family:var(--mono);align-self:center;">→</div>
+        <div style="background:var(--bg-3);border:1px solid var(--border-2);border-radius:4px;padding:0.5rem 0.85rem;font-family:var(--mono);font-size:0.72rem;color:var(--text-2);">tool<br><span style="font-size:0.6rem;opacity:0.8;">検索結果</span></div>
+        <div style="color:var(--text-3);font-family:var(--mono);align-self:center;">→</div>
+        <div style="background:var(--accent-dim);border:1px solid var(--accent-border);border-radius:4px;padding:0.5rem 0.85rem;font-family:var(--mono);font-size:0.72rem;color:var(--accent);">assistant<br><span style="font-size:0.6rem;opacity:0.8;">最終回答</span></div>
+      </div>
     </div>
 
-    <div style="background:var(--bg-2);border:1px solid var(--accent-border);border-radius:8px;padding:1.5rem;">
-      <div style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1rem;padding-bottom:0.75rem;border-bottom:1px solid var(--accent-border);">新しいアプローチ — RAG × ファインチューニング</div>
-      <p style="font-size:0.88rem;color:var(--text-2);line-height:1.9;margin-bottom:1rem;">RAG を導入された方であれば、プロンプトの調整に多くの手間がかかることをご存知かと思います。プロンプトは改善を重ねるごとに肥大化・複雑化し、それに伴って応答の安定性を保つことも難しくなっていきます。</p>
-      <p style="font-size:0.88rem;color:var(--text-2);line-height:1.9;margin-bottom:1.25rem;">弊社では、この課題に対し、<strong style="color:var(--text);">プロンプトそのものをファインチューニングで LLM に学習させる</strong>という新しいアプローチを検証しています。</p>
-      <ol style="list-style:none;display:flex;flex-direction:column;gap:0.6rem;margin-bottom:1.25rem;">
-        <li style="font-size:0.85rem;color:var(--text-2);display:flex;gap:0.75rem;align-items:flex-start;">
-          <span style="color:var(--accent);font-family:var(--mono);font-weight:700;flex-shrink:0;">01</span>RAG に与えるシステムプロンプトを定義する
-        </li>
-        <li style="font-size:0.85rem;color:var(--text-2);display:flex;gap:0.75rem;align-items:flex-start;">
-          <span style="color:var(--accent);font-family:var(--mono);font-weight:700;flex-shrink:0;">02</span>llamune を使い、このプロンプトをマルチターンの Q&A 形式に変換する
-        </li>
-        <li style="font-size:0.85rem;color:var(--text-2);display:flex;gap:0.75rem;align-items:flex-start;">
-          <span style="color:var(--accent);font-family:var(--mono);font-weight:700;flex-shrink:0;">03</span>生成した Q&A を使ってベースモデルをファインチューニングする
-        </li>
-        <li style="font-size:0.85rem;color:var(--text-2);display:flex;gap:0.75rem;align-items:flex-start;">
-          <span style="color:var(--accent);font-family:var(--mono);font-weight:700;flex-shrink:0;">04</span>ファインチューニング済みの LLM を、プロンプトなしで RAG に組み込む
-        </li>
-      </ol>
-      <!-- FTデータ生成モック -->
-      <div class="screenshot-bar" style="background:#1a1a1f;border:1px solid rgba(255,255,255,0.08);border-bottom:none;border-radius:6px 6px 0 0;margin-top:1rem;">
+    <!-- FTデータ管理 UIモック -->
+    <div class="screenshot-frame">
+      <div class="screenshot-bar">
         <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-        <span class="screenshot-url">xxxxxx/admin/ft-data-gen</span>
+        <span class="screenshot-url">localhost:5174/admin/ft-data</span>
       </div>
-      <div class="ui-mock" style="height:420px;border-radius:0 0 6px 6px;border-top:none;">
+      <div class="ui-mock" style="height:480px;">
+        <!-- サイドバー -->
         <div class="ui-mock-sidebar">
           <div class="ui-mock-logo">llamune</div>
           <div class="ui-mock-nav">
             <div class="ui-nav-item">💬 チャット</div>
             <div class="ui-nav-item">📊 データセット</div>
-            <div class="ui-nav-item" style="color:#9ca3af;font-size:0.62rem;padding:4px 8px;margin-top:4px;">管理</div>
+            <div class="ui-nav-item" style="color:#6b7280;font-size:0.6rem;padding:4px 8px;margin-top:4px;border-top:1px solid rgba(255,255,255,0.05);padding-top:8px;">管理</div>
             <div class="ui-nav-item">📁 プロジェクト</div>
             <div class="ui-nav-item">🤖 モデル</div>
-            <div class="ui-nav-item ui-nav-active">⚙️ FTデータ生成</div>
+            <div class="ui-nav-item ui-nav-active">📋 FTデータ管理</div>
             <div class="ui-nav-item">🔧 訓練ジョブ</div>
           </div>
         </div>
-        <div class="ui-mock-body" style="gap:8px;overflow-y:auto;">
-          <div class="ui-mock-page-title">FTデータ生成</div>
-          <div style="font-size:0.65rem;color:#9ca3af;">システムプロンプトからマルチターン会話データを生成します</div>
-          <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:10px;display:flex;flex-direction:column;gap:6px;">
-            <div style="font-size:0.72rem;font-weight:600;color:#f3f4f6;">設定</div>
-            <div class="ui-mock-selector" style="flex:none;">
-              <span class="ui-selector-label">プロジェクト</span>
-              <span class="ui-selector-val">お探し物LLM ▾</span>
-            </div>
-            <div class="ui-mock-selector" style="flex:none;">
-              <span class="ui-selector-label">使用モデル</span>
-              <span class="ui-selector-val">Qwen2.5-14B-Instruct-4bit（base） ▾</span>
-            </div>
-            <div class="ui-mock-selector" style="flex:none;">
-              <span class="ui-selector-label">システムプロンプト</span>
-              <div style="background:#111114;border:1px solid rgba(255,255,255,0.1);border-radius:5px;padding:6px 10px;font-size:0.65rem;color:#9ca3af;line-height:1.6;min-height:60px;">必ず日本語で回答してください。<br>あなたはユーザーの業務アシスタントです。<br>ユーザーは様々な情報を様々なデバイス、アプリ、サービスに登録していますが、そのほとんどを忘れているようです...</div>
-            </div>
-            <div style="display:flex;align-items:flex-end;gap:8px;">
-              <div class="ui-mock-selector" style="flex:none;width:100px;">
-                <span class="ui-selector-label">生成パターン数</span>
-                <span class="ui-selector-val">6</span>
-              </div>
-              <span class="ui-text-btn" style="padding:5px 14px;font-size:0.68rem;color:#d1d5db;">生成</span>
+        <!-- メイン -->
+        <div class="ui-mock-body" style="gap:8px;overflow-y:auto;padding:14px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div class="ui-mock-page-title">FTデータ管理</div>
+            <div style="display:flex;gap:5px;">
+              <span class="ui-text-btn" style="padding:4px 10px;font-size:0.62rem;color:#06b6d4;border-color:rgba(6,182,212,0.3);">↓ train</span>
+              <span class="ui-text-btn" style="padding:4px 10px;font-size:0.62rem;color:#d1d5db;">↓ valid</span>
             </div>
           </div>
-          <div style="font-size:0.72rem;font-weight:600;color:#f3f4f6;">生成結果（6件）</div>
-          <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:10px;display:flex;flex-direction:column;gap:6px;">
-            <div style="font-size:0.68rem;font-weight:600;color:#d1d5db;">パターン 1</div>
-            <div style="display:flex;align-items:flex-start;gap:6px;">
-              <span style="background:#1e1e24;border:1px solid rgba(255,255,255,0.1);border-radius:3px;padding:2px 6px;font-size:0.58rem;color:#9ca3af;flex-shrink:0;">ユーザー</span>
-              <span style="font-size:0.65rem;color:#d1d5db;line-height:1.6;">私のFacebookのログイン情報を見つける方法を教えてください。</span>
+          <div class="ui-mock-selector" style="flex:none;max-width:200px;">
+            <span class="ui-selector-label">プロジェクト</span>
+            <span class="ui-selector-val">お探し物LLM ▾</span>
+          </div>
+          <!-- 編集中パターン -->
+          <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(6,182,212,0.2);border-radius:6px;padding:10px;display:flex;flex-direction:column;gap:7px;">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+              <span style="font-size:0.68rem;font-weight:600;color:#f3f4f6;">編集中 (ID: 4)</span>
+              <span style="background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.25);border-radius:3px;padding:1px 7px;font-size:0.58rem;color:#06b6d4;font-family:'DM Mono',monospace;">ベースID: 1</span>
+              <div style="margin-left:auto;display:flex;gap:4px;">
+                <span class="ui-text-btn" style="padding:2px 8px;font-size:0.6rem;">ベース</span>
+                <span class="ui-text-btn" style="padding:2px 8px;font-size:0.6rem;">パターン</span>
+                <span class="ui-text-btn" style="padding:2px 8px;font-size:0.6rem;color:#06b6d4;border-color:rgba(6,182,212,0.3);">train</span>
+              </div>
             </div>
-            <div style="display:flex;align-items:flex-start;gap:6px;">
-              <span style="background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);border-radius:3px;padding:2px 6px;font-size:0.58rem;color:#06b6d4;flex-shrink:0;">AI</span>
-              <span style="font-size:0.65rem;color:#9ca3af;line-height:1.6;">あなたのFacebookのログイン情報は以下の通りです。<br>- タイトル: Facebookログイン情報<br>- URL: Facebookのアカウントにログインするための情報...</span>
+            <!-- system ターン -->
+            <div style="display:flex;flex-direction:column;gap:3px;">
+              <div style="display:flex;gap:5px;align-items:center;">
+                <span style="background:#1e1e24;border:1px solid rgba(255,255,255,0.1);border-radius:3px;padding:2px 8px;font-size:0.6rem;color:#9ca3af;font-family:'DM Mono',monospace;flex-shrink:0;">system</span>
+                <span style="font-size:0.6rem;color:#6b7280;">system</span>
+              </div>
+              <div style="background:#0a0f14;border:1px solid rgba(255,255,255,0.07);border-radius:4px;padding:6px 8px;font-size:0.62rem;color:#9ca3af;line-height:1.6;">必ず日本語で回答してください。あなたはユーザーの業務アシスタントです。ユーザーの情報管理をサポートしてください。</div>
             </div>
-            <div style="display:flex;align-items:flex-start;gap:6px;">
-              <span style="background:#1e1e24;border:1px solid rgba(255,255,255,0.1);border-radius:3px;padding:2px 6px;font-size:0.58rem;color:#9ca3af;flex-shrink:0;">ユーザー</span>
-              <span style="font-size:0.65rem;color:#d1d5db;line-height:1.6;">パスワードを教えてくれるの？それは安全じゃないよね。</span>
+            <!-- user ターン -->
+            <div style="display:flex;flex-direction:column;gap:3px;">
+              <div style="display:flex;gap:5px;align-items:center;">
+                <span style="background:#1e1e24;border:1px solid rgba(255,255,255,0.1);border-radius:3px;padding:2px 8px;font-size:0.6rem;color:#9ca3af;font-family:'DM Mono',monospace;flex-shrink:0;">user</span>
+                <span style="font-size:0.6rem;color:#6b7280;">user</span>
+              </div>
+              <div style="background:#0a0f14;border:1px solid rgba(255,255,255,0.07);border-radius:4px;padding:6px 8px;font-size:0.62rem;color:#d1d5db;">Googleアカウントを教えて</div>
             </div>
-            <div style="display:flex;align-items:flex-start;gap:6px;">
-              <span style="background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);border-radius:3px;padding:2px 6px;font-size:0.58rem;color:#06b6d4;flex-shrink:0;">AI</span>
-              <span style="font-size:0.65rem;color:#9ca3af;line-height:1.6;">安全な情報管理の観点から、私は具体的なパスワードを共有しません。パスワードの管理は、あなたの信頼性の高いデバイスやサービス（例: LastPass, 1Password）を使用することをお勧めします...</span>
+            <!-- assistant（検索命令）ターン -->
+            <div style="display:flex;flex-direction:column;gap:3px;">
+              <div style="display:flex;gap:5px;align-items:center;">
+                <span style="background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);border-radius:3px;padding:2px 8px;font-size:0.6rem;color:#06b6d4;font-family:'DM Mono',monospace;flex-shrink:0;">assistant</span>
+                <span style="font-size:0.6rem;color:#06b6d4;">assistant</span>
+              </div>
+              <div style="background:#0a0f14;border:1px solid rgba(6,182,212,0.15);border-radius:4px;padding:6px 8px;font-family:'DM Mono',monospace;font-size:0.62rem;color:#06b6d4;">[SEARCH]title:Google[/SEARCH]</div>
+            </div>
+            <!-- tool ターン -->
+            <div style="display:flex;flex-direction:column;gap:3px;">
+              <div style="display:flex;gap:5px;align-items:center;">
+                <span style="background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.2);border-radius:3px;padding:2px 8px;font-size:0.6rem;color:#c084fc;font-family:'DM Mono',monospace;flex-shrink:0;">tool</span>
+                <span style="font-size:0.6rem;color:#c084fc;">tool</span>
+              </div>
+              <div style="background:#0a0f14;border:1px solid rgba(168,85,247,0.1);border-radius:4px;padding:6px 8px;font-family:'DM Mono',monospace;font-size:0.58rem;color:#9ca3af;line-height:1.6;">"content": "検索結果: [ { title: 業務用Googleアカウント, summary: 仕事用Gmail, auth: ishi32@unremoted.com }, { title: 個人用Googleアカウント, auth: ishi.lof@gmail.com } ]"</div>
+            </div>
+            <!-- assistant（最終回答）ターン -->
+            <div style="display:flex;flex-direction:column;gap:3px;">
+              <div style="display:flex;gap:5px;align-items:center;">
+                <span style="background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);border-radius:3px;padding:2px 8px;font-size:0.6rem;color:#06b6d4;font-family:'DM Mono',monospace;flex-shrink:0;">assistant</span>
+                <span style="font-size:0.6rem;color:#06b6d4;">assistant</span>
+              </div>
+              <div style="background:#0a0f14;border:1px solid rgba(6,182,212,0.15);border-radius:4px;padding:6px 8px;font-size:0.62rem;color:#d1d5db;line-height:1.6;">以下の情報が見つかりました。<br>1. 業務用Googleアカウント — ishi32@unremoted.com<br>2. 個人用Googleアカウント — ishi.lof@gmail.com</div>
+            </div>
+            <!-- アクション -->
+            <div style="display:flex;gap:6px;margin-top:2px;">
+              <span class="ui-text-btn" style="padding:3px 10px;font-size:0.62rem;color:#06b6d4;border-color:rgba(6,182,212,0.3);">＋ ターン追加</span>
+              <span class="ui-text-btn" style="padding:3px 10px;font-size:0.62rem;color:#d1d5db;">保存</span>
+            </div>
+          </div>
+          <!-- ベース・パターン一覧 -->
+          <div style="font-size:0.68rem;font-weight:600;color:#9ca3af;margin-top:2px;">パターン（3件）</div>
+          <div style="display:flex;flex-direction:column;gap:4px;">
+            <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:5px;padding:7px 10px;display:flex;align-items:center;gap:8px;">
+              <span style="font-size:0.62rem;color:#9ca3af;font-family:'DM Mono',monospace;">ベースID: 1</span>
+              <span style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);border-radius:3px;padding:1px 6px;font-size:0.58rem;color:#4ade80;">valid</span>
+              <span style="font-size:0.65rem;color:#d1d5db;">Qiitaアカウントを教えて</span>
+            </div>
+            <div style="background:rgba(6,182,212,0.04);border:1px solid rgba(6,182,212,0.15);border-radius:5px;padding:7px 10px;display:flex;align-items:center;gap:8px;">
+              <span style="font-size:0.62rem;color:#9ca3af;font-family:'DM Mono',monospace;">ベースID: 1</span>
+              <span style="background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);border-radius:3px;padding:1px 6px;font-size:0.58rem;color:#06b6d4;">train</span>
+              <span style="font-size:0.65rem;color:#d1d5db;">Googleアカウントを教えて</span>
+            </div>
+            <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:5px;padding:7px 10px;display:flex;align-items:center;gap:8px;">
+              <span style="font-size:0.62rem;color:#9ca3af;font-family:'DM Mono',monospace;">ベースID: 1</span>
+              <span style="background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);border-radius:3px;padding:1px 6px;font-size:0.58rem;color:#06b6d4;">train</span>
+              <span style="font-size:0.65rem;color:#d1d5db;">Facebookアカウントを教えて</span>
             </div>
           </div>
         </div>
@@ -1852,7 +1921,7 @@ Saved final weights to /Users/mini/llmn_models/46/adapters.safetensors.
           </div>
           <div style="background:var(--bg-3);border:1px solid var(--border);border-radius:6px;padding:0.75rem 1rem;">
             <div style="font-family:var(--mono);font-size:0.6rem;color:var(--text-3);margin-bottom:0.25rem;">推奨環境</div>
-            <div style="font-family:var(--mono);font-size:0.95rem;color:var(--text);">Mac mini 32GB+</div>
+            <div style="font-family:var(--mono);font-size:0.82rem;color:var(--text);">Apple Silicon 32GB+</div>
           </div>
         </div>
       </div>
@@ -1877,7 +1946,7 @@ Saved final weights to /Users/mini/llmn_models/46/adapters.safetensors.
           </div>
           <div style="background:var(--bg-3);border:1px solid var(--border);border-radius:6px;padding:0.75rem 1rem;">
             <div style="font-family:var(--mono);font-size:0.6rem;color:var(--text-3);margin-bottom:0.25rem;">推奨環境</div>
-            <div style="font-family:var(--mono);font-size:0.95rem;color:var(--text);">Mac mini 32GB+</div>
+            <div style="font-family:var(--mono);font-size:0.82rem;color:var(--text);">Apple Silicon 32GB+</div>
           </div>
         </div>
       </div>
