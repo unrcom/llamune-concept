@@ -1952,6 +1952,69 @@ Saved final weights to /Users/mini/llmn_models/46/adapters.safetensors.
       </div>
     </div>
   </div>
+
+  <!-- FAQ -->
+  <div style="margin-top:2rem;display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+
+    <!-- Q1 -->
+    <div style="background:var(--bg-2);padding:1.5rem;">
+      <div style="display:flex;gap:0.75rem;align-items:flex-start;margin-bottom:0.75rem;">
+        <span style="font-family:var(--mono);font-size:0.7rem;color:var(--accent);background:var(--accent-dim);border:1px solid var(--accent-border);border-radius:3px;padding:0.15rem 0.5rem;flex-shrink:0;margin-top:0.1rem;">Q</span>
+        <span style="font-size:0.88rem;font-weight:500;color:var(--text);line-height:1.7;">ベースモデルに Qwen2.5 を使っているのはなぜですか？</span>
+      </div>
+      <div style="display:flex;gap:0.75rem;align-items:flex-start;">
+        <span style="font-family:var(--mono);font-size:0.7rem;color:var(--text-3);background:var(--bg-3);border:1px solid var(--border);border-radius:3px;padding:0.15rem 0.5rem;flex-shrink:0;margin-top:0.1rem;">A</span>
+        <span style="font-size:0.85rem;color:var(--text-2);line-height:1.8;">開発開始時点で、オープンウェイト・日本語対応・Apple Silicon（MLX）での動作実績という条件を満たす最良の選択肢でした。</span>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div style="background:var(--bg-2);padding:1.5rem;">
+      <div style="display:flex;gap:0.75rem;align-items:flex-start;margin-bottom:0.75rem;">
+        <span style="font-family:var(--mono);font-size:0.7rem;color:var(--accent);background:var(--accent-dim);border:1px solid var(--accent-border);border-radius:3px;padding:0.15rem 0.5rem;flex-shrink:0;margin-top:0.1rem;">Q</span>
+        <span style="font-size:0.88rem;font-weight:500;color:var(--text);line-height:1.7;">Qwen のオープンソース路線が変わると聞きましたが、今後はどうなりますか？</span>
+      </div>
+      <div style="display:flex;gap:0.75rem;align-items:flex-start;">
+        <span style="font-family:var(--mono);font-size:0.7rem;color:var(--text-3);background:var(--bg-3);border:1px solid var(--border);border-radius:3px;padding:0.15rem 0.5rem;flex-shrink:0;margin-top:0.1rem;">A</span>
+        <div style="font-size:0.85rem;color:var(--text-2);line-height:1.8;display:flex;flex-direction:column;gap:0.75rem;">
+          <p style="margin:0;">2026年3月、技術リードの離脱を機にコアメンバーが次々と退任。4月にはフラッグシップモデル（Qwen 3.6-Max-Preview）がクローズドウェイト化されました。
+            <span style="display:inline-flex;gap:0.5rem;margin-left:0.25rem;flex-wrap:wrap;">
+              <a href="https://www.itmedia.co.jp/aiplus/articles/2603/05/news133.html" target="_blank" style="font-family:var(--mono);font-size:0.65rem;color:var(--text-3);text-decoration:none;border:1px solid var(--border);border-radius:3px;padding:0.1rem 0.45rem;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-3)'">↗ ITmedia AI+</a>
+              <a href="https://zenn.dev/ihasq/articles/ac9d8c1c68fcdd" target="_blank" style="font-family:var(--mono);font-size:0.65rem;color:var(--text-3);text-decoration:none;border:1px solid var(--border);border-radius:3px;padding:0.1rem 0.45rem;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-3)'">↗ Zenn</a>
+            </span>
+          </p>
+          <p style="margin:0;">llamune は特定のモデルに依存しない設計を目指しており、現在 <strong style="color:var(--text);font-weight:500;">Gemma4</strong>（Google DeepMind）への移行を検討しています。</p>
+          <div style="background:var(--bg-3);border:1px solid var(--border);border-radius:6px;padding:1rem;display:flex;flex-direction:column;gap:0.5rem;">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;">
+              <span style="font-family:var(--mono);font-size:0.65rem;color:var(--text-3);letter-spacing:0.08em;text-transform:uppercase;">Gemma4 — 移行候補</span>
+              <div style="display:flex;gap:0.4rem;">
+                <a href="https://sudoall.com/gemma-4-31b-apple-silicon-local-guide/" target="_blank" style="font-family:var(--mono);font-size:0.62rem;color:var(--text-3);text-decoration:none;border:1px solid var(--border);border-radius:3px;padding:0.1rem 0.4rem;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-3)'">↗ SudoAll</a>
+                <a href="https://antigravitylab.net/en/articles/antigravity/gemma-4-finetuning-apple-silicon-mlx-guide" target="_blank" style="font-family:var(--mono);font-size:0.62rem;color:var(--text-3);text-decoration:none;border:1px solid var(--border);border-radius:3px;padding:0.1rem 0.4rem;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-3)'">↗ Antigravity Lab</a>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem;">
+              <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:4px;padding:0.6rem 0.75rem;">
+                <div style="font-family:var(--mono);font-size:0.58rem;color:var(--text-3);margin-bottom:0.25rem;">ライセンス</div>
+                <div style="font-family:var(--mono);font-size:0.75rem;color:var(--text);">Apache 2.0</div>
+                <div style="font-size:0.65rem;color:var(--text-3);margin-top:0.2rem;">商用・FT・再配布可</div>
+              </div>
+              <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:4px;padding:0.6rem 0.75rem;">
+                <div style="font-family:var(--mono);font-size:0.58rem;color:var(--text-3);margin-bottom:0.25rem;">Apple Silicon</div>
+                <div style="font-family:var(--mono);font-size:0.75rem;color:var(--text);">MLX 対応</div>
+                <div style="font-size:0.65rem;color:var(--text-3);margin-top:0.2rem;">推論・LoRA FT 確認済</div>
+              </div>
+              <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:4px;padding:0.6rem 0.75rem;">
+                <div style="font-family:var(--mono);font-size:0.58rem;color:var(--text-3);margin-bottom:0.25rem;">推奨モデル</div>
+                <div style="font-family:var(--mono);font-size:0.75rem;color:var(--text);">4bit 量子化版</div>
+                <div style="font-size:0.65rem;color:var(--text-3);margin-top:0.2rem;">約 14GB（64GB 未満向け）</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </section>
 
 <hr class="divider">
