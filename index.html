@@ -1125,8 +1125,8 @@ footer a:hover { color: var(--text); }
   </h1>
   <p class="hero-sub">
     汎用のLLMは、あなたの業務を知りません。<br>
-    llamune は、自社のナレッジでLLMをトレーニングし、<br>
-    情報が外に出ない閉じた環境で動かすプラットフォームです。
+    llamune は、自社のナレッジをファインチューニングとRAGにより習得し、<br>
+    情報が外に出ない閉じた環境で活用するプラットフォームです。
   </p>
   <div class="hero-badges">
     <span class="badge">Apple Silicon</span>
@@ -1141,9 +1141,20 @@ footer a:hover { color: var(--text); }
 </section>
 
 <div style="max-width:720px;margin:0 auto;padding:0 1.5rem;">
-  <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:0.9rem 1.25rem;display:flex;align-items:flex-start;gap:0.75rem;">
-    <span style="font-family:var(--mono);font-size:0.65rem;color:#06b6d4;background:rgba(6,182,212,0.08);border:1px solid rgba(6,182,212,0.2);border-radius:3px;padding:0.15rem 0.5rem;flex-shrink:0;margin-top:0.1rem;">用語</span>
-    <span style="font-size:0.82rem;color:var(--text-2);line-height:1.8;">このページでいう <strong style="color:var(--text);">「トレーニング」</strong> は、既存のAIモデルに追加で知識や振る舞いを学習させる <strong style="color:var(--text);">ファインチューニング（Fine-tuning / FT）</strong> を指します。</span>
+  <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:1rem 1.25rem;display:flex;flex-direction:column;gap:0.75rem;">
+    <div style="font-family:var(--mono);font-size:0.65rem;color:#06b6d4;background:rgba(6,182,212,0.08);border:1px solid rgba(6,182,212,0.2);border-radius:3px;padding:0.15rem 0.5rem;align-self:flex-start;">用語</div>
+    <div style="display:flex;align-items:flex-start;gap:0.75rem;">
+      <span style="font-size:0.82rem;font-weight:500;color:var(--text);flex-shrink:0;min-width:9rem;">LLM</span>
+      <span style="font-size:0.82rem;color:var(--text-2);line-height:1.8;">Large Language Model の略。ChatGPT のような大規模な AI 言語モデルのことです。膨大なテキストデータで事前学習されており、文章の生成や質問への回答が得意ですが、自社の業務知識は持っていません。</span>
+    </div>
+    <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:0.75rem;display:flex;align-items:flex-start;gap:0.75rem;">
+      <span style="font-size:0.82rem;font-weight:500;color:var(--text);flex-shrink:0;min-width:9rem;">ファインチューニング</span>
+      <span style="font-size:0.82rem;color:var(--text-2);line-height:1.8;">既存の LLM に、追加で知識や振る舞いを学習させること。このページでは「トレーニング」「FT」と表記することもあります。</span>
+    </div>
+    <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:0.75rem;display:flex;align-items:flex-start;gap:0.75rem;">
+      <span style="font-size:0.82rem;font-weight:500;color:var(--text);flex-shrink:0;min-width:9rem;">RAG</span>
+      <span style="font-size:0.82rem;color:var(--text-2);line-height:1.8;">Retrieval-Augmented Generation の略。AI が回答する前に、手持ちのデータを検索して参照する仕組みです。社内資料や業務データを投入しておくことで、AI がその情報をもとに回答できるようになります。</span>
+    </div>
   </div>
 </div>
 
@@ -1162,16 +1173,25 @@ footer a:hover { color: var(--text); }
   <div class="hallucination-demo">
     <div class="demo-panel before">
       <div class="demo-panel-label">ベースモデル — トレーニング前</div>
-      <div class="demo-q">Q. フリーレンはどのような種族ですか？</div>
-      <div class="demo-a">フリーレンはドワーフの幼い魔法使いで、魔王討伐の旅に10年間参加していました。</div>
+      <div class="demo-q">Q. パワースポットブームはいつ頃から始まったのかな？</div>
+      <div class="demo-a">パワースポットブームは2000年代前半から始まったとされています。特に、2004年に「パワースポット」という言葉が一般に広く使われるようになり、そのブームは徐々に高まりました。</div>
     </div>
     <div class="demo-panel after">
       <div class="demo-panel-label">llamune トレーニング後</div>
-      <div class="demo-q">Q. フリーレンはどのような種族ですか？</div>
-      <div class="demo-a">フリーレンはエルフで、勇者ヒンメルたちとともに10年間魔王討伐の旅をしました。</div>
+      <div class="demo-q">Q. パワースポットブームはいつ頃から始まったのかな？</div>
+      <div class="demo-a">パワースポットブームは2008年頃から急拡大したとされています。スピリチュアルブームや女性誌の特集、SNSの普及が重なり、従来の宗教的参拝とは異なる「エネルギーを感じる場所」という概念が広まった時期とされています。このブームは、少子高齢化や経済的不安を背景に、目に見えない力への期待が高まった結果とも分析されています。</div>
     </div>
   </div>
-  <p class="hallucination-note">* 実際の llamune トレーニング結果。ベースモデル: Qwen2.5 3B Instruct bf16（フルファインチューニング）</p>
+  <p class="hallucination-note">* 実際の llamune トレーニング結果。ベースモデル: Qwen2.5 3B Instruct bf16 + LoRAアダプター + RAGデータセット</p>
+
+  <!-- LoRAアダプター用語説明 -->
+  <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:1rem 1.25rem;display:flex;flex-direction:column;gap:0.75rem;margin-top:1rem;">
+    <div style="font-family:var(--mono);font-size:0.65rem;color:#06b6d4;background:rgba(6,182,212,0.08);border:1px solid rgba(6,182,212,0.2);border-radius:3px;padding:0.15rem 0.5rem;align-self:flex-start;">用語</div>
+    <div style="display:flex;align-items:flex-start;gap:0.75rem;">
+      <span style="font-size:0.82rem;font-weight:500;color:var(--text);flex-shrink:0;min-width:9rem;">LoRAアダプター</span>
+      <span style="font-size:0.82rem;color:var(--text-2);line-height:1.8;">ベースモデルを直接書き換えず、小さな追加パラメーター（アダプター）だけを学習させる効率的なファインチューニング手法です。元のモデルはそのままに、アダプターを付け替えることで複数の用途に対応できます。</span>
+    </div>
+  </div>
 </section>
 
 <hr class="divider">
@@ -1602,20 +1622,13 @@ Saved final weights to /Users/mini/llmn_models/46/adapters.safetensors.
   <div class="section-label">現在地点</div>
   <h2 class="section-title">RAG × FT、<br><em>稼働中。</em></h2>
   <p class="section-desc">
-    ファインチューニングツールは <strong style="color:var(--text);font-weight:500;">llamune_ft</strong> として整理し、
-    新たに RAG × FT を組み合わせた <strong style="color:var(--accent);font-weight:500;">llamune</strong> が完成しました。
+    RAG × FT を組み合わせた新しい <strong style="color:var(--accent);font-weight:500;">llamune</strong> が完成しました。
   </p>
-
-  <!-- RAG説明 -->
-  <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:0.9rem 1.25rem;display:flex;align-items:flex-start;gap:0.75rem;margin-bottom:2rem;">
-    <span style="font-family:var(--mono);font-size:0.65rem;color:#06b6d4;background:rgba(6,182,212,0.08);border:1px solid rgba(6,182,212,0.2);border-radius:3px;padding:0.15rem 0.5rem;flex-shrink:0;margin-top:0.1rem;">用語</span>
-    <span style="font-size:0.82rem;color:var(--text-2);line-height:1.8;"><strong style="color:var(--text);">RAG（Retrieval-Augmented Generation）</strong> とは、AIが回答する前に手持ちのデータを検索して参照する仕組みです。社内資料や業務データをデータセットとして投入しておくことで、AIがその情報をもとに回答できるようになります。</span>
-  </div>
 
   <!-- 2つのプロダクトの位置づけ -->
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:2rem;" class="training-grid">
     <div style="background:var(--bg-2);padding:1.75rem;">
-      <div style="font-family:var(--mono);font-size:0.65rem;color:var(--text-3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem;">llamune_ft</div>
+      <div style="font-family:var(--mono);font-size:0.65rem;color:var(--text-3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem;">従来の llamune</div>
       <div style="font-size:0.95rem;font-weight:500;color:var(--text);margin-bottom:0.5rem;">ファインチューニングツール</div>
       <div style="font-size:0.82rem;color:var(--text-2);line-height:1.8;margin-bottom:0.75rem;">user ↔ assistant の Q&A ペアを用いてベースモデルをトレーニングします。このページで紹介しているトレーニングサイクルを担うツールです。</div>
       <a href="https://github.com/unrcom/llamune_ft" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;font-family:var(--mono);font-size:0.7rem;color:var(--text-3);text-decoration:none;border:1px solid var(--border);border-radius:4px;padding:0.3rem 0.65rem;transition:color 0.2s,border-color 0.2s;" onmouseover="this.style.color='var(--text)';this.style.borderColor='var(--text-2)'" onmouseout="this.style.color='var(--text-3)';this.style.borderColor='var(--border)'">
@@ -1873,7 +1886,7 @@ Saved final weights to /Users/mini/llmn_models/46/adapters.safetensors.
                 <span style="background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);border-radius:3px;padding:2px 8px;font-size:0.6rem;color:#06b6d4;font-family:'DM Mono',monospace;flex-shrink:0;">assistant</span>
                 <span style="font-size:0.6rem;color:#06b6d4;">assistant</span>
               </div>
-              <div style="background:#0a0f14;border:1px solid rgba(6,182,212,0.15);border-radius:4px;padding:6px 8px;font-family:'DM Mono',monospace;font-size:0.62rem;color:#06b6d4;">[SEARCH]title:Google[/SEARCH]</div>
+              <div style="background:#0a0f14;border:1px solid rgba(6,182,212,0.15);border-radius:4px;padding:6px 8px;font-family:'DM Mono',monospace;font-size:0.62rem;color:#06b6d4;">[SEARCH]Google アカウント[/SEARCH]</div>
             </div>
             <!-- tool ターン -->
             <div style="display:flex;flex-direction:column;gap:3px;">
@@ -1881,7 +1894,11 @@ Saved final weights to /Users/mini/llmn_models/46/adapters.safetensors.
                 <span style="background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.2);border-radius:3px;padding:2px 8px;font-size:0.6rem;color:#c084fc;font-family:'DM Mono',monospace;flex-shrink:0;">tool</span>
                 <span style="font-size:0.6rem;color:#c084fc;">tool</span>
               </div>
-              <div style="background:#0a0f14;border:1px solid rgba(168,85,247,0.1);border-radius:4px;padding:6px 8px;font-family:'DM Mono',monospace;font-size:0.58rem;color:#9ca3af;line-height:1.6;">"content": "検索結果: [ { title: 業務用Googleアカウント, summary: 仕事用Gmail, auth: ishi32@llamune.com }, { title: 個人用Googleアカウント, auth: llamuneft@gmail.com } ]"</div>
+              <div style="background:#0a0f14;border:1px solid rgba(168,85,247,0.1);border-radius:4px;padding:6px 8px;font-family:'DM Mono',monospace;font-size:0.58rem;color:#9ca3af;line-height:1.6;">title: 業務用Googleアカウント
+content: 仕事用Gmail。メールアドレスは ishi32@llamune.com。Google Keep にも使用。
+
+title: 個人用Googleアカウント
+content: 個人のGmail。メールアドレスは llamuneft@gmail.com。</div>
             </div>
             <!-- assistant（最終回答）ターン -->
             <div style="display:flex;flex-direction:column;gap:3px;">
