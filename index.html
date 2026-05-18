@@ -1196,8 +1196,367 @@ footer a:hover { color: var(--text); }
 
 <hr class="divider">
 
-<!-- SECTION 3: トレーニングサイクル -->
-<section id="why-train">
+<!-- SECTION 3.6: 現在地点 -->
+<section id="current-status">
+  <div class="section-label">現在地点</div>
+  <h2 class="section-title">RAG × FT、<br><em>稼働中。</em></h2>
+  <p class="section-desc">
+    RAG × FT を組み合わせた新しい <strong style="color:var(--accent);font-weight:500;">llamune</strong> が完成しました。
+  </p>
+
+  <!-- 2つのプロダクトの位置づけ -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:2rem;" class="training-grid">
+    <div style="background:var(--bg-2);padding:1.75rem;">
+      <div style="font-family:var(--mono);font-size:0.65rem;color:var(--text-3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem;">従来の llamune</div>
+      <div style="font-size:0.95rem;font-weight:500;color:var(--text);margin-bottom:0.5rem;">ファインチューニングツール</div>
+      <div style="font-size:0.82rem;color:var(--text-2);line-height:1.8;margin-bottom:0.75rem;">user ↔ assistant の Q&A ペアを用いてベースモデルをトレーニングします。このページで紹介しているトレーニングサイクルを担うツールです。</div>
+      <a href="https://github.com/unrcom/llamune_ft" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;font-family:var(--mono);font-size:0.7rem;color:var(--text-3);text-decoration:none;border:1px solid var(--border);border-radius:4px;padding:0.3rem 0.65rem;transition:color 0.2s,border-color 0.2s;" onmouseover="this.style.color='var(--text)';this.style.borderColor='var(--text-2)'" onmouseout="this.style.color='var(--text-3)';this.style.borderColor='var(--border)'">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        unrcom/llamune_ft
+      </a>
+    </div>
+    <div style="background:var(--bg-2);padding:1.75rem;border-left:2px solid var(--accent);">
+      <div style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem;">llamune <span style="background:var(--accent-dim);padding:0.1rem 0.4rem;border-radius:2px;border:1px solid var(--accent-border);">NEW</span></div>
+      <div style="font-size:0.95rem;font-weight:500;color:var(--text);margin-bottom:0.5rem;">RAG × FT アプリ</div>
+      <div style="font-size:0.82rem;color:var(--text-2);line-height:1.8;margin-bottom:0.75rem;">データセットを投入し、ユーザーの問い合わせに対して検索・回答します。システムプロンプトを FT で学習させる独自機能を備えます。</div>
+      <a href="https://github.com/unrcom/llamune" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;font-family:var(--mono);font-size:0.7rem;color:var(--accent);text-decoration:none;border:1px solid var(--accent-border);border-radius:4px;padding:0.3rem 0.65rem;transition:color 0.2s,border-color 0.2s;" onmouseover="this.style.opacity='0.75'" onmouseout="this.style.opacity='1'">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        unrcom/llamune
+      </a>
+    </div>
+  </div>
+
+  <!-- チャットデモ：RAGモード OFF vs ON -->
+  <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:1.75rem;margin-bottom:2rem;">
+    <div style="font-family:var(--mono);font-size:0.65rem;color:var(--text-3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border);">llamune チャット — RAGモード比較</div>
+    <p style="font-size:0.88rem;color:var(--text-2);line-height:1.9;margin-bottom:1.25rem;">同じ質問を RAGモードのOFF/ONで投げると、回答の質が大きく変わります。RAGモードをONにすると、投入したデータセットを検索して回答を生成します。</p>
+
+    <style>
+      @media (max-width: 640px) { .chat-demo-grid { grid-template-columns: 1fr !important; } }
+    </style>
+    <div class="chat-demo-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+
+      <!-- RAGモード OFF -->
+      <div style="display:flex;flex-direction:column;gap:0.6rem;">
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.25rem;">
+          <span style="width:8px;height:8px;border-radius:50%;background:#6b7280;flex-shrink:0;"></span>
+          <span style="font-family:var(--mono);font-size:0.65rem;color:var(--text-3);letter-spacing:0.08em;">RAGモード OFF — LLM の知識のみ</span>
+        </div>
+        <div class="screenshot-frame">
+          <div class="screenshot-bar">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <span class="screenshot-url">localhost:5174/chat</span>
+          </div>
+          <div class="ui-mock" style="height:auto;min-height:0;flex-direction:column;gap:0;">
+            <!-- 設定パネル -->
+            <div style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;flex-direction:column;gap:6px;">
+              <div class="ui-mock-selector" style="flex:none;"><span class="ui-selector-label">モデル</span><span class="ui-selector-val">Qwen2.5-14B-4bit ▾</span></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <span style="font-size:0.62rem;color:#9ca3af;">RAGモード</span>
+                <div style="width:28px;height:15px;border-radius:8px;background:#374151;border:1px solid rgba(255,255,255,0.1);position:relative;">
+                  <div style="width:11px;height:11px;border-radius:50%;background:#6b7280;position:absolute;top:1px;left:1px;"></div>
+                </div>
+              </div>
+            </div>
+            <!-- チャット本文 -->
+            <div style="padding:12px;display:flex;flex-direction:column;gap:8px;">
+              <div style="align-self:flex-end;background:#06b6d4;border-radius:12px 12px 2px 12px;padding:8px 12px;max-width:85%;font-size:0.65rem;color:#fff;line-height:1.6;">パワースポットブームはいつ頃から始まりましたか？</div>
+              <div style="align-self:flex-start;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px 12px 12px 2px;padding:10px 12px;font-size:0.65rem;color:#d1d5db;line-height:1.8;">
+                パワースポットブームは、1990年代後半から2000年代初頭にかけて始まりました。心理学やスピリチュアルな考え方が広く受け入れられるようになり、人々の心の平安や健康への関心が高まった時期と一致しています。<br><br>
+                <span style="color:#6b7280;font-size:0.6rem;">※ LLM の一般的な知識による回答</span>
+              </div>
+            </div>
+            <!-- 入力欄 -->
+            <div style="padding:8px 12px;border-top:1px solid rgba(255,255,255,0.06);">
+              <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:6px 10px;font-size:0.6rem;color:#6b7280;">メッセージを入力…</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RAGモード ON -->
+      <div style="display:flex;flex-direction:column;gap:0.6rem;">
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.25rem;">
+          <span style="width:8px;height:8px;border-radius:50%;background:#06b6d4;flex-shrink:0;"></span>
+          <span style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.08em;">RAGモード ON — データセット検索</span>
+        </div>
+        <div class="screenshot-frame">
+          <div class="screenshot-bar">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <span class="screenshot-url">localhost:5174/chat</span>
+          </div>
+          <div class="ui-mock" style="height:auto;min-height:0;flex-direction:column;gap:0;">
+            <!-- 設定パネル -->
+            <div style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;flex-direction:column;gap:6px;">
+              <div class="ui-mock-selector" style="flex:none;"><span class="ui-selector-label">モデル</span><span class="ui-selector-val">Qwen2.5-14B-4bit ▾</span></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <span style="font-size:0.62rem;color:#9ca3af;">RAGモード</span>
+                <div style="width:28px;height:15px;border-radius:8px;background:rgba(6,182,212,0.3);border:1px solid rgba(6,182,212,0.4);position:relative;">
+                  <div style="width:11px;height:11px;border-radius:50%;background:#06b6d4;position:absolute;top:1px;right:1px;"></div>
+                </div>
+              </div>
+              <div class="ui-mock-selector" style="flex:none;"><span class="ui-selector-label">プロジェクト</span><span class="ui-selector-val">パワースポット ▾</span></div>
+            </div>
+            <!-- チャット本文 -->
+            <div style="padding:12px;display:flex;flex-direction:column;gap:8px;">
+              <div style="align-self:flex-end;background:#06b6d4;border-radius:12px 12px 2px 12px;padding:8px 12px;max-width:85%;font-size:0.65rem;color:#fff;line-height:1.6;">パワースポットブームはいつ頃から始まりましたか？</div>
+              <div style="align-self:flex-start;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px 12px 12px 2px;padding:10px 12px;font-size:0.65rem;color:#d1d5db;line-height:1.8;">
+                パワースポットブームは2008年頃から急拡大しました。<br><br>
+                <span style="color:#9ca3af;">事実：</span><br>
+                ・ブームは2008年頃から急拡大した。<br><br>
+                <span style="color:#9ca3af;">考察：</span><br>
+                ・スピリチュアルブームや女性誌の特集、SNS の普及が重なった。<br>
+                ・観光業との結びつきも強く、地方創生の文脈でも活用されている。
+              </div>
+              <!-- RAG検索コンテキスト -->
+              <div style="background:rgba(6,182,212,0.03);border:1px solid rgba(6,182,212,0.15);border-radius:6px;padding:8px 10px;">
+                <div style="font-family:var(--mono);font-size:0.6rem;color:#06b6d4;margin-bottom:5px;">🔍 RAG検索コンテキスト</div>
+                <div style="font-size:0.6rem;color:#6b7280;line-height:1.7;">【種別】社会現象・考察<br>【時期】2000年代後半〜現在<br>【概要】日本のパワースポットブームは2008年頃から急拡大した。スピリチュアルブームや女性誌の特集、SNS の普及が重なり…</div>
+              </div>
+            </div>
+            <!-- 入力欄 -->
+            <div style="padding:8px 12px;border-top:1px solid rgba(255,255,255,0.06);">
+              <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:6px 10px;font-size:0.6rem;color:#6b7280;">メッセージを入力…</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 独自機能：マルチターン FT -->
+  <div style="background:var(--bg-2);border:1px solid var(--accent-border);border-radius:8px;padding:1.75rem;margin-bottom:2rem;">
+    <div style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1rem;padding-bottom:0.75rem;border-bottom:1px solid var(--accent-border);">llamune 独自機能 — マルチターン FT データ定義</div>
+
+    <!-- なぜシステムプロンプトをFTするのか -->
+    <div style="background:var(--bg-3);border:1px solid var(--border);border-radius:6px;padding:1.25rem;margin-bottom:1.25rem;">
+      <div style="font-size:0.78rem;font-weight:500;color:var(--text);margin-bottom:0.75rem;">RAG のシステムプロンプト管理は、なぜ難しいのか</div>
+      <p style="font-size:0.85rem;color:var(--text-2);line-height:1.9;margin-bottom:0.75rem;">RAG を構築された方なら、システムプロンプトの調整がいかに大変かを実感されているはずです。改善を重ねるごとにプロンプトは肥大化・複雑化し、やがてこんなジレンマに陥ります。</p>
+      <div style="display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1rem;">
+        <div style="display:flex;gap:0.75rem;align-items:flex-start;font-size:0.83rem;color:var(--text-2);line-height:1.7;">
+          <span style="color:var(--text-3);flex-shrink:0;margin-top:0.1rem;">—</span>プロンプトが肥大化・複雑化し、全体の見通しが悪くなる
+        </div>
+        <div style="display:flex;gap:0.75rem;align-items:flex-start;font-size:0.83rem;color:var(--text-2);line-height:1.7;">
+          <span style="color:var(--text-3);flex-shrink:0;margin-top:0.1rem;">—</span>記述が増えるほど、回答の安定性が落ちる
+        </div>
+        <div style="display:flex;gap:0.75rem;align-items:flex-start;font-size:0.83rem;color:var(--text-2);line-height:1.7;">
+          <span style="color:var(--text-3);flex-shrink:0;margin-top:0.1rem;">—</span>新しい挙動を追加すると、今まで動いていた挙動が壊れる
+        </div>
+      </div>
+      <div style="border-top:1px solid var(--border);padding-top:0.75rem;font-size:0.85rem;color:var(--text-2);line-height:1.9;">
+        llamune では、<strong style="color:var(--text);">システムプロンプトそのものを FT で LLM に学習させる</strong>ことで、この問題を解決します。プロンプトをなくし、その分の知識をモデルに内包させるアプローチです。
+      </div>
+    </div>
+
+    <p style="font-size:0.88rem;color:var(--text-2);line-height:1.9;margin-bottom:1rem;">
+      RAG のシステムプロンプトには、検索命令の発行・結果の受け取り・最終回答の生成という複数のステップが含まれます。
+      これを LLM に学習させるには、従来の user ↔ assistant の 1 対 1 では不十分で、
+      <strong style="color:var(--text);">user / assistant / tool のマルチターン構造</strong>で FT データを定義する必要があります。
+      ただし、tool ロールへの対応はモデルによって異なり、FT データの構造もそれに合わせる必要があります。
+    </p>
+
+    <!-- モデル別 tool ロール対応表 -->
+    <div style="margin-bottom:1.5rem;border:1px solid var(--border);border-radius:6px;overflow:hidden;">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--bg-3);border-bottom:1px solid var(--border);">
+        <div style="padding:0.6rem 1rem;font-family:var(--mono);font-size:0.65rem;color:var(--text-3);letter-spacing:0.06em;">モデル</div>
+        <div style="padding:0.6rem 1rem;font-family:var(--mono);font-size:0.65rem;color:var(--text-3);letter-spacing:0.06em;border-left:1px solid var(--border);">tool ロール</div>
+        <div style="padding:0.6rem 1rem;font-family:var(--mono);font-size:0.65rem;color:var(--text-3);letter-spacing:0.06em;border-left:1px solid var(--border);">備考</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--bg-2);border-bottom:1px solid var(--border);">
+        <div style="padding:0.7rem 1rem;font-family:var(--mono);font-size:0.75rem;color:var(--text);">Qwen2.5</div>
+        <div style="padding:0.7rem 1rem;font-size:0.75rem;color:#4ade80;border-left:1px solid var(--border);">✓ ネイティブ対応</div>
+        <div style="padding:0.7rem 1rem;font-size:0.75rem;color:var(--text-3);border-left:1px solid var(--border);">制約なし</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--bg-2);border-bottom:1px solid var(--border);">
+        <div style="padding:0.7rem 1rem;font-family:var(--mono);font-size:0.75rem;color:var(--text);">Gemma4</div>
+        <div style="padding:0.7rem 1rem;font-size:0.75rem;color:#f59e0b;border-left:1px solid var(--border);">△ 非対応</div>
+        <div style="padding:0.7rem 1rem;font-size:0.75rem;color:var(--text-3);border-left:1px solid var(--border);">user ロールで代替</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--bg-2);">
+        <div style="padding:0.7rem 1rem;font-family:var(--mono);font-size:0.75rem;color:var(--text);">GPT-OSS 系</div>
+        <div style="padding:0.7rem 1rem;font-size:0.75rem;color:#4ade80;border-left:1px solid var(--border);">✓ 対応</div>
+        <div style="padding:0.7rem 1rem;font-size:0.75rem;color:var(--text-3);border-left:1px solid var(--border);">直前に assistant の tool call が必要</div>
+      </div>
+    </div>
+
+    <p style="font-size:0.85rem;color:var(--text-2);line-height:1.9;margin-bottom:1.5rem;">
+      現在、これらの代表的な閉域モデルを一つずつ検証している段階です。各モデルの制約に合わせた FT データ構造の最適解を探っています。
+    </p>
+
+    <div style="display:flex;flex-direction:column;gap:0.6rem;margin-bottom:1.5rem;">
+      <div style="font-size:0.78rem;color:var(--text-3);font-family:var(--mono);margin-bottom:0.25rem;">会話ターンの構造</div>
+      <div style="display:flex;gap:0.5rem;align-items:stretch;flex-wrap:wrap;">
+        <div style="background:var(--bg-3);border:1px solid var(--border-2);border-radius:4px;padding:0.5rem 0.85rem;font-family:var(--mono);font-size:0.72rem;color:var(--text-2);">system</div>
+        <div style="color:var(--text-3);font-family:var(--mono);align-self:center;">→</div>
+        <div style="background:var(--bg-3);border:1px solid var(--border-2);border-radius:4px;padding:0.5rem 0.85rem;font-family:var(--mono);font-size:0.72rem;color:var(--text-2);">user</div>
+        <div style="color:var(--text-3);font-family:var(--mono);align-self:center;">→</div>
+        <div style="background:var(--accent-dim);border:1px solid var(--accent-border);border-radius:4px;padding:0.5rem 0.85rem;font-family:var(--mono);font-size:0.72rem;color:var(--accent);">assistant<br><span style="font-size:0.6rem;opacity:0.8;">[SEARCH]クエリ[/SEARCH]</span></div>
+        <div style="color:var(--text-3);font-family:var(--mono);align-self:center;">→</div>
+        <div style="background:var(--bg-3);border:1px solid var(--border-2);border-radius:4px;padding:0.5rem 0.85rem;font-family:var(--mono);font-size:0.72rem;color:var(--text-2);">tool<br><span style="font-size:0.6rem;opacity:0.8;">検索結果</span></div>
+        <div style="color:var(--text-3);font-family:var(--mono);align-self:center;">→</div>
+        <div style="background:var(--accent-dim);border:1px solid var(--accent-border);border-radius:4px;padding:0.5rem 0.85rem;font-family:var(--mono);font-size:0.72rem;color:var(--accent);">assistant<br><span style="font-size:0.6rem;opacity:0.8;">最終回答</span></div>
+      </div>
+    </div>
+
+    <!-- FTデータ管理 UIモック -->
+    <div class="screenshot-frame">
+      <div class="screenshot-bar">
+        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        <span class="screenshot-url">localhost:5174/admin/ft-data</span>
+      </div>
+      <div class="ui-mock" style="height:480px;">
+        <!-- サイドバー -->
+        <div class="ui-mock-sidebar">
+          <div class="ui-mock-logo">llamune</div>
+          <div class="ui-mock-nav">
+            <div class="ui-nav-item">💬 チャット</div>
+            <div class="ui-nav-item">📊 データセット</div>
+            <div class="ui-nav-item" style="color:#6b7280;font-size:0.6rem;padding:4px 8px;margin-top:4px;border-top:1px solid rgba(255,255,255,0.05);padding-top:8px;">管理</div>
+            <div class="ui-nav-item">📁 プロジェクト</div>
+            <div class="ui-nav-item">🤖 モデル</div>
+            <div class="ui-nav-item ui-nav-active">📋 FTデータ管理</div>
+            <div class="ui-nav-item">🔧 訓練ジョブ</div>
+          </div>
+        </div>
+        <!-- メイン -->
+        <div class="ui-mock-body" style="gap:8px;overflow-y:auto;padding:14px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div class="ui-mock-page-title">FTデータ管理</div>
+            <div style="display:flex;gap:5px;">
+              <span class="ui-text-btn" style="padding:4px 10px;font-size:0.62rem;color:#06b6d4;border-color:rgba(6,182,212,0.3);">↓ train</span>
+              <span class="ui-text-btn" style="padding:4px 10px;font-size:0.62rem;color:#d1d5db;">↓ valid</span>
+            </div>
+          </div>
+          <div class="ui-mock-selector" style="flex:none;max-width:200px;">
+            <span class="ui-selector-label">プロジェクト</span>
+            <span class="ui-selector-val">お探し物LLM ▾</span>
+          </div>
+          <!-- 編集中パターン -->
+          <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(6,182,212,0.2);border-radius:6px;padding:10px;display:flex;flex-direction:column;gap:7px;">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+              <span style="font-size:0.68rem;font-weight:600;color:#f3f4f6;">編集中 (ID: 4)</span>
+              <span style="background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.25);border-radius:3px;padding:1px 7px;font-size:0.58rem;color:#06b6d4;font-family:'DM Mono',monospace;">ベースID: 1</span>
+              <div style="margin-left:auto;display:flex;gap:4px;">
+                <span class="ui-text-btn" style="padding:2px 8px;font-size:0.6rem;">ベース</span>
+                <span class="ui-text-btn" style="padding:2px 8px;font-size:0.6rem;">パターン</span>
+                <span class="ui-text-btn" style="padding:2px 8px;font-size:0.6rem;color:#06b6d4;border-color:rgba(6,182,212,0.3);">train</span>
+              </div>
+            </div>
+            <!-- system ターン -->
+            <div style="display:flex;flex-direction:column;gap:3px;">
+              <div style="display:flex;gap:5px;align-items:center;">
+                <span style="background:#1e1e24;border:1px solid rgba(255,255,255,0.1);border-radius:3px;padding:2px 8px;font-size:0.6rem;color:#9ca3af;font-family:'DM Mono',monospace;flex-shrink:0;">system</span>
+                <span style="font-size:0.6rem;color:#6b7280;">system</span>
+              </div>
+              <div style="background:#0a0f14;border:1px solid rgba(255,255,255,0.07);border-radius:4px;padding:6px 8px;font-size:0.62rem;color:#9ca3af;line-height:1.6;">必ず日本語で回答してください。あなたはユーザーの業務アシスタントです。ユーザーの情報管理をサポートしてください。</div>
+            </div>
+            <!-- user ターン -->
+            <div style="display:flex;flex-direction:column;gap:3px;">
+              <div style="display:flex;gap:5px;align-items:center;">
+                <span style="background:#1e1e24;border:1px solid rgba(255,255,255,0.1);border-radius:3px;padding:2px 8px;font-size:0.6rem;color:#9ca3af;font-family:'DM Mono',monospace;flex-shrink:0;">user</span>
+                <span style="font-size:0.6rem;color:#6b7280;">user</span>
+              </div>
+              <div style="background:#0a0f14;border:1px solid rgba(255,255,255,0.07);border-radius:4px;padding:6px 8px;font-size:0.62rem;color:#d1d5db;">Googleアカウントを教えて</div>
+            </div>
+            <!-- assistant（検索命令）ターン -->
+            <div style="display:flex;flex-direction:column;gap:3px;">
+              <div style="display:flex;gap:5px;align-items:center;">
+                <span style="background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);border-radius:3px;padding:2px 8px;font-size:0.6rem;color:#06b6d4;font-family:'DM Mono',monospace;flex-shrink:0;">assistant</span>
+                <span style="font-size:0.6rem;color:#06b6d4;">assistant</span>
+              </div>
+              <div style="background:#0a0f14;border:1px solid rgba(6,182,212,0.15);border-radius:4px;padding:6px 8px;font-family:'DM Mono',monospace;font-size:0.62rem;color:#06b6d4;">[SEARCH]Google アカウント[/SEARCH]</div>
+            </div>
+            <!-- tool ターン -->
+            <div style="display:flex;flex-direction:column;gap:3px;">
+              <div style="display:flex;gap:5px;align-items:center;">
+                <span style="background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.2);border-radius:3px;padding:2px 8px;font-size:0.6rem;color:#c084fc;font-family:'DM Mono',monospace;flex-shrink:0;">tool</span>
+                <span style="font-size:0.6rem;color:#c084fc;">tool</span>
+              </div>
+              <div style="background:#0a0f14;border:1px solid rgba(168,85,247,0.1);border-radius:4px;padding:6px 8px;font-family:'DM Mono',monospace;font-size:0.58rem;color:#9ca3af;line-height:1.6;">title: 業務用Googleアカウント
+content: 仕事用Gmail。メールアドレスは ishi32@llamune.com。Google Keep にも使用。
+
+title: 個人用Googleアカウント
+content: 個人のGmail。メールアドレスは llamuneft@gmail.com。</div>
+            </div>
+            <!-- assistant（最終回答）ターン -->
+            <div style="display:flex;flex-direction:column;gap:3px;">
+              <div style="display:flex;gap:5px;align-items:center;">
+                <span style="background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);border-radius:3px;padding:2px 8px;font-size:0.6rem;color:#06b6d4;font-family:'DM Mono',monospace;flex-shrink:0;">assistant</span>
+                <span style="font-size:0.6rem;color:#06b6d4;">assistant</span>
+              </div>
+              <div style="background:#0a0f14;border:1px solid rgba(6,182,212,0.15);border-radius:4px;padding:6px 8px;font-size:0.62rem;color:#d1d5db;line-height:1.6;">以下の情報が見つかりました。<br>1. 業務用Googleアカウント — ishi32@llamune.com<br>2. 個人用Googleアカウント — llamuneft@gmail.com</div>
+            </div>
+            <!-- アクション -->
+            <div style="display:flex;gap:6px;margin-top:2px;">
+              <span class="ui-text-btn" style="padding:3px 10px;font-size:0.62rem;color:#06b6d4;border-color:rgba(6,182,212,0.3);">＋ ターン追加</span>
+              <span class="ui-text-btn" style="padding:3px 10px;font-size:0.62rem;color:#d1d5db;">保存</span>
+            </div>
+          </div>
+          <!-- ベース・パターン一覧 -->
+          <div style="font-size:0.68rem;font-weight:600;color:#9ca3af;margin-top:2px;">パターン（3件）</div>
+          <div style="display:flex;flex-direction:column;gap:4px;">
+            <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:5px;padding:7px 10px;display:flex;align-items:center;gap:8px;">
+              <span style="font-size:0.62rem;color:#9ca3af;font-family:'DM Mono',monospace;">ベースID: 1</span>
+              <span style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);border-radius:3px;padding:1px 6px;font-size:0.58rem;color:#4ade80;">valid</span>
+              <span style="font-size:0.65rem;color:#d1d5db;">Qiitaアカウントを教えて</span>
+            </div>
+            <div style="background:rgba(6,182,212,0.04);border:1px solid rgba(6,182,212,0.15);border-radius:5px;padding:7px 10px;display:flex;align-items:center;gap:8px;">
+              <span style="font-size:0.62rem;color:#9ca3af;font-family:'DM Mono',monospace;">ベースID: 1</span>
+              <span style="background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);border-radius:3px;padding:1px 6px;font-size:0.58rem;color:#06b6d4;">train</span>
+              <span style="font-size:0.65rem;color:#d1d5db;">Googleアカウントを教えて</span>
+            </div>
+            <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:5px;padding:7px 10px;display:flex;align-items:center;gap:8px;">
+              <span style="font-size:0.62rem;color:#9ca3af;font-family:'DM Mono',monospace;">ベースID: 1</span>
+              <span style="background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);border-radius:3px;padding:1px 6px;font-size:0.58rem;color:#06b6d4;">train</span>
+              <span style="font-size:0.65rem;color:#d1d5db;">Facebookアカウントを教えて</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- SECTION 5: なぜ閉域か -->
+<section id="why-closed">
+  <div class="section-label">なぜ閉域LLMか</div>
+  <h2 class="section-title">育てた知識は、<br><em>外に出さない。</em></h2>
+  <p class="section-desc">
+    クラウドLLMは便利ですが、業務の機密情報を外部サーバーに送るリスクがあります。
+    llamune はすべてをローカルで完結させ、セキュリティと競争優位性を両立します。
+  </p>
+
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-icon">Security</div>
+      <div class="why-title">機密情報の完全保全</div>
+      <div class="why-desc">顧客データも社内ノウハウも、すべて自社環境で完結。インターネットに情報が出ません。</div>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">Advantage</div>
+      <div class="why-title">競合に真似できない強み</div>
+      <div class="why-desc">自社知識で育てたLLMは、競合が同じクラウドサービスを使っても再現できません。</div>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">Cost</div>
+      <div class="why-title">従量課金コストなし</div>
+      <div class="why-desc">APIトークン費用が発生しません。一度構築すれば使用量に関わらず固定コストで運用できます。</div>
+    </div>
+  </div>
+
+  <details style="margin-top:2rem;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <summary style="cursor:pointer;padding:1rem 1.5rem;font-size:0.85rem;color:var(--accent);font-family:var(--mono);letter-spacing:0.05em;list-style:none;display:flex;align-items:center;gap:0.5rem;user-select:none;background:var(--bg-2);">
+      <span class="details-arrow2" style="display:inline-block;transition:transform 0.2s;">▶</span> トレーニングの仕組みを見る
+    </summary>
+    <script>
+      document.currentScript.closest('details').addEventListener('toggle', function(e) {
+        this.querySelector('.details-arrow2').style.transform = this.open ? 'rotate(90deg)' : '';
+      });
+    </script>
+    <div style="padding:1.5rem;">
   <div class="section-label">トレーニングサイクル</div>
   <h2 class="section-title">こうやって、<br><em>理想のLLMを育てる。</em></h2>
   <p class="section-desc">
@@ -1612,361 +1971,8 @@ Saved final weights to /Users/mini/llmn_models/46/adapters.safetensors.
       </span>
     </div>
   </div>
-</section>
-
-
-<hr class="divider">
-
-<!-- SECTION 3.6: 現在地点 -->
-<section id="current-status">
-  <div class="section-label">現在地点</div>
-  <h2 class="section-title">RAG × FT、<br><em>稼働中。</em></h2>
-  <p class="section-desc">
-    RAG × FT を組み合わせた新しい <strong style="color:var(--accent);font-weight:500;">llamune</strong> が完成しました。
-  </p>
-
-  <!-- 2つのプロダクトの位置づけ -->
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:2rem;" class="training-grid">
-    <div style="background:var(--bg-2);padding:1.75rem;">
-      <div style="font-family:var(--mono);font-size:0.65rem;color:var(--text-3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem;">従来の llamune</div>
-      <div style="font-size:0.95rem;font-weight:500;color:var(--text);margin-bottom:0.5rem;">ファインチューニングツール</div>
-      <div style="font-size:0.82rem;color:var(--text-2);line-height:1.8;margin-bottom:0.75rem;">user ↔ assistant の Q&A ペアを用いてベースモデルをトレーニングします。このページで紹介しているトレーニングサイクルを担うツールです。</div>
-      <a href="https://github.com/unrcom/llamune_ft" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;font-family:var(--mono);font-size:0.7rem;color:var(--text-3);text-decoration:none;border:1px solid var(--border);border-radius:4px;padding:0.3rem 0.65rem;transition:color 0.2s,border-color 0.2s;" onmouseover="this.style.color='var(--text)';this.style.borderColor='var(--text-2)'" onmouseout="this.style.color='var(--text-3)';this.style.borderColor='var(--border)'">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-        unrcom/llamune_ft
-      </a>
-    </div>
-    <div style="background:var(--bg-2);padding:1.75rem;border-left:2px solid var(--accent);">
-      <div style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem;">llamune <span style="background:var(--accent-dim);padding:0.1rem 0.4rem;border-radius:2px;border:1px solid var(--accent-border);">NEW</span></div>
-      <div style="font-size:0.95rem;font-weight:500;color:var(--text);margin-bottom:0.5rem;">RAG × FT アプリ</div>
-      <div style="font-size:0.82rem;color:var(--text-2);line-height:1.8;margin-bottom:0.75rem;">データセットを投入し、ユーザーの問い合わせに対して検索・回答します。システムプロンプトを FT で学習させる独自機能を備えます。</div>
-      <a href="https://github.com/unrcom/llamune" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;font-family:var(--mono);font-size:0.7rem;color:var(--accent);text-decoration:none;border:1px solid var(--accent-border);border-radius:4px;padding:0.3rem 0.65rem;transition:color 0.2s,border-color 0.2s;" onmouseover="this.style.opacity='0.75'" onmouseout="this.style.opacity='1'">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-        unrcom/llamune
-      </a>
-    </div>
-  </div>
-
-  <!-- チャットデモ：RAGモード OFF vs ON -->
-  <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:1.75rem;margin-bottom:2rem;">
-    <div style="font-family:var(--mono);font-size:0.65rem;color:var(--text-3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border);">llamune チャット — RAGモード比較</div>
-    <p style="font-size:0.88rem;color:var(--text-2);line-height:1.9;margin-bottom:1.25rem;">同じ質問を RAGモードのOFF/ONで投げると、回答の質が大きく変わります。RAGモードをONにすると、投入したデータセットを検索して回答を生成します。</p>
-
-    <style>
-      @media (max-width: 640px) { .chat-demo-grid { grid-template-columns: 1fr !important; } }
-    </style>
-    <div class="chat-demo-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-
-      <!-- RAGモード OFF -->
-      <div style="display:flex;flex-direction:column;gap:0.6rem;">
-        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.25rem;">
-          <span style="width:8px;height:8px;border-radius:50%;background:#6b7280;flex-shrink:0;"></span>
-          <span style="font-family:var(--mono);font-size:0.65rem;color:var(--text-3);letter-spacing:0.08em;">RAGモード OFF — LLM の知識のみ</span>
-        </div>
-        <div class="screenshot-frame">
-          <div class="screenshot-bar">
-            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-            <span class="screenshot-url">localhost:5174/chat</span>
-          </div>
-          <div class="ui-mock" style="height:auto;min-height:0;flex-direction:column;gap:0;">
-            <!-- 設定パネル -->
-            <div style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;flex-direction:column;gap:6px;">
-              <div class="ui-mock-selector" style="flex:none;"><span class="ui-selector-label">モデル</span><span class="ui-selector-val">Qwen2.5-14B-4bit ▾</span></div>
-              <div style="display:flex;align-items:center;justify-content:space-between;">
-                <span style="font-size:0.62rem;color:#9ca3af;">RAGモード</span>
-                <div style="width:28px;height:15px;border-radius:8px;background:#374151;border:1px solid rgba(255,255,255,0.1);position:relative;">
-                  <div style="width:11px;height:11px;border-radius:50%;background:#6b7280;position:absolute;top:1px;left:1px;"></div>
-                </div>
-              </div>
-            </div>
-            <!-- チャット本文 -->
-            <div style="padding:12px;display:flex;flex-direction:column;gap:8px;">
-              <div style="align-self:flex-end;background:#06b6d4;border-radius:12px 12px 2px 12px;padding:8px 12px;max-width:85%;font-size:0.65rem;color:#fff;line-height:1.6;">パワースポットブームはいつ頃から始まりましたか？</div>
-              <div style="align-self:flex-start;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px 12px 12px 2px;padding:10px 12px;font-size:0.65rem;color:#d1d5db;line-height:1.8;">
-                パワースポットブームは、1990年代後半から2000年代初頭にかけて始まりました。心理学やスピリチュアルな考え方が広く受け入れられるようになり、人々の心の平安や健康への関心が高まった時期と一致しています。<br><br>
-                <span style="color:#6b7280;font-size:0.6rem;">※ LLM の一般的な知識による回答</span>
-              </div>
-            </div>
-            <!-- 入力欄 -->
-            <div style="padding:8px 12px;border-top:1px solid rgba(255,255,255,0.06);">
-              <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:6px 10px;font-size:0.6rem;color:#6b7280;">メッセージを入力…</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- RAGモード ON -->
-      <div style="display:flex;flex-direction:column;gap:0.6rem;">
-        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.25rem;">
-          <span style="width:8px;height:8px;border-radius:50%;background:#06b6d4;flex-shrink:0;"></span>
-          <span style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.08em;">RAGモード ON — データセット検索</span>
-        </div>
-        <div class="screenshot-frame">
-          <div class="screenshot-bar">
-            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-            <span class="screenshot-url">localhost:5174/chat</span>
-          </div>
-          <div class="ui-mock" style="height:auto;min-height:0;flex-direction:column;gap:0;">
-            <!-- 設定パネル -->
-            <div style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;flex-direction:column;gap:6px;">
-              <div class="ui-mock-selector" style="flex:none;"><span class="ui-selector-label">モデル</span><span class="ui-selector-val">Qwen2.5-14B-4bit ▾</span></div>
-              <div style="display:flex;align-items:center;justify-content:space-between;">
-                <span style="font-size:0.62rem;color:#9ca3af;">RAGモード</span>
-                <div style="width:28px;height:15px;border-radius:8px;background:rgba(6,182,212,0.3);border:1px solid rgba(6,182,212,0.4);position:relative;">
-                  <div style="width:11px;height:11px;border-radius:50%;background:#06b6d4;position:absolute;top:1px;right:1px;"></div>
-                </div>
-              </div>
-              <div class="ui-mock-selector" style="flex:none;"><span class="ui-selector-label">プロジェクト</span><span class="ui-selector-val">パワースポット ▾</span></div>
-            </div>
-            <!-- チャット本文 -->
-            <div style="padding:12px;display:flex;flex-direction:column;gap:8px;">
-              <div style="align-self:flex-end;background:#06b6d4;border-radius:12px 12px 2px 12px;padding:8px 12px;max-width:85%;font-size:0.65rem;color:#fff;line-height:1.6;">パワースポットブームはいつ頃から始まりましたか？</div>
-              <div style="align-self:flex-start;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px 12px 12px 2px;padding:10px 12px;font-size:0.65rem;color:#d1d5db;line-height:1.8;">
-                パワースポットブームは2008年頃から急拡大しました。<br><br>
-                <span style="color:#9ca3af;">事実：</span><br>
-                ・ブームは2008年頃から急拡大した。<br><br>
-                <span style="color:#9ca3af;">考察：</span><br>
-                ・スピリチュアルブームや女性誌の特集、SNS の普及が重なった。<br>
-                ・観光業との結びつきも強く、地方創生の文脈でも活用されている。
-              </div>
-              <!-- RAG検索コンテキスト -->
-              <div style="background:rgba(6,182,212,0.03);border:1px solid rgba(6,182,212,0.15);border-radius:6px;padding:8px 10px;">
-                <div style="font-family:var(--mono);font-size:0.6rem;color:#06b6d4;margin-bottom:5px;">🔍 RAG検索コンテキスト</div>
-                <div style="font-size:0.6rem;color:#6b7280;line-height:1.7;">【種別】社会現象・考察<br>【時期】2000年代後半〜現在<br>【概要】日本のパワースポットブームは2008年頃から急拡大した。スピリチュアルブームや女性誌の特集、SNS の普及が重なり…</div>
-              </div>
-            </div>
-            <!-- 入力欄 -->
-            <div style="padding:8px 12px;border-top:1px solid rgba(255,255,255,0.06);">
-              <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:6px 10px;font-size:0.6rem;color:#6b7280;">メッセージを入力…</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- 独自機能：マルチターン FT -->
-  <div style="background:var(--bg-2);border:1px solid var(--accent-border);border-radius:8px;padding:1.75rem;margin-bottom:2rem;">
-    <div style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1rem;padding-bottom:0.75rem;border-bottom:1px solid var(--accent-border);">llamune 独自機能 — マルチターン FT データ定義</div>
-
-    <!-- なぜシステムプロンプトをFTするのか -->
-    <div style="background:var(--bg-3);border:1px solid var(--border);border-radius:6px;padding:1.25rem;margin-bottom:1.25rem;">
-      <div style="font-size:0.78rem;font-weight:500;color:var(--text);margin-bottom:0.75rem;">RAG のシステムプロンプト管理は、なぜ難しいのか</div>
-      <p style="font-size:0.85rem;color:var(--text-2);line-height:1.9;margin-bottom:0.75rem;">RAG を構築された方なら、システムプロンプトの調整がいかに大変かを実感されているはずです。改善を重ねるごとにプロンプトは肥大化・複雑化し、やがてこんなジレンマに陥ります。</p>
-      <div style="display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1rem;">
-        <div style="display:flex;gap:0.75rem;align-items:flex-start;font-size:0.83rem;color:var(--text-2);line-height:1.7;">
-          <span style="color:var(--text-3);flex-shrink:0;margin-top:0.1rem;">—</span>プロンプトが肥大化・複雑化し、全体の見通しが悪くなる
-        </div>
-        <div style="display:flex;gap:0.75rem;align-items:flex-start;font-size:0.83rem;color:var(--text-2);line-height:1.7;">
-          <span style="color:var(--text-3);flex-shrink:0;margin-top:0.1rem;">—</span>記述が増えるほど、回答の安定性が落ちる
-        </div>
-        <div style="display:flex;gap:0.75rem;align-items:flex-start;font-size:0.83rem;color:var(--text-2);line-height:1.7;">
-          <span style="color:var(--text-3);flex-shrink:0;margin-top:0.1rem;">—</span>新しい挙動を追加すると、今まで動いていた挙動が壊れる
-        </div>
-      </div>
-      <div style="border-top:1px solid var(--border);padding-top:0.75rem;font-size:0.85rem;color:var(--text-2);line-height:1.9;">
-        llamune では、<strong style="color:var(--text);">システムプロンプトそのものを FT で LLM に学習させる</strong>ことで、この問題を解決します。プロンプトをなくし、その分の知識をモデルに内包させるアプローチです。
-      </div>
-    </div>
-
-    <p style="font-size:0.88rem;color:var(--text-2);line-height:1.9;margin-bottom:1rem;">
-      RAG のシステムプロンプトには、検索命令の発行・結果の受け取り・最終回答の生成という複数のステップが含まれます。
-      これを LLM に学習させるには、従来の user ↔ assistant の 1 対 1 では不十分で、
-      <strong style="color:var(--text);">user / assistant / tool のマルチターン構造</strong>で FT データを定義する必要があります。
-      ただし、tool ロールへの対応はモデルによって異なり、FT データの構造もそれに合わせる必要があります。
-    </p>
-
-    <!-- モデル別 tool ロール対応表 -->
-    <div style="margin-bottom:1.5rem;border:1px solid var(--border);border-radius:6px;overflow:hidden;">
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--bg-3);border-bottom:1px solid var(--border);">
-        <div style="padding:0.6rem 1rem;font-family:var(--mono);font-size:0.65rem;color:var(--text-3);letter-spacing:0.06em;">モデル</div>
-        <div style="padding:0.6rem 1rem;font-family:var(--mono);font-size:0.65rem;color:var(--text-3);letter-spacing:0.06em;border-left:1px solid var(--border);">tool ロール</div>
-        <div style="padding:0.6rem 1rem;font-family:var(--mono);font-size:0.65rem;color:var(--text-3);letter-spacing:0.06em;border-left:1px solid var(--border);">備考</div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--bg-2);border-bottom:1px solid var(--border);">
-        <div style="padding:0.7rem 1rem;font-family:var(--mono);font-size:0.75rem;color:var(--text);">Qwen2.5</div>
-        <div style="padding:0.7rem 1rem;font-size:0.75rem;color:#4ade80;border-left:1px solid var(--border);">✓ ネイティブ対応</div>
-        <div style="padding:0.7rem 1rem;font-size:0.75rem;color:var(--text-3);border-left:1px solid var(--border);">制約なし</div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--bg-2);border-bottom:1px solid var(--border);">
-        <div style="padding:0.7rem 1rem;font-family:var(--mono);font-size:0.75rem;color:var(--text);">Gemma4</div>
-        <div style="padding:0.7rem 1rem;font-size:0.75rem;color:#f59e0b;border-left:1px solid var(--border);">△ 非対応</div>
-        <div style="padding:0.7rem 1rem;font-size:0.75rem;color:var(--text-3);border-left:1px solid var(--border);">user ロールで代替</div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--bg-2);">
-        <div style="padding:0.7rem 1rem;font-family:var(--mono);font-size:0.75rem;color:var(--text);">GPT-OSS 系</div>
-        <div style="padding:0.7rem 1rem;font-size:0.75rem;color:#4ade80;border-left:1px solid var(--border);">✓ 対応</div>
-        <div style="padding:0.7rem 1rem;font-size:0.75rem;color:var(--text-3);border-left:1px solid var(--border);">直前に assistant の tool call が必要</div>
-      </div>
-    </div>
-
-    <p style="font-size:0.85rem;color:var(--text-2);line-height:1.9;margin-bottom:1.5rem;">
-      現在、これらの代表的な閉域モデルを一つずつ検証している段階です。各モデルの制約に合わせた FT データ構造の最適解を探っています。
-    </p>
-
-    <div style="display:flex;flex-direction:column;gap:0.6rem;margin-bottom:1.5rem;">
-      <div style="font-size:0.78rem;color:var(--text-3);font-family:var(--mono);margin-bottom:0.25rem;">会話ターンの構造</div>
-      <div style="display:flex;gap:0.5rem;align-items:stretch;flex-wrap:wrap;">
-        <div style="background:var(--bg-3);border:1px solid var(--border-2);border-radius:4px;padding:0.5rem 0.85rem;font-family:var(--mono);font-size:0.72rem;color:var(--text-2);">system</div>
-        <div style="color:var(--text-3);font-family:var(--mono);align-self:center;">→</div>
-        <div style="background:var(--bg-3);border:1px solid var(--border-2);border-radius:4px;padding:0.5rem 0.85rem;font-family:var(--mono);font-size:0.72rem;color:var(--text-2);">user</div>
-        <div style="color:var(--text-3);font-family:var(--mono);align-self:center;">→</div>
-        <div style="background:var(--accent-dim);border:1px solid var(--accent-border);border-radius:4px;padding:0.5rem 0.85rem;font-family:var(--mono);font-size:0.72rem;color:var(--accent);">assistant<br><span style="font-size:0.6rem;opacity:0.8;">[SEARCH]クエリ[/SEARCH]</span></div>
-        <div style="color:var(--text-3);font-family:var(--mono);align-self:center;">→</div>
-        <div style="background:var(--bg-3);border:1px solid var(--border-2);border-radius:4px;padding:0.5rem 0.85rem;font-family:var(--mono);font-size:0.72rem;color:var(--text-2);">tool<br><span style="font-size:0.6rem;opacity:0.8;">検索結果</span></div>
-        <div style="color:var(--text-3);font-family:var(--mono);align-self:center;">→</div>
-        <div style="background:var(--accent-dim);border:1px solid var(--accent-border);border-radius:4px;padding:0.5rem 0.85rem;font-family:var(--mono);font-size:0.72rem;color:var(--accent);">assistant<br><span style="font-size:0.6rem;opacity:0.8;">最終回答</span></div>
-      </div>
-    </div>
-
-    <!-- FTデータ管理 UIモック -->
-    <div class="screenshot-frame">
-      <div class="screenshot-bar">
-        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-        <span class="screenshot-url">localhost:5174/admin/ft-data</span>
-      </div>
-      <div class="ui-mock" style="height:480px;">
-        <!-- サイドバー -->
-        <div class="ui-mock-sidebar">
-          <div class="ui-mock-logo">llamune</div>
-          <div class="ui-mock-nav">
-            <div class="ui-nav-item">💬 チャット</div>
-            <div class="ui-nav-item">📊 データセット</div>
-            <div class="ui-nav-item" style="color:#6b7280;font-size:0.6rem;padding:4px 8px;margin-top:4px;border-top:1px solid rgba(255,255,255,0.05);padding-top:8px;">管理</div>
-            <div class="ui-nav-item">📁 プロジェクト</div>
-            <div class="ui-nav-item">🤖 モデル</div>
-            <div class="ui-nav-item ui-nav-active">📋 FTデータ管理</div>
-            <div class="ui-nav-item">🔧 訓練ジョブ</div>
-          </div>
-        </div>
-        <!-- メイン -->
-        <div class="ui-mock-body" style="gap:8px;overflow-y:auto;padding:14px;">
-          <div style="display:flex;justify-content:space-between;align-items:center;">
-            <div class="ui-mock-page-title">FTデータ管理</div>
-            <div style="display:flex;gap:5px;">
-              <span class="ui-text-btn" style="padding:4px 10px;font-size:0.62rem;color:#06b6d4;border-color:rgba(6,182,212,0.3);">↓ train</span>
-              <span class="ui-text-btn" style="padding:4px 10px;font-size:0.62rem;color:#d1d5db;">↓ valid</span>
-            </div>
-          </div>
-          <div class="ui-mock-selector" style="flex:none;max-width:200px;">
-            <span class="ui-selector-label">プロジェクト</span>
-            <span class="ui-selector-val">お探し物LLM ▾</span>
-          </div>
-          <!-- 編集中パターン -->
-          <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(6,182,212,0.2);border-radius:6px;padding:10px;display:flex;flex-direction:column;gap:7px;">
-            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-              <span style="font-size:0.68rem;font-weight:600;color:#f3f4f6;">編集中 (ID: 4)</span>
-              <span style="background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.25);border-radius:3px;padding:1px 7px;font-size:0.58rem;color:#06b6d4;font-family:'DM Mono',monospace;">ベースID: 1</span>
-              <div style="margin-left:auto;display:flex;gap:4px;">
-                <span class="ui-text-btn" style="padding:2px 8px;font-size:0.6rem;">ベース</span>
-                <span class="ui-text-btn" style="padding:2px 8px;font-size:0.6rem;">パターン</span>
-                <span class="ui-text-btn" style="padding:2px 8px;font-size:0.6rem;color:#06b6d4;border-color:rgba(6,182,212,0.3);">train</span>
-              </div>
-            </div>
-            <!-- system ターン -->
-            <div style="display:flex;flex-direction:column;gap:3px;">
-              <div style="display:flex;gap:5px;align-items:center;">
-                <span style="background:#1e1e24;border:1px solid rgba(255,255,255,0.1);border-radius:3px;padding:2px 8px;font-size:0.6rem;color:#9ca3af;font-family:'DM Mono',monospace;flex-shrink:0;">system</span>
-                <span style="font-size:0.6rem;color:#6b7280;">system</span>
-              </div>
-              <div style="background:#0a0f14;border:1px solid rgba(255,255,255,0.07);border-radius:4px;padding:6px 8px;font-size:0.62rem;color:#9ca3af;line-height:1.6;">必ず日本語で回答してください。あなたはユーザーの業務アシスタントです。ユーザーの情報管理をサポートしてください。</div>
-            </div>
-            <!-- user ターン -->
-            <div style="display:flex;flex-direction:column;gap:3px;">
-              <div style="display:flex;gap:5px;align-items:center;">
-                <span style="background:#1e1e24;border:1px solid rgba(255,255,255,0.1);border-radius:3px;padding:2px 8px;font-size:0.6rem;color:#9ca3af;font-family:'DM Mono',monospace;flex-shrink:0;">user</span>
-                <span style="font-size:0.6rem;color:#6b7280;">user</span>
-              </div>
-              <div style="background:#0a0f14;border:1px solid rgba(255,255,255,0.07);border-radius:4px;padding:6px 8px;font-size:0.62rem;color:#d1d5db;">Googleアカウントを教えて</div>
-            </div>
-            <!-- assistant（検索命令）ターン -->
-            <div style="display:flex;flex-direction:column;gap:3px;">
-              <div style="display:flex;gap:5px;align-items:center;">
-                <span style="background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);border-radius:3px;padding:2px 8px;font-size:0.6rem;color:#06b6d4;font-family:'DM Mono',monospace;flex-shrink:0;">assistant</span>
-                <span style="font-size:0.6rem;color:#06b6d4;">assistant</span>
-              </div>
-              <div style="background:#0a0f14;border:1px solid rgba(6,182,212,0.15);border-radius:4px;padding:6px 8px;font-family:'DM Mono',monospace;font-size:0.62rem;color:#06b6d4;">[SEARCH]Google アカウント[/SEARCH]</div>
-            </div>
-            <!-- tool ターン -->
-            <div style="display:flex;flex-direction:column;gap:3px;">
-              <div style="display:flex;gap:5px;align-items:center;">
-                <span style="background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.2);border-radius:3px;padding:2px 8px;font-size:0.6rem;color:#c084fc;font-family:'DM Mono',monospace;flex-shrink:0;">tool</span>
-                <span style="font-size:0.6rem;color:#c084fc;">tool</span>
-              </div>
-              <div style="background:#0a0f14;border:1px solid rgba(168,85,247,0.1);border-radius:4px;padding:6px 8px;font-family:'DM Mono',monospace;font-size:0.58rem;color:#9ca3af;line-height:1.6;">title: 業務用Googleアカウント
-content: 仕事用Gmail。メールアドレスは ishi32@llamune.com。Google Keep にも使用。
-
-title: 個人用Googleアカウント
-content: 個人のGmail。メールアドレスは llamuneft@gmail.com。</div>
-            </div>
-            <!-- assistant（最終回答）ターン -->
-            <div style="display:flex;flex-direction:column;gap:3px;">
-              <div style="display:flex;gap:5px;align-items:center;">
-                <span style="background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);border-radius:3px;padding:2px 8px;font-size:0.6rem;color:#06b6d4;font-family:'DM Mono',monospace;flex-shrink:0;">assistant</span>
-                <span style="font-size:0.6rem;color:#06b6d4;">assistant</span>
-              </div>
-              <div style="background:#0a0f14;border:1px solid rgba(6,182,212,0.15);border-radius:4px;padding:6px 8px;font-size:0.62rem;color:#d1d5db;line-height:1.6;">以下の情報が見つかりました。<br>1. 業務用Googleアカウント — ishi32@llamune.com<br>2. 個人用Googleアカウント — llamuneft@gmail.com</div>
-            </div>
-            <!-- アクション -->
-            <div style="display:flex;gap:6px;margin-top:2px;">
-              <span class="ui-text-btn" style="padding:3px 10px;font-size:0.62rem;color:#06b6d4;border-color:rgba(6,182,212,0.3);">＋ ターン追加</span>
-              <span class="ui-text-btn" style="padding:3px 10px;font-size:0.62rem;color:#d1d5db;">保存</span>
-            </div>
-          </div>
-          <!-- ベース・パターン一覧 -->
-          <div style="font-size:0.68rem;font-weight:600;color:#9ca3af;margin-top:2px;">パターン（3件）</div>
-          <div style="display:flex;flex-direction:column;gap:4px;">
-            <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:5px;padding:7px 10px;display:flex;align-items:center;gap:8px;">
-              <span style="font-size:0.62rem;color:#9ca3af;font-family:'DM Mono',monospace;">ベースID: 1</span>
-              <span style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);border-radius:3px;padding:1px 6px;font-size:0.58rem;color:#4ade80;">valid</span>
-              <span style="font-size:0.65rem;color:#d1d5db;">Qiitaアカウントを教えて</span>
-            </div>
-            <div style="background:rgba(6,182,212,0.04);border:1px solid rgba(6,182,212,0.15);border-radius:5px;padding:7px 10px;display:flex;align-items:center;gap:8px;">
-              <span style="font-size:0.62rem;color:#9ca3af;font-family:'DM Mono',monospace;">ベースID: 1</span>
-              <span style="background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);border-radius:3px;padding:1px 6px;font-size:0.58rem;color:#06b6d4;">train</span>
-              <span style="font-size:0.65rem;color:#d1d5db;">Googleアカウントを教えて</span>
-            </div>
-            <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:5px;padding:7px 10px;display:flex;align-items:center;gap:8px;">
-              <span style="font-size:0.62rem;color:#9ca3af;font-family:'DM Mono',monospace;">ベースID: 1</span>
-              <span style="background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);border-radius:3px;padding:1px 6px;font-size:0.58rem;color:#06b6d4;">train</span>
-              <span style="font-size:0.65rem;color:#d1d5db;">Facebookアカウントを教えて</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<hr class="divider">
-
-<!-- SECTION 5: なぜ閉域か -->
-<section id="why-closed">
-  <div class="section-label">なぜ閉域LLMか</div>
-  <h2 class="section-title">育てた知識は、<br><em>外に出さない。</em></h2>
-  <p class="section-desc">
-    クラウドLLMは便利ですが、業務の機密情報を外部サーバーに送るリスクがあります。
-    llamune はすべてをローカルで完結させ、セキュリティと競争優位性を両立します。
-  </p>
-
-  <div class="why-grid">
-    <div class="why-card">
-      <div class="why-icon">Security</div>
-      <div class="why-title">機密情報の完全保全</div>
-      <div class="why-desc">顧客データも社内ノウハウも、すべて自社環境で完結。インターネットに情報が出ません。</div>
-    </div>
-    <div class="why-card">
-      <div class="why-icon">Advantage</div>
-      <div class="why-title">競合に真似できない強み</div>
-      <div class="why-desc">自社知識で育てたLLMは、競合が同じクラウドサービスを使っても再現できません。</div>
-    </div>
-    <div class="why-card">
-      <div class="why-icon">Cost</div>
-      <div class="why-title">従量課金コストなし</div>
-      <div class="why-desc">APIトークン費用が発生しません。一度構築すれば使用量に関わらず固定コストで運用できます。</div>
-    </div>
-  </div>
+</div>
+  </details>
 </section>
 
 <hr class="divider">
