@@ -1107,11 +1107,12 @@ footer a:hover { color: var(--text); }
 <nav>
   <div class="nav-logo"><span style="color:var(--accent);">ll</span>a<span style="color:var(--accent);">m</span>une</div>
   <ul class="nav-links">
-    <li><a href="#why-train">育てるとは</a></li>
-    <li><a href="#tools">ツール</a></li>
+    <li><a href="#problem">育てるとは</a></li>
+    <li><a href="#current-status">ツール</a></li>
     <li><a href="#why-closed">閉域LLM</a></li>
     <li><a href="#catalog">モデル</a></li>
-    <li><a href="https://github.com/unrcom" target="_blank">GitHub</a></li>
+    <li><a href="#ramune-club" style="color:var(--accent);">試してみる</a></li>
+    <li><a href="https://github.com/unrcom/llamune" target="_blank">GitHub</a></li>
   </ul>
   <a href="#consultation" class="nav-cta">お問い合わせ</a>
 </nav>
@@ -1135,7 +1136,8 @@ footer a:hover { color: var(--text); }
     <span class="badge">従量課金なし</span>
   </div>
   <div class="hero-cta">
-    <a href="#why-train" class="btn-primary">トレーニングの仕組みを見る</a>
+    <a href="#problem" class="btn-primary">トレーニングの仕組みを見る</a>
+    <a href="#ramune-club" class="btn-ghost" style="border-color:var(--accent-border);color:var(--accent);">試してみる</a>
     <a href="#consultation" class="btn-ghost">無料相談する</a>
   </div>
 </section>
@@ -2200,6 +2202,103 @@ Saved final weights to /Users/mini/llmn_models/46/adapters.safetensors.
 
   </div>
 </section>
+
+<hr class="divider">
+
+<!-- SECTION: ラムネクラブ -->
+<section id="ramune-club">
+  <div class="section-label">限定試用プログラム</div>
+  <h2 class="section-title">自社データで、<br><em>llamune を試す。</em></h2>
+  <p class="section-desc">
+    ラムネクラブは、llamune を実際の業務データで試していただける限定公開環境です。<br>
+    データの投入からチャットでの検索・回答確認まで、本番と同じ操作を体験できます。
+  </p>
+
+  <!-- 特徴カード -->
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:3rem;" class="club-cards">
+    <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:1.5rem;">
+      <div style="font-family:var(--mono);font-size:0.62rem;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem;">独立した環境</div>
+      <div style="font-size:0.88rem;color:var(--text);font-weight:500;margin-bottom:0.5rem;">プロジェクト専用</div>
+      <p style="font-size:0.82rem;color:var(--text-2);line-height:1.8;margin:0;">参加企業ごとに独立したプロジェクト環境を割り当てます。他社のデータと混在しません。</p>
+    </div>
+    <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:1.5rem;">
+      <div style="font-family:var(--mono);font-size:0.62rem;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem;">実データで検証</div>
+      <div style="font-size:0.88rem;color:var(--text);font-weight:500;margin-bottom:0.5rem;">データ投入から試せる</div>
+      <p style="font-size:0.82rem;color:var(--text-2);line-height:1.8;margin:0;">社内マニュアル・FAQ・ナレッジ文書などを投入し、RAG 検索の精度をそのまま確認できます。</p>
+    </div>
+    <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:1.5rem;">
+      <div style="font-family:var(--mono);font-size:0.62rem;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem;">曜日制・先着順</div>
+      <div style="font-size:0.88rem;color:var(--text);font-weight:500;margin-bottom:0.5rem;">5枠・空き次第受付</div>
+      <p style="font-size:0.82rem;color:var(--text-2);line-height:1.8;margin:0;">月〜金の各曜日に1枠ずつ設けています。現在空きのある曜日をご案内します。</p>
+    </div>
+  </div>
+
+  <!-- 参加特典 -->
+  <div style="margin-bottom:1.5rem;">
+    <div style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:0.75rem;">
+      <span style="display:block;width:20px;height:1px;background:var(--accent);"></span>参加特典
+    </div>
+    <div style="display:flex;flex-direction:column;gap:0.75rem;">
+
+      <!-- 特典 1 -->
+      <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:1.25rem 1.5rem;display:flex;gap:1.25rem;align-items:flex-start;">
+        <span style="font-family:var(--mono);font-size:0.7rem;color:var(--accent);background:var(--accent-dim);border:1px solid var(--accent-border);border-radius:3px;padding:0.2rem 0.6rem;flex-shrink:0;margin-top:0.1rem;">01</span>
+        <div>
+          <div style="font-size:0.88rem;font-weight:500;color:var(--text);margin-bottom:0.4rem;">担当者による運用サポート</div>
+          <p style="font-size:0.82rem;color:var(--text-2);line-height:1.8;margin:0;">運用が軌道に乗るまでの間、ご利用枠の曜日ごとに 1〜2 時間の範囲で弊社担当者が無償でサポートします。</p>
+        </div>
+      </div>
+
+      <!-- 特典 2 -->
+      <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:1.25rem 1.5rem;display:flex;gap:1.25rem;align-items:flex-start;">
+        <span style="font-family:var(--mono);font-size:0.7rem;color:var(--accent);background:var(--accent-dim);border:1px solid var(--accent-border);border-radius:3px;padding:0.2rem 0.6rem;flex-shrink:0;margin-top:0.1rem;">02</span>
+        <div>
+          <div style="font-size:0.88rem;font-weight:500;color:var(--text);margin-bottom:0.4rem;">バックアップ転送サービス</div>
+          <p style="font-size:0.82rem;color:var(--text-2);line-height:1.8;margin:0;">画面操作でデータセットのバックアップをお手元の PC に転送できます。試用期間中に蓄積したデータをそのまま持ち出せます。</p>
+        </div>
+      </div>
+
+      <!-- 特典 3 -->
+      <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:1.25rem 1.5rem;display:flex;gap:1.25rem;align-items:flex-start;">
+        <span style="font-family:var(--mono);font-size:0.7rem;color:var(--accent);background:var(--accent-dim);border:1px solid var(--accent-border);border-radius:3px;padding:0.2rem 0.6rem;flex-shrink:0;margin-top:0.1rem;">03</span>
+        <div>
+          <div style="font-size:0.88rem;font-weight:500;color:var(--text);margin-bottom:0.4rem;">自社環境の構築支援</div>
+          <p style="font-size:0.82rem;color:var(--text-2);line-height:1.8;margin:0;">貴社で環境構築を実施される場合は、その構築を弊社担当者が無償で支援します。</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 参加条件 + 申し込みボックス -->
+  <div style="background:var(--bg-2);border:1px solid var(--accent-border);border-radius:8px;overflow:hidden;">
+    <div style="background:var(--accent-dim);padding:0.6rem 1.5rem;border-bottom:1px solid var(--accent-border);">
+      <span style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;">参加条件 &amp; 申し込み</span>
+    </div>
+    <div style="padding:1.75rem 1.5rem;display:flex;flex-direction:column;gap:1.25rem;">
+      <div style="display:flex;align-items:flex-start;gap:0.75rem;">
+        <span style="font-family:var(--mono);font-size:0.7rem;color:var(--accent);background:var(--accent-dim);border:1px solid var(--accent-border);border-radius:3px;padding:0.15rem 0.5rem;flex-shrink:0;margin-top:0.15rem;">条件</span>
+        <span style="font-size:0.88rem;color:var(--text-2);line-height:1.8;">連絡可能な企業メールアドレスをお持ちであること（フリーアドレス不可）</span>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:0.75rem;">
+        <span style="font-family:var(--mono);font-size:0.7rem;color:var(--text-3);background:var(--bg-3);border:1px solid var(--border);border-radius:3px;padding:0.15rem 0.5rem;flex-shrink:0;margin-top:0.15rem;">方法</span>
+        <div style="font-size:0.88rem;color:var(--text-2);line-height:1.8;">
+          下記アドレスまで「ラムネクラブ参加希望」の旨をご連絡ください。空き状況をご案内します。
+        </div>
+      </div>
+      <a href="mailto:llm@unremoted.com?subject=ラムネクラブ参加希望" style="display:inline-flex;align-items:center;gap:0.5rem;font-family:var(--mono);font-size:0.95rem;color:var(--accent);border:1px solid var(--accent-border);border-radius:6px;padding:0.75rem 1.25rem;background:var(--bg-3);transition:background 0.2s;align-self:flex-start;" onmouseover="this.style.background='var(--accent-dim)'" onmouseout="this.style.background='var(--bg-3)'">
+        llm@unremoted.com
+        <span style="font-size:0.75rem;color:var(--text-3);">↗</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+@media (max-width: 640px) {
+  .club-cards { grid-template-columns: 1fr !important; }
+}
+</style>
 
 <hr class="divider">
 
