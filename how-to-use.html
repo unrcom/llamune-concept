@@ -1,0 +1,1655 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>使い方 — llamune｜業務知識を持つLLMを社内で育てる</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Sans+JP:wght@300;400;500&family=Syne:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0c0c0e;
+  --bg-2: #111114;
+  --bg-3: #18181c;
+  --bg-4: #1e1e24;
+  --border: rgba(255,255,255,0.07);
+  --border-2: rgba(255,255,255,0.12);
+  --text: #f3f4f6;
+  --text-2: #d1d5db;
+  --text-3: #9ca3af;
+  --accent: #06b6d4;
+  --accent-dim: rgba(6,182,212,0.12);
+  --accent-border: rgba(6,182,212,0.3);
+  --danger: #f87171;
+  --danger-dim: rgba(248,113,113,0.1);
+  --mono: 'DM Mono', monospace;
+  --sans: 'Noto Sans JP', sans-serif;
+  --display: 'Syne', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-weight: 400;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  height: 56px;
+  background: rgba(12,12,14,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo {
+  font-family: var(--mono);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+.nav-logo span { color: var(--accent); }
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--text-2);
+}
+
+.nav-links a:hover { color: var(--text); }
+
+.nav-cta {
+  font-size: 0.8rem;
+  font-weight: 400;
+  padding: 0.4rem 1rem;
+  border: 1px solid var(--accent-border);
+  border-radius: 4px;
+  color: var(--accent);
+  transition: background 0.2s;
+}
+
+.nav-cta:hover { background: var(--accent-dim); }
+
+/* ── HERO ── */
+#hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 8rem 2rem 6rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--accent);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.hero-eyebrow::before {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 1px;
+  background: var(--accent);
+}
+
+.hero-title {
+  font-family: var(--display);
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  margin-bottom: 1.5rem;
+}
+
+.hero-title em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.hero-sub {
+  font-size: 1rem;
+  color: var(--text-2);
+  max-width: 560px;
+  line-height: 1.9;
+  margin-bottom: 3rem;
+}
+
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 3rem;
+}
+
+.badge {
+  font-size: 0.75rem;
+  font-family: var(--mono);
+  padding: 0.35rem 0.85rem;
+  border: 1px solid var(--border-2);
+  border-radius: 2px;
+  color: var(--text-2);
+  background: var(--bg-3);
+}
+
+.hero-cta {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  background: var(--accent);
+  color: #0c0c0e;
+  font-weight: 500;
+  font-size: 0.875rem;
+  border-radius: 4px;
+  transition: opacity 0.2s;
+}
+
+.btn-primary:hover { opacity: 0.85; }
+
+.btn-ghost {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  border: 1px solid var(--border-2);
+  color: var(--text-2);
+  font-size: 0.875rem;
+  border-radius: 4px;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.btn-ghost:hover { border-color: var(--border-2); color: var(--text); }
+
+/* ── SECTION COMMON ── */
+section {
+  padding: 6rem 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.section-label {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--accent);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.section-label::before {
+  content: '';
+  display: block;
+  width: 16px;
+  height: 1px;
+  background: var(--accent);
+}
+
+.section-title {
+  font-family: var(--display);
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.section-desc {
+  color: var(--text-2);
+  font-size: 0.95rem;
+  max-width: 600px;
+  line-height: 1.9;
+  margin-bottom: 3rem;
+}
+
+/* ── DIVIDER ── */
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ── SECTION 2: ベースモデルの限界 ── */
+.hallucination-demo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.demo-panel {
+  background: var(--bg-2);
+  padding: 1.75rem;
+}
+
+.demo-panel-label {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.demo-panel.before .demo-panel-label { color: var(--danger); }
+.demo-panel.after .demo-panel-label { color: var(--accent); }
+
+.demo-q {
+  font-size: 0.8rem;
+  color: var(--text);
+  margin-bottom: 0.75rem;
+  font-family: var(--mono);
+  font-weight: 500;
+}
+
+.demo-a {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  font-weight: 400;
+}
+
+.demo-panel.before .demo-a {
+  background: var(--danger-dim);
+  color: var(--danger);
+  border: 1px solid rgba(248,113,113,0.15);
+}
+
+.demo-panel.after .demo-a {
+  background: var(--accent-dim);
+  color: var(--accent);
+  border: 1px solid var(--accent-border);
+}
+
+.hallucination-note {
+  font-size: 0.8rem;
+  color: var(--text-3);
+  font-family: var(--mono);
+  text-align: center;
+}
+
+/* ── SECTION 3: トレーニングサイクル ── */
+.cycle-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 3rem;
+}
+
+.cycle-step {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 0;
+}
+
+.step-connector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.step-num {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--accent-border);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--accent);
+  flex-shrink: 0;
+  background: var(--bg);
+  position: relative;
+  z-index: 1;
+}
+
+.step-line {
+  width: 1px;
+  flex: 1;
+  background: var(--border-2);
+  min-height: 2rem;
+}
+
+.cycle-step:last-child .step-line { display: none; }
+
+.step-body {
+  padding: 0 0 2.5rem 1.25rem;
+}
+
+.step-tool {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--text-3);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.35rem;
+}
+
+.step-title {
+  font-family: var(--display);
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+
+.step-desc {
+  font-size: 0.85rem;
+  color: var(--text-2);
+  line-height: 1.8;
+  margin-bottom: 1.25rem;
+}
+
+/* スクリーンショット */
+.screenshot-frame {
+  border: 1px solid var(--border-2);
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--bg-3);
+}
+
+.screenshot-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: var(--bg-4);
+  border-bottom: 1px solid var(--border);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border-2);
+}
+
+.screenshot-url {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--text-3);
+  margin-left: 4px;
+}
+
+.screenshot-frame img {
+  width: 100%;
+  display: block;
+}
+
+/* Loss グラフ */
+.loss-chart {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1.25rem 1.5rem;
+  margin-top: 1.25rem;
+}
+
+.loss-chart-title {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--text-3);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.loss-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 80px;
+}
+
+.loss-bar {
+  flex: 1;
+  background: var(--accent);
+  border-radius: 2px 2px 0 0;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  min-width: 0;
+}
+
+.loss-bar:hover { opacity: 1; }
+
+.loss-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+}
+
+.loss-label {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  color: var(--text-3);
+}
+
+/* ── SECTION 4: 2つのツール ── */
+.tools-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.tool-card {
+  background: var(--bg-2);
+  padding: 2rem;
+}
+
+.tool-name {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+}
+
+.tool-role {
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 0.75rem;
+  line-height: 1.5;
+}
+
+.tool-desc {
+  font-size: 0.82rem;
+  color: var(--text-2);
+  line-height: 1.8;
+}
+
+.tool-features {
+  list-style: none;
+  margin-top: 1rem;
+}
+
+.tool-features li {
+  font-size: 0.8rem;
+  color: var(--text-2);
+  padding: 0.3rem 0;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.tool-features li::before {
+  content: '—';
+  color: var(--text-3);
+  flex-shrink: 0;
+  font-family: var(--mono);
+}
+
+/* ── SECTION 5: なぜ閉域か ── */
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.why-card {
+  background: var(--bg-2);
+  padding: 1.75rem;
+}
+
+.why-icon {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.why-title {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+
+.why-desc {
+  font-size: 0.8rem;
+  color: var(--text-2);
+  line-height: 1.8;
+}
+
+/* ── SECTION 6: 構築例 ── */
+.config-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.config-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  background: var(--bg-2);
+}
+
+.config-label {
+  padding: 1.25rem 1.5rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--text-3);
+  border-right: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  padding-top: 1.35rem;
+}
+
+.config-content {
+  padding: 1.25rem 1.5rem;
+}
+
+.config-title {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 0.35rem;
+}
+
+.config-desc {
+  font-size: 0.8rem;
+  color: var(--text-2);
+  line-height: 1.75;
+}
+
+.config-badge {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 2px;
+  margin-top: 0.5rem;
+  background: var(--accent-dim);
+  color: var(--accent);
+  border: 1px solid var(--accent-border);
+}
+
+/* monkey */
+.monkey-diagram {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 2rem;
+}
+
+.monkey-header {
+  padding: 1rem 1.5rem;
+  background: var(--bg-3);
+  border-bottom: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--text-2);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+}
+
+.monkey-header:hover { background: var(--bg-4); }
+
+.monkey-body {
+  padding: 1.5rem;
+  background: var(--bg-2);
+  display: none;
+}
+
+.monkey-body.open { display: block; }
+
+.monkey-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--text-2);
+}
+
+.monkey-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.monkey-node {
+  background: var(--bg-4);
+  border: 1px solid var(--border-2);
+  border-radius: 4px;
+  padding: 0.4rem 0.8rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--text-2);
+  white-space: nowrap;
+}
+
+.monkey-node.highlight {
+  border-color: var(--accent-border);
+  color: var(--accent);
+  background: var(--accent-dim);
+}
+
+.arrow { color: var(--text-3); font-family: var(--mono); }
+
+/* ── SECTION 7: LLMカタログ ── */
+.catalog-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.catalog-header {
+  display: grid;
+  grid-template-columns: 1fr 80px 80px 80px;
+  padding: 0.6rem 1.25rem;
+  background: var(--bg-3);
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--text-3);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.catalog-item {
+  display: grid;
+  grid-template-columns: 1fr 80px 80px 80px;
+  padding: 1rem 1.25rem;
+  background: var(--bg-2);
+  align-items: center;
+  gap: 0;
+}
+
+.catalog-item:hover { background: var(--bg-3); }
+
+.model-name {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  color: var(--text);
+  margin-bottom: 0.2rem;
+}
+
+.model-desc {
+  font-size: 0.75rem;
+  color: var(--text-3);
+}
+
+.catalog-val {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--text-2);
+}
+
+.thinking-badge {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: 2px;
+  background: rgba(168,85,247,0.12);
+  color: #c084fc;
+  border: 1px solid rgba(168,85,247,0.2);
+}
+
+.catalog-section-label {
+  padding: 0.5rem 1.25rem;
+  background: var(--bg-4);
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--text-3);
+  letter-spacing: 0.08em;
+}
+
+/* ── SECTION 8: お問い合わせ ── */
+#consultation {
+  text-align: center;
+  padding: 6rem 2rem;
+}
+
+.contact-box {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.contact-mail {
+  font-family: var(--mono);
+  font-size: 1.1rem;
+  color: var(--accent);
+  margin: 2rem 0;
+  padding: 1rem 1.5rem;
+  border: 1px solid var(--accent-border);
+  border-radius: 4px;
+  background: var(--accent-dim);
+  display: inline-block;
+}
+
+.services {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  text-align: left;
+  margin-top: 2rem;
+}
+
+.service-item {
+  padding: 1.25rem 1.5rem;
+  background: var(--bg-2);
+}
+
+.service-title {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 0.35rem;
+}
+
+.service-desc {
+  font-size: 0.78rem;
+  color: var(--text-2);
+  line-height: 1.75;
+}
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 2rem;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--text-3);
+}
+
+footer a { color: var(--text-2); }
+footer a:hover { color: var(--text); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  nav { padding: 0 1rem; }
+  .nav-links { display: none; }
+  section { padding: 4rem 1rem; }
+  #hero { padding: 6rem 1rem 4rem; }
+  .hallucination-demo { grid-template-columns: 1fr; }
+  .tools-grid { grid-template-columns: 1fr; }
+  .why-grid { grid-template-columns: 1fr; }
+  .config-row { grid-template-columns: 1fr; }
+  .config-label { border-right: none; border-bottom: 1px solid var(--border); }
+  .catalog-header { grid-template-columns: 1fr 70px 60px; }
+  .catalog-item { grid-template-columns: 1fr 70px 60px; }
+  .catalog-item > .catalog-val:last-child { display: none; }
+  .services { grid-template-columns: 1fr; }
+}
+
+
+
+
+
+/* ── JOB MOCK ── */
+.ui-job-item {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 6px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.ui-job-open { border-color: rgba(6,182,212,0.2); }
+.ui-job-header { display:flex;align-items:center;gap:6px;flex-wrap:wrap; }
+.ui-job-num { font-size:0.62rem;color:#9ca3af;font-family:'DM Mono',monospace; }
+.ui-job-name { font-size:0.68rem;font-weight:600;color:#f3f4f6; }
+.ui-job-badge { font-size:0.58rem;padding:2px 6px;border-radius:3px; }
+.ui-badge-ok { background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.3);color:#4ade80; }
+.ui-badge-fail { background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);color:#f87171; }
+.ui-job-mode { font-size:0.62rem;color:#9ca3af; }
+.ui-job-date { font-size:0.6rem;color:#6b7280; }
+.ui-job-detail { display:flex;flex-direction:column;gap:3px;margin-top:4px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.06); }
+.ui-job-params { display:flex;gap:12px;font-size:0.62rem;color:#9ca3af;font-family:'DM Mono',monospace; }
+.ui-job-meta { font-size:0.6rem;color:#6b7280; }
+/* ── LOG FRAME ── */
+.ui-log-frame {
+  background: #0a0f14;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  padding: 12px 14px;
+  font-family: 'DM Mono', monospace;
+}
+.ui-log-title { font-size:0.72rem;color:#d1d5db;font-weight:600;margin-bottom:8px; }
+.ui-log-body { font-size:0.6rem;color:#6b7280;line-height:1.8;white-space:pre; }
+.ui-log-highlight { color:#4ade80;font-weight:600; }
+
+/* ── QA ITEMS ── */
+.ui-qs-row-open { background:rgba(6,182,212,0.06);border-bottom:none !important; }
+.ui-qs-row-qa { padding:6px 8px;display:flex;flex-direction:column;gap:4px;background:rgba(6,182,212,0.03);border-bottom:1px solid rgba(255,255,255,0.04); }
+.ui-qa-item { background:#111114;border:1px solid rgba(255,255,255,0.07);border-radius:4px;padding:5px 8px; }
+.ui-qa-q { font-size:0.58rem;color:#d1d5db;margin-bottom:3px; }
+.ui-qa-a { font-size:0.57rem;color:#9ca3af;line-height:1.5; }
+
+/* ── TRAINING DATA MOCK ── */
+.ui-qs-table { display:flex;flex-direction:column;gap:0;border:1px solid rgba(255,255,255,0.08);border-radius:6px;overflow:hidden;margin-top:4px; }
+.ui-qs-meta { font-size:0.62rem;color:#9ca3af;padding:6px 10px;background:rgba(255,255,255,0.02);border-bottom:1px solid rgba(255,255,255,0.06); }
+.ui-qs-header { display:grid;grid-template-columns:1fr 60px 130px 40px;font-size:0.6rem;color:#6b7280;padding:5px 10px;background:rgba(255,255,255,0.02);border-bottom:1px solid rgba(255,255,255,0.06); }
+.ui-qs-row { display:grid;grid-template-columns:1fr 60px 130px 40px;font-size:0.65rem;color:#d1d5db;padding:5px 10px;border-bottom:1px solid rgba(255,255,255,0.04);align-items:center; }
+.ui-qs-row:last-child { border-bottom:none; }
+.ui-qs-row-accent { background:rgba(6,182,212,0.05); }
+.ui-edit-btn { background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:3px;padding:2px 6px;font-size:0.58rem;color:#9ca3af;text-align:center; }
+.ui-qa-section { display:flex;flex-direction:column;gap:6px;border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:10px;margin-top:4px; }
+.ui-qa-title { font-size:0.72rem;font-weight:600;color:#f3f4f6; }
+.ui-qa-hint { font-size:0.6rem;color:#6b7280; }
+
+/* ── TEXT MANAGEMENT MOCK ── */
+.ui-text-list { display: flex; flex-direction: column; gap: 6px; flex: 1; overflow: hidden; }
+.ui-text-count { font-size: 0.65rem; color: #9ca3af; }
+.ui-text-item {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 6px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow: hidden;
+}
+.ui-text-open { border-color: rgba(6,182,212,0.2); }
+.ui-text-header { display: flex; align-items: center; gap: 8px; }
+.ui-text-badge {
+  background: rgba(6,182,212,0.12);
+  border: 1px solid rgba(6,182,212,0.25);
+  color: #06b6d4;
+  font-size: 0.6rem;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-family: 'DM Mono', monospace;
+}
+.ui-text-name { font-size: 0.72rem; color: #d1d5db; font-weight: 600; }
+.ui-text-preview { font-size: 0.65rem; color: #6b7280; line-height: 1.5; }
+.ui-text-actions { display: flex; gap: 5px; flex-wrap: wrap; }
+.ui-text-btn {
+  background: #1e1e24;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-size: 0.6rem;
+  color: #9ca3af;
+}
+.ui-btn-accent {
+  background: rgba(6,182,212,0.1);
+  border-color: rgba(6,182,212,0.3);
+  color: #06b6d4;
+}
+.ui-chunk-label { font-size: 0.62rem; color: #9ca3af; }
+.ui-chunk {
+  background: #111114;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 4px;
+  padding: 8px;
+}
+.ui-chunk-header { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+.ui-chunk-num {
+  background: rgba(6,182,212,0.15);
+  color: #06b6d4;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+.ui-chunk-tokens { font-size: 0.6rem; color: #6b7280; font-family: 'DM Mono', monospace; }
+.ui-chunk-body { font-size: 0.62rem; color: #9ca3af; line-height: 1.5; }
+
+/* ── UI MOCK ── */
+.ui-mock {
+  display: flex;
+  height: 320px;
+  border: 1px solid rgba(255,255,255,0.06);
+  font-size: 0.78rem;
+  background: #0d1b24;
+}
+.ui-mock-sidebar {
+  width: 140px;
+  flex-shrink: 0;
+  background: #0a1520;
+  border-right: 1px solid rgba(255,255,255,0.06);
+  padding: 14px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.ui-mock-logo {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #06b6d4;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.ui-mock-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ui-nav-item {
+  padding: 5px 8px;
+  border-radius: 5px;
+  color: #9ca3af;
+  font-size: 0.72rem;
+  cursor: pointer;
+}
+.ui-nav-active {
+  background: rgba(6,182,212,0.12);
+  color: #06b6d4;
+  border: 1px solid rgba(6,182,212,0.2);
+}
+.ui-mock-body {
+  flex: 1;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+}
+.ui-mock-page-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #f3f4f6;
+}
+.ui-mock-selectors {
+  display: flex;
+  gap: 10px;
+}
+.ui-mock-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+}
+.ui-selector-label {
+  font-size: 0.65rem;
+  color: #9ca3af;
+}
+.ui-selector-val {
+  background: #1e1e24;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 5px;
+  padding: 5px 10px;
+  color: #f3f4f6;
+  font-size: 0.72rem;
+}
+.ui-mock-model-path {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  color: #6b7280;
+}
+.ui-mock-chat {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+.ui-bubble-user {
+  align-self: flex-end;
+  background: rgba(6,182,212,0.12);
+  border: 1px solid rgba(6,182,212,0.25);
+  border-radius: 10px 10px 2px 10px;
+  padding: 8px 12px;
+  color: #e5e7eb;
+  max-width: 75%;
+  font-size: 0.75rem;
+}
+.ui-bubble-ai {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 2px 10px 10px 10px;
+  padding: 10px 12px;
+  color: #d1d5db;
+  max-width: 90%;
+  font-size: 0.75rem;
+  line-height: 1.6;
+}
+.ui-ai-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  color: #6b7280;
+  margin-bottom: 5px;
+}
+.ui-highlight {
+  color: #f87171;
+  font-weight: 600;
+}
+
+
+/* ── TRAINING GRID RESPONSIVE ── */
+@media (max-width: 768px) {
+  .training-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+  .ui-mock {
+    display: none !important;
+  }
+  .screenshot-bar {
+    display: none !important;
+  }
+  .ui-log-frame {
+    display: none !important;
+  }
+}
+</style>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo"><span style="color:var(--accent);">ll</span>a<span style="color:var(--accent);">m</span>une</a>
+  <ul class="nav-links">
+    <li><a href="#step1">STEP 1 導入</a></li>
+    <li><a href="#step2">STEP 2 利用</a></li>
+    <li><a href="#step3">STEP 3 育成</a></li>
+    <li><a href="index.html#ramune-club" style="color:var(--accent);">試してみる</a></li>
+    <li><a href="https://github.com/unrcom/llamune" target="_blank">GitHub</a></li>
+  </ul>
+  <a href="index.html#consultation" class="nav-cta">お問い合わせ</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero" style="min-height:60vh;">
+  <div class="hero-eyebrow">How llamune Works</div>
+  <h1 class="hero-title">
+    導入から、利用、<br>
+    <em>育成まで。</em>
+  </h1>
+  <p class="hero-sub">
+    llamune は「データを入れて終わり」のツールではありません。<br>
+    使い始めてから、社内の質問にどんどん的確に答えられるよう<br>
+    育っていく — その一連の流れを、実際の画面で紹介します。
+  </p>
+  <div class="hero-badges">
+    <span class="badge">STEP 1 導入</span>
+    <span class="badge">STEP 2 利用</span>
+    <span class="badge">STEP 3 育成</span>
+  </div>
+  <div class="hero-cta">
+    <a href="#step1" class="btn-primary">使い方を見る</a>
+    <a href="index.html" class="btn-ghost">トップページへ戻る</a>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- STEP 1: 導入 -->
+<section id="step1">
+  <div class="section-label">STEP 1 / 3</div>
+  <h2 class="section-title">まず、<br><em>プロジェクトを作って、データを入れる。</em></h2>
+  <p class="section-desc">
+    業務やチームごとに「プロジェクト」を作成し、そこに社内マニュアル・FAQ・ナレッジ文書などを投入します。
+    投入したテキストは自動でチャンク（検索の単位）に分割され、そのまま RAG 検索の対象になります。
+  </p>
+
+  <div class="cycle-steps">
+
+    <!-- Step 1-1: プロジェクト作成 -->
+    <div class="cycle-step">
+      <div class="step-connector">
+        <div class="step-num">01</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-body">
+        <div class="step-title">プロジェクトを作成する</div>
+        <div class="step-desc">
+          部署やテーマごとにプロジェクトを分けて管理できます。プロジェクトごとにデータが独立しているため、他のプロジェクトのデータと混ざることはありません。
+        </div>
+        <div class="screenshot-frame">
+          <div class="screenshot-bar">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <span class="screenshot-url">localhost:5174/projects</span>
+          </div>
+          <div class="ui-mock" style="height:340px;">
+            <div class="ui-mock-sidebar">
+              <div class="ui-mock-logo">llamune</div>
+              <div class="ui-mock-nav">
+                <div class="ui-nav-item">💬 チャット</div>
+                <div class="ui-nav-item">🗄️ データセット</div>
+                <div class="ui-nav-item" style="color:#6b7280;font-size:0.6rem;padding:4px 8px;margin-top:4px;border-top:1px solid rgba(255,255,255,0.05);padding-top:8px;">管理</div>
+                <div class="ui-nav-item ui-nav-active">📁 プロジェクト</div>
+                <div class="ui-nav-item">⚙️ モデル</div>
+                <div class="ui-nav-item">📋 FTデータ管理</div>
+                <div class="ui-nav-item">🔧 訓練ジョブ</div>
+                <div class="ui-nav-item">🧾 ログ</div>
+              </div>
+            </div>
+            <div class="ui-mock-body" style="gap:8px;overflow-y:auto;padding:14px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <div class="ui-mock-page-title">プロジェクト</div>
+                <span class="ui-text-btn" style="padding:4px 10px;font-size:0.62rem;color:#06b6d4;border-color:rgba(6,182,212,0.3);">＋ 新規作成</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px;">
+                <div style="background:rgba(6,182,212,0.04);border:1px solid rgba(6,182,212,0.2);border-radius:6px;padding:10px 12px;display:flex;flex-direction:column;gap:4px;">
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <span style="font-size:0.75rem;font-weight:500;color:#f3f4f6;">star</span>
+                    <span style="background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);border-radius:3px;padding:1px 6px;font-size:0.58rem;color:#06b6d4;">就業規則</span>
+                  </div>
+                  <span style="font-size:0.65rem;color:#6b7280;">テキスト 29件</span>
+                </div>
+                <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:6px;padding:10px 12px;display:flex;flex-direction:column;gap:4px;">
+                  <span style="font-size:0.75rem;font-weight:500;color:#d1d5db;">ds</span>
+                  <span style="font-size:0.65rem;color:#6b7280;">テキスト 12件</span>
+                </div>
+                <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:6px;padding:10px 12px;display:flex;flex-direction:column;gap:4px;">
+                  <span style="font-size:0.75rem;font-weight:500;color:#d1d5db;">ew</span>
+                  <span style="font-size:0.65rem;color:#6b7280;">テキスト 8件</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 1-2: データセット投入 -->
+    <div class="cycle-step">
+      <div class="step-connector">
+        <div class="step-num">02</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-body">
+        <div class="step-title">データを投入し、検索できる形にする</div>
+        <div class="step-desc">
+          社内マニュアルや業務資料をテキストとして登録すると、そのまま RAG 検索の対象になります。
+          下は実際に「就業規則」を投入した例です。条文ごとにカード化され、すぐに検索可能な状態になっています。
+        </div>
+        <div class="screenshot-frame">
+          <div class="screenshot-bar">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <span class="screenshot-url">ds.llamune.com/dataset</span>
+          </div>
+          <div class="ui-mock" style="height:480px;">
+            <div class="ui-mock-sidebar">
+              <div class="ui-mock-logo">llamune</div>
+              <div class="ui-mock-nav">
+                <div class="ui-nav-item">💬 チャット</div>
+                <div class="ui-nav-item ui-nav-active">🗄️ データセット</div>
+                <div class="ui-nav-item" style="color:#6b7280;font-size:0.6rem;padding:4px 8px;margin-top:4px;border-top:1px solid rgba(255,255,255,0.05);padding-top:8px;">管理</div>
+                <div class="ui-nav-item">📁 プロジェクト</div>
+                <div class="ui-nav-item">⚙️ モデル</div>
+                <div class="ui-nav-item">📋 FTデータ管理</div>
+                <div class="ui-nav-item">🔧 訓練ジョブ</div>
+                <div class="ui-nav-item">🧾 ログ</div>
+              </div>
+            </div>
+            <div class="ui-mock-body" style="gap:8px;">
+              <div class="ui-mock-selector" style="max-width:200px;flex:none;">
+                <span class="ui-selector-label">プロジェクト</span>
+                <span class="ui-selector-val">star ▾</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <span style="font-size:0.7rem;color:#9ca3af;">star <strong style="color:#f3f4f6;">29 件</strong></span>
+                <div style="display:flex;gap:4px;">
+                  <span class="ui-text-btn" style="padding:3px 8px;font-size:0.58rem;">↓ エクスポート</span>
+                  <span class="ui-text-btn" style="padding:3px 8px;font-size:0.58rem;">↑ インポート</span>
+                  <span class="ui-text-btn" style="padding:3px 8px;font-size:0.58rem;color:#06b6d4;border-color:rgba(6,182,212,0.3);">＋ 追加</span>
+                </div>
+              </div>
+              <div class="ui-text-list" style="overflow-y:auto;">
+                <div class="ui-text-item">
+                  <div class="ui-text-header">
+                    <span class="ui-text-badge">就業規則 #1</span>
+                    <span class="ui-text-name" style="color:#06b6d4;font-weight:500;">アンリモート合同会社就業規則</span>
+                    <span style="margin-left:auto;font-size:0.58rem;color:#6b7280;font-family:'DM Mono',monospace;">2026-06-06</span>
+                  </div>
+                  <div class="ui-text-preview" style="color:#9ca3af;">
+                    <strong style="color:#d1d5db;">### 第1条（目的）</strong><br>
+                    この就業規則（以下「本規則」という）は、アンリモート合同会社（以下「会社」という）の従業員の労働条件、服務規律その他就業に関する事項を定めることを目的とする。
+                  </div>
+                </div>
+                <div class="ui-text-item">
+                  <div class="ui-text-header">
+                    <span class="ui-text-badge">就業規則 #2</span>
+                    <span class="ui-text-name" style="color:#06b6d4;font-weight:500;">アンリモート合同会社就業規則</span>
+                    <span style="margin-left:auto;font-size:0.58rem;color:#6b7280;font-family:'DM Mono',monospace;">2026-06-06</span>
+                  </div>
+                  <div class="ui-text-preview" style="color:#9ca3af;">
+                    <strong style="color:#d1d5db;">### 第2条（適用範囲）</strong><br>
+                    本規則は、会社に雇用されるすべての従業員に適用する。ただし、パートタイム従業員および契約社員については、別途定める規則を適用する場合がある。
+                  </div>
+                </div>
+                <div class="ui-text-item">
+                  <div class="ui-text-header">
+                    <span class="ui-text-badge">就業規則 #6</span>
+                    <span class="ui-text-name" style="color:#06b6d4;font-weight:500;">アンリモート合同会社就業規則</span>
+                    <span style="margin-left:auto;font-size:0.58rem;color:#6b7280;font-family:'DM Mono',monospace;">2026-06-06</span>
+                  </div>
+                  <div class="ui-text-preview" style="color:#9ca3af;">
+                    <strong style="color:#d1d5db;">### 第6条（就業形態）</strong><br>
+                    会社はリモートワークを基本とした就業形態を採用する。従業員は原則として自宅その他会社が認めた場所で業務を行うことができる。
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:1rem 1.25rem;">
+    <p style="font-size:0.82rem;color:var(--text-2);line-height:1.8;margin:0;">
+      ここまでで、社内データが <strong style="color:var(--text);font-weight:500;">検索可能な状態</strong> になりました。
+      次は、このデータをもとに実際にチャットで質問してみましょう。
+    </p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- STEP 2: 利用 -->
+<section id="step2">
+  <div class="section-label">STEP 2 / 3</div>
+  <h2 class="section-title">使ってみると、<br><em>「知らない」と言われた。</em></h2>
+  <p class="section-desc">
+    投入した「就業規則」には、実は「休暇の申請方法」についての記載がありません。
+    こういうとき、llamune はどう振る舞うのでしょうか。
+  </p>
+
+  <div class="cycle-steps">
+
+    <!-- Step 2-1: 答えられない例 -->
+    <div class="cycle-step">
+      <div class="step-connector">
+        <div class="step-num">01</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-body">
+        <div class="step-title">わからないことは、わからないと言う</div>
+        <div class="step-desc">
+          システムプロンプトには「参考情報のみを根拠とし、含まれていなければ問い合わせ先を案内する」よう指示してあります。
+          就業規則に記載のない「休暇の申請方法」を尋ねると、LLM は自分の一般知識で答えを<em style="color:var(--text);font-style:normal;">でっち上げず</em>、指示どおり問い合わせ先を案内しました。
+        </div>
+        <div class="screenshot-frame">
+          <div class="screenshot-bar">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <span class="screenshot-url">ds.llamune.com/chat</span>
+          </div>
+          <div class="ui-mock" style="height:420px;">
+            <div class="ui-mock-sidebar" style="width:110px;">
+              <div class="ui-mock-logo">llamune</div>
+              <div class="ui-mock-nav">
+                <div class="ui-nav-item ui-nav-active">💬 チャット</div>
+                <div class="ui-nav-item">🗄️ データセット</div>
+                <div class="ui-nav-item" style="color:#6b7280;font-size:0.6rem;padding:4px 8px;margin-top:4px;border-top:1px solid rgba(255,255,255,0.05);padding-top:8px;">管理</div>
+                <div class="ui-nav-item">📁 プロジェクト</div>
+                <div class="ui-nav-item">⚙️ モデル</div>
+                <div class="ui-nav-item">📋 FTデータ管理</div>
+                <div class="ui-nav-item">🔧 訓練ジョブ</div>
+                <div class="ui-nav-item">🧾 ログ</div>
+              </div>
+            </div>
+            <div style="width:150px;flex-shrink:0;background:#0a1520;border-right:1px solid rgba(255,255,255,0.06);padding:12px 10px;display:flex;flex-direction:column;gap:8px;overflow-y:auto;">
+              <div style="font-size:0.68rem;color:#9ca3af;font-weight:600;">設定</div>
+              <div style="display:flex;flex-direction:column;gap:3px;">
+                <span class="ui-selector-label" style="font-size:0.58rem;">モデル選択</span>
+                <span class="ui-selector-val" style="font-size:0.62rem;padding:4px 7px;">Qwen2.5-14B-4bit</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:3px;">
+                <span class="ui-selector-label" style="font-size:0.58rem;">プロジェクト</span>
+                <span class="ui-selector-val" style="font-size:0.62rem;padding:4px 7px;color:#06b6d4;">star</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:3px;">
+                <span class="ui-selector-label" style="font-size:0.58rem;">ドキュメント参照</span>
+                <span class="ui-selector-val" style="font-size:0.62rem;padding:4px 7px;">直接検索</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:3px;">
+                <span class="ui-selector-label" style="font-size:0.58rem;">システムプロンプト</span>
+                <div style="background:#1e1e24;border:1px solid rgba(255,255,255,0.12);border-radius:5px;padding:6px 7px;font-size:0.56rem;color:#9ca3af;line-height:1.6;">
+                  以下の【参考情報】のみを根拠として回答してください。あなた自身の一般知識は使用しないでください。【参考情報】に含まれていない場合は「確認できませんでした。@rulesqa にお問い合わせください」と回答する。
+                </div>
+              </div>
+            </div>
+            <div class="ui-mock-body" style="gap:10px;">
+              <div class="ui-mock-chat">
+                <div class="ui-bubble-user">休暇の申請方法を教えて</div>
+                <div class="ui-bubble-ai">
+                  <div class="ui-ai-tag">▸ 直接検索 ・ 2528ms</div>
+                  申し訳ございませんが、その情報は確認できませんでした。@rulesqa にお問い合わせください。
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2-2: ログで検索結果を確認 -->
+    <div class="cycle-step">
+      <div class="step-connector">
+        <div class="step-num">02</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-body">
+        <div class="step-title">なぜ答えられなかったのか、ログで確認する</div>
+        <div class="step-desc">
+          回答の「▸ 直接検索」をクリックすると、裏側で何が起きていたかを確認できます。
+          検索は <strong style="color:var(--text);font-weight:500;">threshold 以内のチャンクを3件ヒット</strong>させており、検索そのものは失敗していません。
+          しかし上位3件はいずれも「育児・介護休業」「安全衛生」「就業形態」についての条文で、<strong style="color:var(--text);font-weight:500;">「休暇の申請方法」そのものを答える記載がデータに存在しなかった</strong>ことがわかります。
+        </div>
+        <div class="screenshot-frame">
+          <div class="screenshot-bar">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <span class="screenshot-url">ds.llamune.com/chat</span>
+          </div>
+          <div class="ui-mock" style="height:480px;">
+            <div class="ui-mock-sidebar" style="width:110px;">
+              <div class="ui-mock-logo">llamune</div>
+              <div class="ui-mock-nav">
+                <div class="ui-nav-item ui-nav-active">💬 チャット</div>
+                <div class="ui-nav-item">🗄️ データセット</div>
+                <div class="ui-nav-item" style="color:#6b7280;font-size:0.6rem;padding:4px 8px;margin-top:4px;border-top:1px solid rgba(255,255,255,0.05);padding-top:8px;">管理</div>
+                <div class="ui-nav-item">📁 プロジェクト</div>
+                <div class="ui-nav-item">⚙️ モデル</div>
+                <div class="ui-nav-item">📋 FTデータ管理</div>
+                <div class="ui-nav-item">🔧 訓練ジョブ</div>
+                <div class="ui-nav-item">🧾 ログ</div>
+              </div>
+            </div>
+            <div class="ui-mock-body" style="gap:8px;overflow-y:auto;">
+              <div class="ui-bubble-user" style="align-self:flex-end;">休暇の申請方法を教えて</div>
+              <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 12px;font-size:0.62rem;line-height:1.7;">
+                <div style="color:#06b6d4;font-family:'DM Mono',monospace;margin-bottom:6px;">▾ 直接検索　2528ms</div>
+                <div style="color:#6b7280;font-family:'DM Mono',monospace;font-size:0.6rem;">
+                  model: mlx-community/Qwen2.5-14B-Instruct-4bit<br>
+                  search_mode: <span style="color:#9ca3af;">direct</span><br>
+                  rag_query: 休暇の申請方法を教えて<br>
+                  rag_hits: threshold=1.4 / used=<span style="color:#4ade80;">✅</span>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:5px;margin-top:8px;">
+                  <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:5px;padding:6px 8px;">
+                    <div style="font-family:'DM Mono',monospace;font-size:0.58rem;color:#9ca3af;">rank=1 <span style="color:#facc15;">distance=0.8492</span></div>
+                    <div style="font-size:0.62rem;color:#d1d5db;font-weight:600;margin-top:2px;">### 第15条（育児・介護休業）</div>
+                    <div style="font-size:0.6rem;color:#6b7280;margin-top:2px;">育児休業および介護休業については、育児・介護休業法の定めに従い付与する...</div>
+                  </div>
+                  <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:5px;padding:6px 8px;">
+                    <div style="font-family:'DM Mono',monospace;font-size:0.58rem;color:#9ca3af;">rank=2 <span style="color:#facc15;">distance=0.9113</span></div>
+                    <div style="font-size:0.62rem;color:#d1d5db;font-weight:600;margin-top:2px;">### 第22条（安全衛生の基本）</div>
+                    <div style="font-size:0.6rem;color:#6b7280;margin-top:2px;">会社は従業員の安全と健康の確保に努め、従業員はその指示に従わなければならない...</div>
+                  </div>
+                  <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:5px;padding:6px 8px;">
+                    <div style="font-family:'DM Mono',monospace;font-size:0.58rem;color:#9ca3af;">rank=3 <span style="color:#facc15;">distance=0.9361</span></div>
+                    <div style="font-size:0.62rem;color:#d1d5db;font-weight:600;margin-top:2px;">### 第6条（就業形態）</div>
+                    <div style="font-size:0.6rem;color:#6b7280;margin-top:2px;">会社はリモートワークを基本とした就業形態を採用する...</div>
+                  </div>
+                </div>
+                <div style="color:#6b7280;font-family:'DM Mono',monospace;font-size:0.58rem;margin-top:6px;">response_time: 2528ms</div>
+              </div>
+              <div class="ui-bubble-ai" style="align-self:flex-start;">
+                申し訳ございませんが、その情報は確認できませんでした。@rulesqa にお問い合わせください。
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2-3: FAQ追加後、正しく回答できる -->
+    <div class="cycle-step">
+      <div class="step-connector">
+        <div class="step-num">03</div>
+      </div>
+      <div class="step-body">
+        <div class="step-title">データを補えば、すぐに答えられるようになる</div>
+        <div class="step-desc">
+          原因はシンプルです。「休暇の申請方法」を答えるためのデータが、そもそも存在していなかっただけ。
+          そこで勤怠管理システム「kinta」での休暇申請の手順を FAQ として1件追加し、同じ質問をもう一度してみます。
+        </div>
+        <div class="screenshot-frame">
+          <div class="screenshot-bar">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <span class="screenshot-url">ds.llamune.com/chat</span>
+          </div>
+          <div class="ui-mock" style="height:300px;">
+            <div class="ui-mock-sidebar" style="width:110px;">
+              <div class="ui-mock-logo">llamune</div>
+              <div class="ui-mock-nav">
+                <div class="ui-nav-item ui-nav-active">💬 チャット</div>
+                <div class="ui-nav-item">🗄️ データセット</div>
+                <div class="ui-nav-item" style="color:#6b7280;font-size:0.6rem;padding:4px 8px;margin-top:4px;border-top:1px solid rgba(255,255,255,0.05);padding-top:8px;">管理</div>
+                <div class="ui-nav-item">📁 プロジェクト</div>
+                <div class="ui-nav-item">⚙️ モデル</div>
+                <div class="ui-nav-item">📋 FTデータ管理</div>
+                <div class="ui-nav-item">🔧 訓練ジョブ</div>
+                <div class="ui-nav-item">🧾 ログ</div>
+              </div>
+            </div>
+            <div class="ui-mock-body" style="gap:10px;">
+              <div class="ui-mock-chat">
+                <div class="ui-bubble-user">休暇の申請方法を教えて</div>
+                <div class="ui-bubble-ai">
+                  <div class="ui-ai-tag">▸ 直接検索 ・ 612ms</div>
+                  休暇を取得する場合は、勤怠管理システム「kinta」にログインし、休暇申請メニューから種別（有給・特別休暇など）を選択して申請してください。全休の場合は取得日を、時間単位で取得する場合は不在となる時間範囲を入力します。<br>
+                  申請後は承認ワークフローが自動的に進行し、承認状況はいつでも照会できます。承認が完了するとメールで通知されます。
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:1rem 1.25rem;">
+    <p style="font-size:0.82rem;color:var(--text-2);line-height:1.8;margin:0;">
+      llamune は、わからないことを <strong style="color:var(--text);font-weight:500;">「わからない」と正直に答え</strong>、
+      そのギャップを <strong style="color:var(--text);font-weight:500;">データを足すだけ</strong> で埋められます。
+      モデルの再学習も、複雑な設定も必要ありません。
+    </p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- STEP 3: 育成 -->
+<section id="step3">
+  <div class="section-label">STEP 3 / 3</div>
+  <h2 class="section-title">使うほどに、<br><em>検索の「クセ」まで育てる。</em></h2>
+  <p class="section-desc">
+    llamune は、ユーザーの発話をそのまま検索クエリとして使います。
+    たとえば「<strong style="color:var(--text);font-weight:500;">島根県のパワースポットを教えて</strong>」という質問では、
+    「パワースポット」という頻出語に検索結果が引っ張られ、肝心の「島根県」という条件が埋もれてしまうことがあります。
+    このクセは、ファインチューニングで矯正できます。
+  </p>
+
+  <div class="cycle-steps">
+
+    <!-- Step 3-1: FTデータ作成 -->
+    <div class="cycle-step">
+      <div class="step-connector">
+        <div class="step-num">01</div>
+      </div>
+      <div class="step-body">
+        <div class="step-title">「正しい検索クエリ」を訓練データとして教える</div>
+        <div class="step-desc">
+          ユーザーの発話に対して、まず <code style="background:rgba(255,255,255,0.06);padding:1px 5px;border-radius:3px;font-size:0.85em;">[SEARCH]...[/SEARCH]</code> の形で検索に効くキーワードへ変換するターンを挟みます。
+          ここでは「島根」「出雲」「松江」「縁結び」など、地名と要点を抽出したクエリを教師データとして与えます。
+          このパターンを訓練データとして蓄積していくと、モデル自身が質問の要点を見抜いて検索クエリを組み立てられるようになります。
+        </div>
+        <div class="screenshot-frame">
+          <div class="screenshot-bar">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <span class="screenshot-url">ds.llamune.com/admin/ft-data</span>
+          </div>
+          <div class="ui-mock" style="height:560px;">
+            <div class="ui-mock-sidebar">
+              <div class="ui-mock-logo">llamune</div>
+              <div class="ui-mock-nav">
+                <div class="ui-nav-item">💬 チャット</div>
+                <div class="ui-nav-item">🗄️ データセット</div>
+                <div class="ui-nav-item" style="color:#6b7280;font-size:0.6rem;padding:4px 8px;margin-top:4px;border-top:1px solid rgba(255,255,255,0.05);padding-top:8px;">管理</div>
+                <div class="ui-nav-item">📁 プロジェクト</div>
+                <div class="ui-nav-item">⚙️ モデル</div>
+                <div class="ui-nav-item ui-nav-active">📋 FTデータ管理</div>
+                <div class="ui-nav-item">🔧 訓練ジョブ</div>
+                <div class="ui-nav-item">🧾 ログ</div>
+              </div>
+            </div>
+            <div class="ui-mock-body" style="gap:8px;overflow-y:auto;">
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <div class="ui-mock-page-title">FTデータ管理</div>
+                <div style="display:flex;gap:4px;">
+                  <span class="ui-text-btn" style="padding:3px 8px;font-size:0.58rem;">↓ train</span>
+                  <span class="ui-text-btn" style="padding:3px 8px;font-size:0.58rem;">↓ valid</span>
+                </div>
+              </div>
+              <div class="ui-mock-selector" style="max-width:200px;flex:none;">
+                <span class="ui-selector-label">プロジェクト</span>
+                <span class="ui-selector-val">パワースポット ▾</span>
+              </div>
+
+              <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px;display:flex;flex-direction:column;gap:6px;">
+                <div style="font-size:0.7rem;color:#f3f4f6;font-weight:600;">新規パターン</div>
+
+                <div>
+                  <span style="font-family:'DM Mono',monospace;font-size:0.58rem;color:#9ca3af;background:rgba(255,255,255,0.05);border-radius:3px;padding:1px 6px;">system</span>
+                  <div style="background:#1e1e24;border:1px solid rgba(255,255,255,0.12);border-radius:5px;padding:6px 8px;margin-top:3px;font-size:0.6rem;color:#9ca3af;line-height:1.6;">
+                    以下の【参考情報】のみを根拠として回答してください。あなた自身の一般知識は使用しないでください。
+                  </div>
+                </div>
+
+                <div>
+                  <span style="font-family:'DM Mono',monospace;font-size:0.58rem;color:#60a5fa;background:rgba(96,165,250,0.1);border-radius:3px;padding:1px 6px;">user</span>
+                  <div style="background:#1e1e24;border:1px solid rgba(255,255,255,0.12);border-radius:5px;padding:6px 8px;margin-top:3px;font-size:0.62rem;color:#d1d5db;">
+                    島根県の縁結びのパワースポットを教えて
+                  </div>
+                </div>
+
+                <div>
+                  <span style="font-family:'DM Mono',monospace;font-size:0.58rem;color:#4ade80;background:rgba(74,222,128,0.1);border-radius:3px;padding:1px 6px;">assistant</span>
+                  <div style="background:#1e1e24;border:1px solid rgba(255,255,255,0.12);border-radius:5px;padding:6px 8px;margin-top:3px;font-size:0.62rem;color:#06b6d4;font-family:'DM Mono',monospace;">
+                    [SEARCH]島根 出雲 松江 縁結び[/SEARCH]
+                  </div>
+                </div>
+
+                <div>
+                  <span style="font-family:'DM Mono',monospace;font-size:0.58rem;color:#facc15;background:rgba(250,204,21,0.1);border-radius:3px;padding:1px 6px;">tool</span>
+                  <div style="background:#1e1e24;border:1px solid rgba(255,255,255,0.12);border-radius:5px;padding:6px 8px;margin-top:3px;font-size:0.58rem;color:#9ca3af;font-family:'DM Mono',monospace;line-height:1.6;">
+                    "documents": [[<br>
+                    &nbsp;&nbsp;"出雲大社（出雲市）縁結び、開運招福。日本最大級の大注連縄は圧巻...",<br>
+                    &nbsp;&nbsp;"八重垣神社（松江市）縁結び、夫婦円満。鏡の池に和紙と硬貨を浮かべる占いが大人気...",<br>
+                    &nbsp;&nbsp;"玉作湯神社（松江市）縁結び。触れて祈ると願いが叶う「願い石」が有名..."<br>
+                    ]],
+                  </div>
+                </div>
+
+                <div>
+                  <span style="font-family:'DM Mono',monospace;font-size:0.58rem;color:#4ade80;background:rgba(74,222,128,0.1);border-radius:3px;padding:1px 6px;">assistant</span>
+                  <div style="background:#1e1e24;border:1px solid rgba(255,255,255,0.12);border-radius:5px;padding:6px 8px;margin-top:3px;font-size:0.62rem;color:#d1d5db;">
+                    島根県の縁結びのパワースポットには「出雲大社」「八重垣神社」「玉作湯神社」などがあります。「出雲大社」は日本一の縁結びの聖地として全国的にも有名です。
+                  </div>
+                </div>
+
+                <div style="display:flex;gap:6px;margin-top:2px;">
+                  <span class="ui-text-btn" style="padding:3px 9px;font-size:0.58rem;">＋ ターン追加</span>
+                  <span class="ui-text-btn ui-btn-accent" style="padding:3px 9px;font-size:0.58rem;">💾 保存</span>
+                </div>
+              </div>
+
+              <div style="font-size:0.62rem;color:#9ca3af;margin-top:2px;">パターン（202件）</div>
+              <div style="display:flex;flex-direction:column;gap:4px;">
+                <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:5px;padding:6px 9px;">
+                  <span style="font-family:'DM Mono',monospace;font-size:0.55rem;color:#4ade80;border:1px solid rgba(74,222,128,0.3);border-radius:3px;padding:1px 5px;">valid</span>
+                  <span style="font-size:0.62rem;color:#d1d5db;">出雲の縁結びのパワースポットを教えて</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:5px;padding:6px 9px;">
+                  <span style="font-family:'DM Mono',monospace;font-size:0.55rem;color:#9ca3af;border:1px solid rgba(255,255,255,0.15);border-radius:3px;padding:1px 5px;">train</span>
+                  <span style="font-size:0.62rem;color:#d1d5db;">島根県の縁結びのパワースポットを教えて</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:1rem 1.25rem;">
+    <p style="font-size:0.82rem;color:var(--text-2);line-height:1.8;margin:0;">
+      こうして集めたパターンを <strong style="color:var(--text);font-weight:500;">訓練ジョブ</strong> として実行すれば、
+      モデルは「検索の前に、何を引っ張り出せばいいか」を学んでいきます。
+      RAG のデータを増やすだけでなく、<strong style="color:var(--text);font-weight:500;">検索のかけ方そのもの</strong>を業務にあわせて育てられるのが、llamune の RAG × FT です。
+    </p>
+  </div>
+</section>
+
+<hr class="divider">
+<section style="text-align:center;padding:3rem 2rem;">
+  <p style="font-size:0.85rem;color:var(--text-2);margin-bottom:1rem;">ここまでが、導入・利用・育成の一連の流れです。</p>
+  <a href="index.html#ramune-club" class="btn-primary">ラムネクラブで試してみる</a>
+</section>
+
+</body>
+
+</html>
